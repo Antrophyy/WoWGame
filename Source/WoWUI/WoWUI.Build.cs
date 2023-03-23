@@ -22,6 +22,7 @@ public class WoWUI : ModuleRules
 				"UMG",
 
 				// Game
+				"GameplayMessageRuntime",
 				"UIExtensions",
 				"WoWGame",
 			}

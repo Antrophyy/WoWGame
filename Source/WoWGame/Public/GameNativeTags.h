@@ -1,0 +1,5 @@
+﻿#pragma once
+
+#include "NativeGameplayTags.h"
+
+WOWGAME_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_GAME_EVENTS_ENEMY_SPAWNED);

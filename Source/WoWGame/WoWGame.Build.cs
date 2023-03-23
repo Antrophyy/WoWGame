@@ -12,11 +12,13 @@ public class WoWGame : ModuleRules
 			"Core",
 			"CoreUObject",
 			"Engine",
+			"GameplayTags",
 			"InputCore",
 			"HeadMountedDisplay",
 			"EnhancedInput",
 
 			// Game
+			"GameplayMessageRuntime",
 		});
 	}
 }

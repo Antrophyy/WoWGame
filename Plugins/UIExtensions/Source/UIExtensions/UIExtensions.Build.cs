@@ -6,6 +6,16 @@ public class UIExtensions : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
+		PublicDependencyModuleNames.AddRange(
+			new[]
+			{
+				// Engine
+				"ModularGameplay",
+
+				// Game
+				"AsyncMixin",
+			});
+
 		PrivateDependencyModuleNames.AddRange(
 			new[]
 			{
@@ -19,6 +29,8 @@ public class UIExtensions : ModuleRules
 				"Slate",
 				"SlateCore",
 				"UMG",
+				
+				// Game
 			});
 	}
 }
