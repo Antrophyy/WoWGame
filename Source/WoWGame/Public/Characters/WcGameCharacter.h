@@ -4,12 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "InputActionValue.h"
 #include "WcGameCharacter.generated.h"
 
+struct FInputActionValue;
 
 UCLASS(config=Game)
-class AWcGameCharacter : public ACharacter
+class WOWGAME_API AWcGameCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
