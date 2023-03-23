@@ -1,66 +1,88 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #pragma once
 
-#include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "WcGameCharacter.generated.h"
 
+class UCameraComponent;
+class UInputAction;
+class UInputMappingContext;
+class USceneCaptureComponent2D;
+class USpringArmComponent;
 struct FInputActionValue;
 
-UCLASS(config=Game)
-class WOWGAME_API AWcGameCharacter : public ACharacter
+UCLASS(Config=Game)
+class WOWGAME_API AWcGameCharacter final : public ACharacter
 {
 	GENERATED_BODY()
 
-	/** Camera boom positioning the camera behind the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* CameraBoom;
+public:
 
-	/** Follow camera */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* FollowCamera;
-	
-	/** MappingContext */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	class UInputMappingContext* DefaultMappingContext;
+	AWcGameCharacter();
 
-	/** Jump Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	class UInputAction* JumpAction;
+public: // Overriden Functions
 
-	/** Move Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	class UInputAction* MoveAction;
+	virtual void BeginPlay() override;
 
-	/** Look Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	class UInputAction* LookAction;
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 public:
-	AWcGameCharacter();
-	
+
+	USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+
+	UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 protected:
 
-	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
 
-	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-			
 
-protected:
-	// APawn interface
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	
-	// To add mapping context
-	virtual void BeginPlay();
+	void Zoom(const FInputActionValue& Value);
 
-public:
-	/** Returns CameraBoom subobject **/
-	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	/** Returns FollowCamera subobject **/
-	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+protected: // Set by the Editor
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=Input)
+	TObjectPtr<UInputMappingContext> DefaultMappingContext;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=Input)
+	TObjectPtr<UInputAction> JumpAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=Input)
+	TObjectPtr<UInputAction> MoveAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=Input)
+	TObjectPtr<UInputAction> LookAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=Input)
+	TObjectPtr<UInputAction> ZoomAction;
+
+	// By how much will the zoom move the camera when you scroll once.
+	UPROPERTY(EditAnywhere, Category=Input)
+	float ZoomStep = 50.f;
+
+	// What is the maximum zoom from the character.
+	UPROPERTY(EditAnywhere, Category=Input)
+	float ZoomMax = 800.f;
+
+	// What is the minimum zoom from the character.
+	UPROPERTY(EditAnywhere, Category=Input)
+	float ZoomMin = 100.f;
+
+private: // Components
+
+	// Arm positioning the camera that is behind the character.
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USpringArmComponent> CameraBoom;
+
+	// Camera behind character
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UCameraComponent> FollowCamera;
+
+	// Minimap spring arm
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Minimap, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USpringArmComponent> MinimapSpringArm;
+
+	// Minimap scene capture
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Minimap, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USceneCaptureComponent2D> MinimapSceneCapture2D;
 };
-

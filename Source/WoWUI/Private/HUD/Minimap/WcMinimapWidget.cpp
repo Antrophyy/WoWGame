@@ -3,6 +3,7 @@
 #include "Characters/WcGameCharacter.h"
 #include "Components/Image.h"
 #include "Components/SceneCaptureComponent2D.h"
+#include "Foundation/PalleteWidgets/WcTextBlock.h"
 
 void UWcMinimapWidget::NativeConstruct()
 {
@@ -27,10 +28,15 @@ void UWcMinimapWidget::NativeTick(const FGeometry& MyGeometry, const float InDel
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
 
-	if (!GameCharacter.IsValid() || !PlayerArrow_Image)
-		return;
+	if (PlayerArrow_Image && GameCharacter.IsValid())
+	{
+		PlayerArrow_Image->SetRenderTransformAngle(GameCharacter->GetActorRotation().Yaw);
+	}
 
-	PlayerArrow_Image->SetRenderTransformAngle(GameCharacter->GetActorRotation().Yaw);
+	if (WorldTime_Label)
+	{
+		WorldTime_Label->SetText(FText::FromString(FDateTime::Now().ToFormattedString(TEXT("%H:%M %p"))));
+	}
 }
 
 FReply UWcMinimapWidget::NativeOnMouseWheel(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)

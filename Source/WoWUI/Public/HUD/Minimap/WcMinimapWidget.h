@@ -3,6 +3,7 @@
 #include "Foundation/WcUserWidget.h"
 #include "WcMinimapWidget.generated.h"
 
+class UWcTextBlock;
 class AWcGameCharacter;
 class UImage;
 class USceneCaptureComponent2D;
@@ -48,4 +49,7 @@ private: // Widget Bindings
 
 	UPROPERTY(meta=(BindWidget))
 	TObjectPtr<UImage> PlayerArrow_Image;
+
+	UPROPERTY(meta=(BindWidget))
+	TObjectPtr<UWcTextBlock> WorldTime_Label;
 };
