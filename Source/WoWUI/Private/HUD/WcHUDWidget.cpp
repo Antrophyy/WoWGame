@@ -40,6 +40,30 @@ void UWcHUDWidget::ValidateCompiledDefaults(IWidgetCompilerLog& CompileLog) cons
 }
 #endif // WITH_EDITOR
 
+FReply UWcHUDWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+{
+	FVector MouseLocation;
+	FVector MouseDirection;
+	GetOwningPlayer()->DeprojectMousePositionToWorld(OUT MouseLocation, OUT MouseDirection);
+
+	const FVector TraceEnd = MouseLocation + MouseDirection * 10'000.f;
+	
+	FHitResult HitResult;
+	const bool bHit = GetWorld()->LineTraceSingleByChannel(OUT HitResult, MouseLocation, TraceEnd, ECC_Visibility, FCollisionQueryParams());
+	if (bHit)
+	{
+		if (APawn* Pawn = Cast<APawn>(HitResult.GetActor()))
+		{
+			if (TargetingBehaviorComponent.IsValid())
+			{
+				TargetingBehaviorComponent->ChangeTarget(Pawn);
+			}
+		}
+	}
+
+	return FReply::Unhandled();
+}
+
 void UWcHUDWidget::HandleEscapeAction()
 {
 	if (!TargetingBehaviorComponent.IsValid())

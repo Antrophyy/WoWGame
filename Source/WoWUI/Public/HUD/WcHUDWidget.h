@@ -19,6 +19,8 @@ protected:
 	virtual void ValidateCompiledDefaults(IWidgetCompilerLog& CompileLog) const override;
 #endif // WITH_EDITOR
 
+	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+
 protected: // Set from the Editor
 
 	UPROPERTY(EditDefaultsOnly)

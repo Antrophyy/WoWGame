@@ -4,9 +4,8 @@
 #include "GameFramework/GameplayMessageSubsystem.h"
 #include "WcIndicatorLayerWidget.generated.h"
 
+class UWcIndicatorComponent_Nameplates;
 class UBaseIndicatorWidget;
-class UIndicatorDescriptor;
-struct FEnemySpawnedMessage;
 
 UCLASS(Abstract)
 class WOWUI_API UWcIndicatorLayerWidget final : public UWcUserWidget
@@ -16,10 +15,6 @@ class WOWUI_API UWcIndicatorLayerWidget final : public UWcUserWidget
 protected:
 
 	virtual void NativeOnInitialized() override;
-
-	virtual void NativeConstruct() override;
-
-	virtual void NativeDestruct() override;
 
 #if WITH_EDITOR
 	virtual void ValidateCompiledDefaults(IWidgetCompilerLog& CompileLog) const override;
@@ -32,18 +27,10 @@ protected: // Set from the Editor
 
 private:
 
-	void RegisterListeners();
+	void CreateComponents();
 
-	void UnregisterListeners();
-
-private: // Broadcast Handling
-
-	void HandleEnemyAggroStateChanged(const FGameplayTag GameplayTag, const FEnemySpawnedMessage& Message);
-
-	FGameplayMessageListenerHandle EnemySpawnedListener;
-
-private: // Internal Properties
+private: // Components
 
 	UPROPERTY()
-	TMap<FString, TObjectPtr<UIndicatorDescriptor>> IndicatorOwnersMap; 
+	TObjectPtr<UWcIndicatorComponent_Nameplates> NameplatesComponent;
 };

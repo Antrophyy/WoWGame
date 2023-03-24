@@ -44,8 +44,6 @@ void UWcNameplateWidget::NativeResetWidgetToDefault()
 {
 	Super::NativeResetWidgetToDefault();
 
-	MakePrimaryTarget(false);
-
 	TargetSelectedListener.Unregister();
 }
 
@@ -58,8 +56,8 @@ FReply UWcNameplateWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, 
 			TargetingBehaviorComponent->ChangeTarget(ActorToAttach.Get());
 		}
 	}
-
-	return FReply::Handled();
+	
+	return FReply::Unhandled();
 }
 
 void UWcNameplateWidget::MakePrimaryTarget(const bool bPrimaryTarget) const
