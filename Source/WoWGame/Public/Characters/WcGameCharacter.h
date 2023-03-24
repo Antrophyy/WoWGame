@@ -3,6 +3,7 @@
 #include "GameFramework/Character.h"
 #include "WcGameCharacter.generated.h"
 
+class UWcTargetingBehaviorComponent;
 class UCameraComponent;
 class UInputAction;
 class UInputMappingContext;
@@ -85,4 +86,8 @@ private: // Components
 	// Minimap scene capture
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Minimap, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<USceneCaptureComponent2D> MinimapSceneCapture2D;
+
+	// Targeting Behavior
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Behavior, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UWcTargetingBehaviorComponent> TargetingBehavior;
 };

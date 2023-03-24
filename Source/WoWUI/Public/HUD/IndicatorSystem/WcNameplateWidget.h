@@ -7,6 +7,8 @@
 class UImage;
 class UProgressBar;
 class UWcTextBlock;
+class UWcTargetingBehaviorComponent;
+struct FTargetSelectedMessage;
 
 UCLASS(Abstract)
 class WOWUI_API UWcNameplateWidget final : public UBaseIndicatorWidget
@@ -20,6 +22,16 @@ protected:
 	virtual void NativeResetWidgetToDefault() override;
 
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+
+	void MakePrimaryTarget(const bool bPrimaryTarget) const;
+
+private: // Broadcast Handling
+
+	void HandleTargetSelectionChanged(const FGameplayTag GameplayTag, const FTargetSelectedMessage& Message);
+
+	FGameplayMessageListenerHandle TargetSelectedListener;
+
+	TWeakObjectPtr<UWcTargetingBehaviorComponent> TargetingBehaviorComponent;
 
 private: // Widget Bindings
 

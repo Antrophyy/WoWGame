@@ -43,7 +43,7 @@ void UWcIndicatorLayerWidget::RegisterListeners()
 	if (!EnemySpawnedListener.IsValid())
 	{
 		UGameplayMessageSubsystem& MessageSubsystem = UGameplayMessageSubsystem::Get(this);
-		MessageSubsystem.RegisterListener(TAG_GAME_EVENTS_ENEMY_SPAWNED, this, &ThisClass::HandleEnemyAggroStateChanged);
+		MessageSubsystem.RegisterListener(TAG_GAME_EVENT_ENEMY_SPAWNED, this, &ThisClass::HandleEnemyAggroStateChanged);
 	}
 }
 

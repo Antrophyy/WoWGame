@@ -5,6 +5,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Behaviors/WcTargetingBehaviorComponent.h"
 #include "Components/SceneCaptureComponent2D.h"
 #include "Engine/LocalPlayer.h"
 #include "GameFramework/PlayerController.h"
@@ -52,6 +53,9 @@ AWcGameCharacter::AWcGameCharacter()
 	// Create minimap scene capture
 	MinimapSceneCapture2D = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("MinimapSceneCapture2D"));
 	MinimapSceneCapture2D->SetupAttachment(MinimapSpringArm, USpringArmComponent::SocketName);
+
+	TargetingBehavior = CreateDefaultSubobject<UWcTargetingBehaviorComponent>(TEXT("TargetingBehavior"));
+	TargetingBehavior->SetupAttachment(RootComponent);
 }
 
 void AWcGameCharacter::BeginPlay()

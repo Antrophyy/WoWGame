@@ -1,3 +1,4 @@
 ﻿#include "GameNativeTags.h"
 
-UE_DEFINE_GAMEPLAY_TAG(TAG_GAME_EVENTS_ENEMY_SPAWNED, "Game.Events.EnemySpawned");
+UE_DEFINE_GAMEPLAY_TAG(TAG_GAME_EVENT_ENEMY_SPAWNED, "Game.Event.EnemySpawned");
+UE_DEFINE_GAMEPLAY_TAG(TAG_GAME_EVENT_TARGET_SELECTED, "Game.Event.TargetSelected");

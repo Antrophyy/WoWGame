@@ -24,7 +24,7 @@ void AWcNonPlayerCharacter::BroadcastAggroStateChanged()
 	FEnemySpawnedMessage Message;
 	Message.Pawn = this;
 	Message.bHasAggro = bHasAggro;
-	MessageSubsystem.BroadcastMessage(TAG_GAME_EVENTS_ENEMY_SPAWNED, Message);
+	MessageSubsystem.BroadcastMessage(TAG_GAME_EVENT_ENEMY_SPAWNED, Message);
 }
 
 void AWcNonPlayerCharacter::NotifyActorBeginOverlap(AActor* OtherActor)
