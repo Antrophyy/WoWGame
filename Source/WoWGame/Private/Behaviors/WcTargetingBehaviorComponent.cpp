@@ -9,7 +9,7 @@ void UWcTargetingBehaviorComponent::ChangeTarget(AActor* NewTarget)
 
 	PreviousTarget = CurrentTarget;
 	CurrentTarget = NewTarget;
-	
+
 	BroadcastTargetSelected();
 }
 

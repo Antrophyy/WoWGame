@@ -33,9 +33,7 @@ private:
 
 	void BroadcastTargetSelected() const;
 
-	UPROPERTY()
-	TObjectPtr<AActor> PreviousTarget;
+	TWeakObjectPtr<AActor> PreviousTarget;
 
-	UPROPERTY()
-	TObjectPtr<AActor> CurrentTarget;
+	TWeakObjectPtr<AActor> CurrentTarget;
 };

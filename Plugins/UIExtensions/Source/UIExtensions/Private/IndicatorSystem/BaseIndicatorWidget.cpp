@@ -8,7 +8,7 @@ void UBaseIndicatorWidget::InitializeIndicatorWidget(const TWeakObjectPtr<UIndic
 {
 	IndicatorDescriptor = InIndicatorDescriptor;
 
-	ActorToAttach = Cast<AActor>(IndicatorDescriptor->GetDataObject());
+	ActorToAttach = Cast<AActor>(IndicatorDescriptor->DataObject);
 	if (!ActorToAttach.IsValid())
 	{
 		UE_LOG(LogUIExtensions, Error, TEXT("[%s::%hs] -> Actor to attach the interaction widget to is invalid."), *StaticClass()->GetName(), __func__);

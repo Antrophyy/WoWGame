@@ -15,7 +15,7 @@ UIndicatorManagerComponent* UIndicatorManagerComponent::GetComponent(const ACont
 
 void UIndicatorManagerComponent::AddIndicator(UIndicatorDescriptor* IndicatorDescriptor)
 {
-	IndicatorDescriptor->SetIndicatorManagerComponent(this);
+	IndicatorDescriptor->ManagerComponent = this;
 	OnIndicatorAdded.Broadcast(IndicatorDescriptor);
 	Indicators.Add(IndicatorDescriptor);
 }
@@ -24,7 +24,7 @@ void UIndicatorManagerComponent::RemoveIndicator(UIndicatorDescriptor* Indicator
 {
 	if (IndicatorDescriptor)
 	{
-		ensure(IndicatorDescriptor->GetIndicatorManagerComponent() == this);
+		ensure(IndicatorDescriptor->ManagerComponent == this);
 
 		OnIndicatorRemoved.Broadcast(IndicatorDescriptor);
 	}

@@ -39,15 +39,15 @@ void UWcIndicatorComponent_Nameplates::HandleNameplateVisibilityBeginOverlap(UPr
 	if (UIndicatorManagerComponent* IndicatorManager = UIndicatorManagerComponent::GetComponent(OwningPlayer.Get()))
 	{
 		UIndicatorDescriptor* Descriptor = NewObject<UIndicatorDescriptor>(this);
-		Descriptor->SetDataObject(OtherActor);
-		Descriptor->SetSceneComponent(OtherActor->FindComponentByClass<USkeletalMeshComponent>());
-		Descriptor->SetProjectionMode(EActorCanvasProjectionMode::ComponentBoundingBox);
-		Descriptor->SetIndicatorClass(IndicatorWidgetClass);
-		Descriptor->SetPriority(1);
-		Descriptor->SetHAlign(HAlign_Center);
-		Descriptor->SetVAlign(VAlign_Bottom);
-		Descriptor->SetBoundingBoxAnchor(FVector(0.5f, 0.5f, 1.1f));
-		Descriptor->SetIsHitTestable(true);
+		Descriptor->DataObject = OtherActor;
+		Descriptor->SceneComponent = OtherActor->FindComponentByClass<USkeletalMeshComponent>();
+		Descriptor->ProjectionMode = EActorCanvasProjectionMode::ComponentBoundingBox;
+		Descriptor->IndicatorWidgetClass = IndicatorWidgetClass;
+		Descriptor->Priority = 1;
+		Descriptor->HAlignment = HAlign_Center;
+		Descriptor->VAlignment = VAlign_Bottom;
+		Descriptor->BoundingBoxAnchor = FVector(0.5f, 0.5f, 1.1f);
+		Descriptor->bIsHitTestable = true;
 
 		IndicatorManager->AddIndicator(Descriptor);
 		IndicatorOwnersMap.Emplace(OtherActor->GetActorLabel(), Descriptor);

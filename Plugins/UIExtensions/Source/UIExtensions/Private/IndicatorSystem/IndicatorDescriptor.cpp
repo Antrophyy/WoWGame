@@ -4,35 +4,35 @@
 
 bool FIndicatorProjection::Project(const UIndicatorDescriptor& IndicatorDescriptor, const FSceneViewProjectionData& InProjectionData, const FVector2D& ScreenSize, FVector& OutScreenPositionWithDepth) const
 {
-	TWeakObjectPtr<USceneComponent> Component = IndicatorDescriptor.GetSceneComponent();
+	TWeakObjectPtr<USceneComponent> Component = IndicatorDescriptor.SceneComponent;
 	if (Component.IsValid())
 	{
 		TOptional<FVector> WorldLocation;
-		if (IndicatorDescriptor.GetComponentSocketName() != NAME_None)
+		if (IndicatorDescriptor.ComponentSocketName != NAME_None)
 		{
-			WorldLocation = Component->GetSocketTransform(IndicatorDescriptor.GetComponentSocketName()).GetLocation();
+			WorldLocation = Component->GetSocketTransform(IndicatorDescriptor.ComponentSocketName).GetLocation();
 		}
 		else
 		{
 			WorldLocation = Component->GetComponentLocation();
 		}
 
-		const FVector ProjectWorldLocation = WorldLocation.GetValue() + IndicatorDescriptor.GetWorldPositionOffset();
-		const EActorCanvasProjectionMode ProjectionMode = IndicatorDescriptor.GetProjectionMode();
+		const FVector ProjectWorldLocation = WorldLocation.GetValue() + IndicatorDescriptor.WorldPositionOffset;
+		const EActorCanvasProjectionMode ProjectionMode = IndicatorDescriptor.ProjectionMode;
 
 		FBox2D ScreenBox = FBox2D(FVector2D::Zero(), ScreenSize);
 
 		FVector2D UnClampedScreenSpacePosition;
-		if (IndicatorDescriptor.GetIsClamped())
+		if (IndicatorDescriptor.bIsClamped)
 		{
 			const TSharedPtr<SWidget> CanvasHost = IndicatorDescriptor.GetCanvasHost().Pin();
 			if (CanvasHost.IsValid())
 			{
 				FVector2D CurrentSize = CanvasHost->GetDesiredSize();
 
-				if (IndicatorDescriptor.GetCurrentClampDirection() != EArrowDirection::Left && IndicatorDescriptor.GetCurrentClampDirection() != EArrowDirection::Bottom)
+				if (IndicatorDescriptor.CurrentClampDirection != EArrowDirection::Left && IndicatorDescriptor.CurrentClampDirection != EArrowDirection::Bottom)
 				{
-					UnClampedScreenSpacePosition = IndicatorDescriptor.GetUnClampedIndicatorSize() - CurrentSize;
+					UnClampedScreenSpacePosition = IndicatorDescriptor.UnClampedIndicatorSize - CurrentSize;
 				}
 			}
 		}
@@ -47,8 +47,8 @@ bool FIndicatorProjection::Project(const UIndicatorDescriptor& IndicatorDescript
 					const bool bInFrontOfCamera = ULocalPlayer::GetPixelPoint(InProjectionData, ProjectWorldLocation, OutScreenSpacePosition, &ScreenSize);
 
 					OutScreenSpacePosition -= UnClampedScreenSpacePosition;
-					OutScreenSpacePosition.X += IndicatorDescriptor.GetScreenSpaceOffset().X * (bInFrontOfCamera ? 1 : -1);
-					OutScreenSpacePosition.Y += IndicatorDescriptor.GetScreenSpaceOffset().Y;
+					OutScreenSpacePosition.X += IndicatorDescriptor.ScreenSpaceOffset.X * (bInFrontOfCamera ? 1 : -1);
+					OutScreenSpacePosition.Y += IndicatorDescriptor.ScreenSpaceOffset.Y;
 
 					if (!bInFrontOfCamera && ScreenBox.IsInside(OutScreenSpacePosition))
 					{
@@ -79,8 +79,8 @@ bool FIndicatorProjection::Project(const UIndicatorDescriptor& IndicatorDescript
 				FVector2D LowerLeft, UpperRight;
 				const bool bInFrontOfCamera = ULocalPlayer::GetPixelBoundingBox(InProjectionData, IndicatorBox, LowerLeft, UpperRight, &ScreenSize);
 
-				const FVector& BoundingBoxAnchor = IndicatorDescriptor.GetBoundingBoxAnchor();
-				const FVector2D& ScreenSpaceOffset = IndicatorDescriptor.GetScreenSpaceOffset();
+				const FVector& BoundingBoxAnchor = IndicatorDescriptor.BoundingBoxAnchor;
+				const FVector2D& ScreenSpaceOffset = IndicatorDescriptor.ScreenSpaceOffset;
 
 				FVector ScreenPositionWithDepth;
 				ScreenPositionWithDepth.X -= UnClampedScreenSpacePosition.X;
@@ -115,14 +115,14 @@ bool FIndicatorProjection::Project(const UIndicatorDescriptor& IndicatorDescript
 					IndicatorBox = Component->Bounds.GetBox();
 				}
 
-				const FVector ProjectBoxPoint = IndicatorBox.GetCenter() + IndicatorBox.GetSize() * (IndicatorDescriptor.GetBoundingBoxAnchor() - FVector(0.5));
+				const FVector ProjectBoxPoint = IndicatorBox.GetCenter() + IndicatorBox.GetSize() * (IndicatorDescriptor.BoundingBoxAnchor - FVector(0.5));
 
 				FVector2D OutScreenSpacePosition;
 				const bool bInFrontOfCamera = ULocalPlayer::GetPixelPoint(InProjectionData, ProjectBoxPoint, OutScreenSpacePosition, &ScreenSize);
 
 				OutScreenSpacePosition -= UnClampedScreenSpacePosition; 
-				OutScreenSpacePosition.X += IndicatorDescriptor.GetScreenSpaceOffset().X * (bInFrontOfCamera ? 1 : -1);
-				OutScreenSpacePosition.Y += IndicatorDescriptor.GetScreenSpaceOffset().Y;
+				OutScreenSpacePosition.X += IndicatorDescriptor.ScreenSpaceOffset.X * (bInFrontOfCamera ? 1 : -1);
+				OutScreenSpacePosition.Y += IndicatorDescriptor.ScreenSpaceOffset.Y;
 
 				if (!bInFrontOfCamera && ScreenBox.IsInside(OutScreenSpacePosition))
 				{
@@ -140,18 +140,9 @@ bool FIndicatorProjection::Project(const UIndicatorDescriptor& IndicatorDescript
 	return false;
 }
 
-void UIndicatorDescriptor::SetIndicatorManagerComponent(UIndicatorManagerComponent* InManager)
-{
-	// Make sure nobody has set this.
-	if (ensure(ManagerPtr.IsExplicitlyNull()))
-	{
-		ManagerPtr = InManager;
-	}
-}
-
 void UIndicatorDescriptor::UnregisterIndicator()
 {
-	if (UIndicatorManagerComponent* Manager = ManagerPtr.Get())
+	if (UIndicatorManagerComponent* Manager = ManagerComponent.Get())
 	{
 		Manager->RemoveIndicator(this);
 	}

@@ -223,7 +223,7 @@ EActiveTimerReturnType SActorCanvas::UpdateCanvas(double InCurrentTime, float In
 				}
 
 				CurChild.SetInFrontOfCamera(Success);
-				CurChild.SetHasValidScreenPosition(CurChild.GetInFrontOfCamera() || Indicator->GetShouldClampToScreen());
+				CurChild.SetHasValidScreenPosition(CurChild.GetInFrontOfCamera() || Indicator->bShouldClampToScreen);
 
 				if (CurChild.HasValidScreenPosition())
 				{
@@ -232,7 +232,7 @@ EActiveTimerReturnType SActorCanvas::UpdateCanvas(double InCurrentTime, float In
 					CurChild.SetDepth(ScreenPositionWithDepth.X);
 				}
 
-				CurChild.SetPriority(Indicator->GetPriority());
+				CurChild.SetPriority(Indicator->Priority);
 
 				IndicatorsChanged |= CurChild.IsDirty();
 				CurChild.ClearDirtyFlag();
@@ -326,7 +326,7 @@ void SActorCanvas::OnArrangeChildren(const FGeometry& AllottedGeometry, FArrange
 			const bool bInFrontOfCamera = CurChild.GetInFrontOfCamera();
 
 			// Don't bother if we can't project the position and the indicator doesn't want to be clamped
-			const bool bShouldClamp = Indicator->GetShouldClampToScreen();
+			const bool bShouldClamp = Indicator->bShouldClampToScreen;
 
 			//get the offset and final size of the slot
 			FVector2D SlotSize, SlotOffset, SlotPaddingMin, SlotPaddingMax;
@@ -403,11 +403,11 @@ void SActorCanvas::OnArrangeChildren(const FGeometry& AllottedGeometry, FArrange
 
 				if (bWasIndicatorClamped)
 				{
-					Indicator->SetCurrentClampDirection(ClampDir);
+					Indicator->CurrentClampDirection = ClampDir;
 				}
 
 				// should we show an arrow
-				if (Indicator->GetShowClampToScreenArrow() &&
+				if (Indicator->bShowClampToScreenArrow &&
 					bWasIndicatorClamped &&
 					ArrowChildren.IsValidIndex(NextArrowIndex))
 				{
@@ -460,7 +460,7 @@ void SActorCanvas::OnArrangeChildren(const FGeometry& AllottedGeometry, FArrange
 
 			if (bWasIndicatorClamped != CurChild.WasIndicatorClamped())
 			{
-				Indicator->SetIsClamped(bWasIndicatorClamped);
+				Indicator->bIsClamped = bWasIndicatorClamped;
 
 				check(Indicator->IndicatorWidget.IsValid())
 				Indicator->IndicatorWidget->NativeOnClampedStatusChanged(bWasIndicatorClamped);
@@ -548,7 +548,7 @@ void SActorCanvas::OnIndicatorRemoved(UIndicatorDescriptor* Indicator)
 void SActorCanvas::AddIndicatorForEntry(UIndicatorDescriptor* Indicator)
 {
 	// Async load the indicator, and pool the results so that it's easy to use and reuse the widgets.
-	TSoftClassPtr<UUserWidget> IndicatorClass = Indicator->GetIndicatorClass();
+	TSoftClassPtr<UUserWidget> IndicatorClass = Indicator->IndicatorWidgetClass;
 	if (!IndicatorClass.IsNull())
 	{
 		TWeakObjectPtr<UIndicatorDescriptor> IndicatorPtr(Indicator);
@@ -585,7 +585,7 @@ void SActorCanvas::AddIndicatorForEntry(UIndicatorDescriptor* Indicator)
 						]
 					];
 
-					SetVisibility(Indicator->GetIsHitTestable() ? EVisibility::Visible : EVisibility::SelfHitTestInvisible);
+					SetVisibility(Indicator->bIsHitTestable ? EVisibility::Visible : EVisibility::SelfHitTestInvisible);
 				}
 			}
 		});
@@ -620,7 +620,7 @@ void SActorCanvas::RemoveIndicatorForEntry(UIndicatorDescriptor* Indicator)
 
 				RemoveCanvasSlot(Indicator);
 
-				Indicator->GetIndicatorManagerComponent()->Indicators.Remove(Indicator);
+				Indicator->ManagerComponent->Indicators.Remove(Indicator);
 			});
 		}
 	}
@@ -629,9 +629,9 @@ void SActorCanvas::RemoveIndicatorForEntry(UIndicatorDescriptor* Indicator)
 	{
 		if (IsValid(Indicator))
 		{
-			Indicator->GetIndicatorManagerComponent()->Indicators.Remove(Indicator);
+			Indicator->ManagerComponent->Indicators.Remove(Indicator);
 		}
-		
+
 		RemoveCanvasSlot(Indicator);
 	}
 }
@@ -678,10 +678,10 @@ int32 SActorCanvas::RemoveActorSlot(const TSharedRef<SWidget>& SlotWidget)
 }
 
 void SActorCanvas::GetOffsetAndSize(UIndicatorDescriptor* Indicator,
-                                        FVector2D& OutSize,
-                                        FVector2D& OutOffset,
-                                        FVector2D& OutPaddingMin,
-                                        FVector2D& OutPaddingMax)
+                                    FVector2D& OutSize,
+                                    FVector2D& OutOffset,
+                                    FVector2D& OutPaddingMin,
+                                    FVector2D& OutPaddingMax)
 {
 	//This might get used one day
 	const FVector2D AllottedSize = FVector2D::ZeroVector;
@@ -693,13 +693,13 @@ void SActorCanvas::GetOffsetAndSize(UIndicatorDescriptor* Indicator,
 		OutSize = CanvasHost->GetDesiredSize();
 	}
 
-	if (!Indicator->GetIsClamped())
+	if (!Indicator->bIsClamped)
 	{
-		Indicator->SetUnClampedIndicatorSize(OutSize);
+		Indicator->UnClampedIndicatorSize = OutSize;
 	}
 
 	//handle horizontal alignment
-	switch (Indicator->GetHAlign())
+	switch (Indicator->HAlignment)
 	{
 		case HAlign_Left: // same as Align_Top
 			OutOffset.X = 0.0f;
@@ -721,7 +721,7 @@ void SActorCanvas::GetOffsetAndSize(UIndicatorDescriptor* Indicator,
 	}
 
 	//Now, handle vertical alignment
-	switch (Indicator->GetVAlign())
+	switch (Indicator->VAlignment)
 	{
 		case VAlign_Top:
 			OutOffset.Y = 0.0f;
