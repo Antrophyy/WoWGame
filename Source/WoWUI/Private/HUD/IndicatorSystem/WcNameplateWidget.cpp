@@ -62,14 +62,16 @@ FReply UWcNameplateWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, 
 
 void UWcNameplateWidget::MakePrimaryTarget(const bool bPrimaryTarget) const
 {
+	const ESlateVisibility DesiredVisibility = bPrimaryTarget ? ESlateVisibility::SelfHitTestInvisible : ESlateVisibility::Collapsed;
+	
 	if (LeftTargetArrow_Image)
 	{
-		LeftTargetArrow_Image->SetVisibility(bPrimaryTarget ? ESlateVisibility::SelfHitTestInvisible : ESlateVisibility::Collapsed);
+		LeftTargetArrow_Image->SetVisibility(DesiredVisibility);
 	}
 
 	if (RightTargetArrow_Image)
 	{
-		RightTargetArrow_Image->SetVisibility(bPrimaryTarget ? ESlateVisibility::SelfHitTestInvisible : ESlateVisibility::Collapsed);
+		RightTargetArrow_Image->SetVisibility(DesiredVisibility);
 	}
 }
 
