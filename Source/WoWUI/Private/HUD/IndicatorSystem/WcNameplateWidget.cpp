@@ -64,12 +64,12 @@ void UWcNameplateWidget::MakePrimaryTarget(const bool bPrimaryTarget) const
 {
 	if (LeftTargetArrow_Image)
 	{
-		LeftTargetArrow_Image->SetVisibility(bPrimaryTarget ? ESlateVisibility::SelfHitTestInvisible : ESlateVisibility::Hidden);
+		LeftTargetArrow_Image->SetVisibility(bPrimaryTarget ? ESlateVisibility::SelfHitTestInvisible : ESlateVisibility::Collapsed);
 	}
 
 	if (RightTargetArrow_Image)
 	{
-		RightTargetArrow_Image->SetVisibility(bPrimaryTarget ? ESlateVisibility::SelfHitTestInvisible : ESlateVisibility::Hidden);
+		RightTargetArrow_Image->SetVisibility(bPrimaryTarget ? ESlateVisibility::SelfHitTestInvisible : ESlateVisibility::Collapsed);
 	}
 }
 
