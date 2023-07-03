@@ -5,6 +5,7 @@
 #include "UITag.h"
 #include "Behaviors/WcTargetingBehaviorComponent.h"
 #include "Editor/WidgetCompilerLog.h"
+#include "GameFramework/Pawn.h"
 #include "Input/CommonUIInputTypes.h"
 
 void UWcHUDWidget::NativeOnInitialized()
