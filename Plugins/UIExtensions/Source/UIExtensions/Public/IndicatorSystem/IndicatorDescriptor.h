@@ -9,7 +9,7 @@ class UIndicatorManagerComponent;
 
 struct UIEXTENSIONS_API FIndicatorProjection
 {
-	bool Project(const UIndicatorDescriptor& IndicatorDescriptor, const FSceneViewProjectionData& InProjectionData, const FVector2D& ScreenSize, FVector& OutScreenPositionWithDepth) const;
+	bool Project(const UIndicatorDescriptor& IndicatorDescriptor, const FSceneViewProjectionData& InProjectionData, const FVector2f& ScreenSize, FVector& OutScreenPositionWithDepth) const;
 };
 
 UENUM(BlueprintType)

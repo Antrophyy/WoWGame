@@ -2,6 +2,7 @@
 #include "LogUIExtensions.h"
 #include "PrimaryGameLayout.h"
 #include "ExtensionHUD.h"
+#include "Framework/Application/SlateApplication.h"
 #include "Kismet/GameplayStatics.h"
 
 void UGameUIManagerSubsystem::Initialize(FSubsystemCollectionBase& Collection)

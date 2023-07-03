@@ -1,5 +1,6 @@
 #include "IndicatorSystem/IndicatorLayer.h"
 #include "IndicatorSystem/SActorCanvas.h"
+#include "Widgets/Layout/SBox.h"
 
 UIndicatorLayer::UIndicatorLayer(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)

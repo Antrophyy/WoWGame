@@ -1,5 +1,6 @@
 ﻿#include "Foundation/ExtensionActivatableWidget.h"
 #include "LogUIExtensions.h"
+#include "Framework/Application/SlateUser.h"
 
 TOptional<FUIInputConfig> UExtensionActivatableWidget::GetDesiredInputConfig() const
 {

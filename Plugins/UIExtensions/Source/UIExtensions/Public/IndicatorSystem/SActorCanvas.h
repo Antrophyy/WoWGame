@@ -3,6 +3,7 @@
 #include "AsyncMixin.h"
 #include "Blueprint/UserWidgetPool.h"
 #include "SceneView.h"
+#include "Widgets/SPanel.h"
 
 class UIndicatorManagerComponent;
 class UIndicatorDescriptor;

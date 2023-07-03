@@ -1,8 +1,13 @@
 ﻿#include "IndicatorSystem/SActorCanvas.h"
+
+#include "Engine/GameViewportClient.h"
 #include "IndicatorSystem/IndicatorManagerComponent.h"
 #include "IndicatorSystem/IIndicatorWidgetInterface.h"
 #include "IndicatorSystem/IndicatorDescriptor.h"
 #include "IndicatorSystem/BaseIndicatorWidget.h"
+#include "Layout/ArrangedChildren.h"
+#include "Widgets/SLeafWidget.h"
+#include "Widgets/Layout/SBox.h"
 
 // Angles for the direction of the arrow to display
 constexpr float ArrowRotations[EArrowDirection::MAX] =
@@ -62,7 +67,7 @@ public:
 			FSlateDrawElement::MakeRotatedBox(
 				OutDrawElements,
 				MaxLayerId++,
-				AllottedGeometry.ToPaintGeometry(FVector2D::ZeroVector, Arrow->ImageSize, 1.f),
+				AllottedGeometry.ToPaintGeometry(Arrow->ImageSize, FSlateLayoutTransform()),
 				Arrow,
 				DrawEffects,
 				FMath::DegreesToRadians(GetRotation()),
