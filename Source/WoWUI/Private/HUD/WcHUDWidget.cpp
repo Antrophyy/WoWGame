@@ -7,8 +7,8 @@
 #include "Components/CanvasPanelSlot.h"
 #include "Editor/WidgetCompilerLog.h"
 #include "GameFramework/Pawn.h"
-#include "HUD/Windows/WcDragWindowOperation.h"
-#include "HUD/Windows/Inventory/WcInventoryWidget.h"
+#include "HUD/Modals/WcDragWindowOperation.h"
+#include "HUD/Modals/Inventory/WcInventoryWidget.h"
 #include "Input/CommonUIInputTypes.h"
 
 void UWcHUDWidget::NativeOnInitialized()

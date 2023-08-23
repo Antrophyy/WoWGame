@@ -1,10 +1,10 @@
-﻿#include "HUD/Windows/Inventory/WcInventoryWidget.h"
+﻿#include "HUD/Modals/Inventory/WcInventoryWidget.h"
 
 #include "Blueprint/WidgetBlueprintLibrary.h"
-#include "HUD/Windows/Inventory/WcInventoryItemWidget.h"
+#include "HUD/Modals/Inventory/WcInventoryItemWidget.h"
 #include "Components/UniformGridPanel.h"
 #include "HUD/WcItemTooltipWidget.h"
-#include "HUD/Windows/WcDragWindowOperation.h"
+#include "HUD/Modals/WcDragWindowOperation.h"
 #include "Items/EWcItemBinding.h"
 #include "Items/EWcItemRarity.h"
 #include "Items/Weapons/EWcItemWeaponType.h"
