@@ -6,6 +6,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Behaviors/WcTargetingBehaviorComponent.h"
+#include "Inventory/WcPlayerInventoryComponent.h"
 #include "Components/SceneCaptureComponent2D.h"
 #include "Engine/LocalPlayer.h"
 #include "GameFramework/PlayerController.h"
@@ -33,29 +34,32 @@ AWcGameCharacter::AWcGameCharacter()
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
-	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
+	CameraBoom = CreateDefaultSubobject<USpringArmComponent>("CameraBoom");
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 400.0f;
 	CameraBoom->bUsePawnControlRotation = true;
 
 	// Create a follow camera
-	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
+	FollowCamera = CreateDefaultSubobject<UCameraComponent>("FollowCamera");
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
 	// Create a minimap spring arm
-	MinimapSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("MinimapSpringArm"));
+	MinimapSpringArm = CreateDefaultSubobject<USpringArmComponent>("MinimapSpringArm");
 	MinimapSpringArm->SetupAttachment(RootComponent);
 	MinimapSpringArm->bInheritPitch = false;
 	MinimapSpringArm->bInheritRoll = false;
 	MinimapSpringArm->bInheritYaw = false;
 
 	// Create minimap scene capture
-	MinimapSceneCapture2D = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("MinimapSceneCapture2D"));
+	MinimapSceneCapture2D = CreateDefaultSubobject<USceneCaptureComponent2D>("MinimapSceneCapture2D");
 	MinimapSceneCapture2D->SetupAttachment(MinimapSpringArm, USpringArmComponent::SocketName);
 
-	TargetingBehavior = CreateDefaultSubobject<UWcTargetingBehaviorComponent>(TEXT("TargetingBehavior"));
-	TargetingBehavior->SetupAttachment(RootComponent);
+	TargetingBehavior = CreateDefaultSubobject<UWcTargetingBehaviorComponent>("TargetingBehavior");
+	AddOwnedComponent(TargetingBehavior);
+
+	PlayerInventory_Component = CreateDefaultSubobject<UWcPlayerInventoryComponent>("PlayerInventory");
+	AddOwnedComponent(PlayerInventory_Component);
 }
 
 void AWcGameCharacter::BeginPlay()

@@ -4,7 +4,7 @@
 #include "WcInventoryWidget.generated.h"
 
 class UWcItemTooltipWidget;
-class UWcInventoryItemWidget;
+class UWcItemWidget;
 class UUniformGridPanel;
 
 UCLASS(Abstract, ClassGroup=UI)
@@ -23,7 +23,7 @@ protected:
 protected: // Set by the Editor
 
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<UWcInventoryItemWidget> InventoryItem_Widget;
+	TSubclassOf<UWcItemWidget> InventoryItem_Class;
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UWcItemTooltipWidget> ItemTooltip_Widget;

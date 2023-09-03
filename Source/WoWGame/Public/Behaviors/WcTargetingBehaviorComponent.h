@@ -1,7 +1,6 @@
 ﻿#pragma once
 
-#include "Components/PrimitiveComponent.h"
-#include "UObject/Object.h"
+#include "Components/ActorComponent.h"
 #include "WcTargetingBehaviorComponent.generated.h"
 
 class AActor;
@@ -17,7 +16,7 @@ struct FTargetSelectedMessage
 };
 
 UCLASS()
-class WOWGAME_API UWcTargetingBehaviorComponent final : public UPrimitiveComponent
+class WOWGAME_API UWcTargetingBehaviorComponent final : public UActorComponent
 {
 	GENERATED_BODY()
 

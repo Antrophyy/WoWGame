@@ -3,8 +3,7 @@
 #include "Foundation/WcUserWidget.h"
 #include "WcItemTooltipWidget.generated.h"
 
-struct FWcItemBase;
-class UWcItemBase;
+struct FWcItemDetail;
 class UWcTextBlock;
 
 UCLASS(Abstract, ClassGroup=UI)
@@ -14,7 +13,7 @@ class WOWUI_API UWcItemTooltipWidget : public UWcUserWidget
 
 public:
 
-	void InitializeTooltipInformation(const UWcItemBase* Item) const;
+	void UpdateTooltipInformation(const FWcItemDetail& Item) const;
 
 private: // Widget Bindings
 

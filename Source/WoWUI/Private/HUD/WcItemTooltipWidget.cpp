@@ -2,14 +2,14 @@
 
 #include "Foundation/PalleteWidgets/WcTextBlock.h"
 #include "Items/EWcItemRarity.h"
-#include "Items/WcItemBase.h"
+#include "Items/WcItemDetail.h"
 
-void UWcItemTooltipWidget::InitializeTooltipInformation(const UWcItemBase* Item) const
+void UWcItemTooltipWidget::UpdateTooltipInformation(const FWcItemDetail& Item) const
 {
 	// TODO(Jan.Vlcek): Make the colors accessible through the editor so that designers can choose and modify the colors themselves. Placeholder for now.
 	FColor NameColor;
 
-	switch (Item->Rarity)
+	switch (Item.Rarity)
 	{
 		case EWcItemRarity::Poor:
 			NameColor = FColor(157, 157, 157);
@@ -41,7 +41,7 @@ void UWcItemTooltipWidget::InitializeTooltipInformation(const UWcItemBase* Item)
 	}
 	
 	Name_Label->SetColorAndOpacity(NameColor);
-	Name_Label->SetText(Item->Name);
-	BindType_Label->SetText(UEnum::GetDisplayValueAsText(Item->ItemBinding));
-	LevelRequirement_Label->SetText(FText::FromString(FString::FromInt(Item->LevelRequirement)));
+	Name_Label->SetText(Item.Name);
+	BindType_Label->SetText(UEnum::GetDisplayValueAsText(Item.Binding));
+	LevelRequirement_Label->SetText(FText::FromString(FString::FromInt(Item.LevelRequirement)));
 }

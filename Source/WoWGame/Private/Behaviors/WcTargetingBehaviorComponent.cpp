@@ -1,6 +1,7 @@
 ﻿#include "Behaviors/WcTargetingBehaviorComponent.h"
 #include "GameNativeTags.h"
 #include "GameFramework/GameplayMessageSubsystem.h"
+#include "GameFramework/Actor.h"
 
 void UWcTargetingBehaviorComponent::ChangeTarget(AActor* NewTarget)
 {
