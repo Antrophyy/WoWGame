@@ -3,6 +3,7 @@
 #include "GameFramework/Character.h"
 #include "WcGameCharacter.generated.h"
 
+class UWcPlayerInventoryComponent;
 class UWcTargetingBehaviorComponent;
 class UCameraComponent;
 class UInputAction;
@@ -90,4 +91,8 @@ private: // Components
 	// Targeting Behavior
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Behavior, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UWcTargetingBehaviorComponent> TargetingBehavior;
+
+	// Player Inventory
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta=(AllowPrivateAccess = true))
+	TObjectPtr<UWcPlayerInventoryComponent> PlayerInventory_Component;
 };

@@ -9,4 +9,5 @@ UE_DEFINE_GAMEPLAY_TAG(TAG_UI_LAYER_ERROR, "UI.Layer.Error");
 
 #pragma region Action
 UE_DEFINE_GAMEPLAY_TAG(TAG_UI_ACTION_ESCAPE, "UI.Action.Escape");
+UE_DEFINE_GAMEPLAY_TAG(TAG_UI_ACTION_TOGGLE_INVENTORY, "UI.Action.ToggleInventory");
 #pragma endregion Action;
