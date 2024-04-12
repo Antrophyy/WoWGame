@@ -9,6 +9,7 @@
 #include "GameFramework/Pawn.h"
 #include "HUD/Modals/WcDragWindowOperation.h"
 #include "HUD/Modals/Inventory/WcInventoryWidget.h"
+#include "HUD/Modals/QuestLog/WcQuestLog.h"
 #include "Input/CommonUIInputTypes.h"
 
 void UWcHUDWidget::NativeOnInitialized()
@@ -105,6 +106,11 @@ void UWcHUDWidget::RegisterUIActionBindings()
 	{
 		ToggleInventoryActionHandle = RegisterUIActionBinding(FBindUIActionArgs(FUIActionTag::ConvertChecked(TAG_UI_ACTION_TOGGLE_INVENTORY), false, FSimpleDelegate::CreateUObject(this, &ThisClass::HandleToggleInventoryAction)));
 	}
+
+	if (!ToggleQuestLogActionHandle.IsValid())
+	{
+		ToggleQuestLogActionHandle = RegisterUIActionBinding(FBindUIActionArgs(FUIActionTag::ConvertChecked(TAG_UI_ACTION_TOGGLE_QUEST_LOG), false, FSimpleDelegate::CreateUObject(this, &ThisClass::HandleToggleQuestLogAction)));
+	}
 }
 
 void UWcHUDWidget::HandleEscapeAction()
@@ -135,25 +141,40 @@ void UWcHUDWidget::HandleEscapeAction()
 
 void UWcHUDWidget::HandleToggleInventoryAction()
 {
-	if (!Inventory_Widget)
+	if (!IsValid(Inventory))
 		return;
 
-	if (OpenedWindows.Contains(Inventory_Widget))
+	if (OpenedWindows.Contains(Inventory))
 	{
-		CollapseWindow(Inventory_Widget);
+		CollapseWindow(Inventory);
 	}
 	else
 	{
-		ShowWindow(Inventory_Widget);
+		ShowWindow(Inventory);
+	}
+}
+
+void UWcHUDWidget::HandleToggleQuestLogAction()
+{
+	if (!IsValid(QuestLog))
+		return;
+
+	if (OpenedWindows.Contains(QuestLog))
+	{
+		CollapseWindow(QuestLog);
+	}
+	else
+	{
+		ShowWindow(QuestLog);
 	}
 }
 
 void UWcHUDWidget::CollapseWindow(UWcUserWidget* WindowToCollapse)
 {
-	if (!WindowToCollapse)
+	if (!IsValid(WindowToCollapse))
 		return;
 
-	if (Inventory_Widget->GetVisibility() == ESlateVisibility::Collapsed)
+	if (WindowToCollapse->GetVisibility() == ESlateVisibility::Collapsed)
 	{
 		UE_LOG(LogWoWUI, Error, TEXT("Attempted to hide a window that is already hidden! Probably wrong handling of window toggle!"));
 		return;
@@ -165,10 +186,10 @@ void UWcHUDWidget::CollapseWindow(UWcUserWidget* WindowToCollapse)
 
 void UWcHUDWidget::ShowWindow(UWcUserWidget* WindowToShow)
 {
-	if (!WindowToShow)
+	if (!IsValid(WindowToShow))
 		return;
 
-	if (Inventory_Widget->GetVisibility() == ESlateVisibility::Visible)
+	if (Inventory->GetVisibility() == ESlateVisibility::Visible)
 	{
 		UE_LOG(LogWoWUI, Error, TEXT("Attempted to show a window that is already shown! Probably wrong handling of window toggle!"));
 		return;

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Foundation/WcUserWidget.h"
+#include "Foundation/WcDraggableModalWidget.h"
 #include "WcInventoryWidget.generated.h"
 
 class UWcItemTooltipWidget;
@@ -8,17 +8,13 @@ class UWcItemWidget;
 class UUniformGridPanel;
 
 UCLASS(Abstract, ClassGroup=UI)
-class WOWUI_API UWcInventoryWidget : public UWcUserWidget
+class WOWUI_API UWcInventoryWidget : public UWcDraggableModalWidget
 {
 	GENERATED_BODY()
 
 protected:
 
 	virtual void NativeConstruct() override;
-
-	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
-
-	virtual void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation) override;
 
 protected: // Set by the Editor
 

@@ -3,6 +3,7 @@
 #include "Foundation/WcActivatableWidget.h"
 #include "WcHUDWidget.generated.h"
 
+class UWcQuestLog;
 class UWcUserWidget;
 class UWcInventoryWidget;
 class UWcTargetingBehaviorComponent;
@@ -34,21 +35,20 @@ protected: // Set from the Editor
 private: // Actions
 
 	void RegisterUIActionBindings();
-
 	void HandleEscapeAction();
-
 	void HandleToggleInventoryAction();
+	void HandleToggleQuestLogAction();
 
 	FUIActionBindingHandle EscapeActionHandle;
-
 	FUIActionBindingHandle ToggleInventoryActionHandle;
+	FUIActionBindingHandle ToggleQuestLogActionHandle;
 
 private: // Window Toggling
 
 	void CollapseWindow(UWcUserWidget* WindowToCollapse);
 
 	void ShowWindow(UWcUserWidget* WindowToShow);
-	
+
 private: // Internal Properties
 
 	TWeakObjectPtr<UWcTargetingBehaviorComponent> TargetingBehaviorComponent;
@@ -59,5 +59,8 @@ private: // Internal Properties
 private: // Widget Bindings
 
 	UPROPERTY(meta=(BindWidget))
-	TObjectPtr<UWcInventoryWidget> Inventory_Widget;
+	TObjectPtr<UWcInventoryWidget> Inventory;
+
+	UPROPERTY(meta=(BindWidget))
+	TObjectPtr<UWcQuestLog> QuestLog;
 };
