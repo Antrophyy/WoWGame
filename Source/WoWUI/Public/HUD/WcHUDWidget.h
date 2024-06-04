@@ -13,18 +13,17 @@ class WOWUI_API UWcHUDWidget final : public UWcActivatableWidget
 {
 	GENERATED_BODY()
 
-protected:
-
-	virtual void NativeOnInitialized() override;
-
-	virtual void NativeConstruct() override;
-
+public:
+	
 #if WITH_EDITOR
 	virtual void ValidateCompiledDefaults(IWidgetCompilerLog& CompileLog) const override;
 #endif // WITH_EDITOR
+	
+protected:
+	virtual void NativeOnInitialized() override;
+	virtual void NativeOnActivated() override;
 
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
-
 	virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
 
 protected: // Set from the Editor
@@ -34,19 +33,13 @@ protected: // Set from the Editor
 
 private: // Actions
 
-	void RegisterUIActionBindings();
 	void HandleEscapeAction();
 	void HandleToggleInventoryAction();
 	void HandleToggleQuestLogAction();
 
-	FUIActionBindingHandle EscapeActionHandle;
-	FUIActionBindingHandle ToggleInventoryActionHandle;
-	FUIActionBindingHandle ToggleQuestLogActionHandle;
-
 private: // Window Toggling
 
 	void CollapseWindow(UWcUserWidget* WindowToCollapse);
-
 	void ShowWindow(UWcUserWidget* WindowToShow);
 
 private: // Internal Properties

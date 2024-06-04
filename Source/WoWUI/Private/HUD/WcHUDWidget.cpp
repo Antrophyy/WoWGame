@@ -1,27 +1,33 @@
 ﻿#include "HUD/WcHUDWidget.h"
+
 #include "LogWoWUI.h"
 #include "PrimaryGameLayout.h"
 #include "UINativeTags.h"
-#include "UITag.h"
 #include "Behaviors/WcTargetingBehaviorComponent.h"
 #include "Components/CanvasPanelSlot.h"
-#include "Editor/WidgetCompilerLog.h"
+#include "Engine/HitResult.h"
 #include "GameFramework/Pawn.h"
 #include "HUD/Modals/WcDragWindowOperation.h"
 #include "HUD/Modals/Inventory/WcInventoryWidget.h"
 #include "HUD/Modals/QuestLog/WcQuestLog.h"
 #include "Input/CommonUIInputTypes.h"
 
+#if WITH_EDITOR
+#include "Editor/WidgetCompilerLog.h"
+#endif // WITH_EDITOR
+
 void UWcHUDWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
-	RegisterUIActionBindings();
+	RegisterUIActionBinding(FBindUIActionArgs(FUIActionTag::ConvertChecked(TAG_UI_ACTION_ESCAPE), false, FSimpleDelegate::CreateUObject(this, &ThisClass::HandleEscapeAction)));
+	RegisterUIActionBinding(FBindUIActionArgs(FUIActionTag::ConvertChecked(TAG_UI_ACTION_TOGGLE_INVENTORY), false, FSimpleDelegate::CreateUObject(this, &ThisClass::HandleToggleInventoryAction)));
+	RegisterUIActionBinding(FBindUIActionArgs(FUIActionTag::ConvertChecked(TAG_UI_ACTION_TOGGLE_QUEST_LOG), false, FSimpleDelegate::CreateUObject(this, &ThisClass::HandleToggleQuestLogAction)));
 }
 
-void UWcHUDWidget::NativeConstruct()
+void UWcHUDWidget::NativeOnActivated()
 {
-	Super::NativeConstruct();
+	Super::NativeOnActivated();
 
 	TargetingBehaviorComponent = GetOwningPlayerPawn()->FindComponentByClass<UWcTargetingBehaviorComponent>();
 	if (!TargetingBehaviorComponent.IsValid())
@@ -93,24 +99,6 @@ bool UWcHUDWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEven
 	CanvasSlot->SetPosition(DragWindowOffsetResult);
 	DragWindowResult->WidgetReference->SetVisibility(ESlateVisibility::Visible);
 	return true;
-}
-
-void UWcHUDWidget::RegisterUIActionBindings()
-{
-	if (!EscapeActionHandle.IsValid())
-	{
-		EscapeActionHandle = RegisterUIActionBinding(FBindUIActionArgs(FUIActionTag::ConvertChecked(TAG_UI_ACTION_ESCAPE), false, FSimpleDelegate::CreateUObject(this, &ThisClass::HandleEscapeAction)));
-	}
-
-	if (!ToggleInventoryActionHandle.IsValid())
-	{
-		ToggleInventoryActionHandle = RegisterUIActionBinding(FBindUIActionArgs(FUIActionTag::ConvertChecked(TAG_UI_ACTION_TOGGLE_INVENTORY), false, FSimpleDelegate::CreateUObject(this, &ThisClass::HandleToggleInventoryAction)));
-	}
-
-	if (!ToggleQuestLogActionHandle.IsValid())
-	{
-		ToggleQuestLogActionHandle = RegisterUIActionBinding(FBindUIActionArgs(FUIActionTag::ConvertChecked(TAG_UI_ACTION_TOGGLE_QUEST_LOG), false, FSimpleDelegate::CreateUObject(this, &ThisClass::HandleToggleQuestLogAction)));
-	}
 }
 
 void UWcHUDWidget::HandleEscapeAction()
