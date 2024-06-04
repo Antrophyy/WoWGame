@@ -40,7 +40,7 @@ void UWcUIManagerSubsystem::NotifyPlayerRemoved(ULocalPlayer* LocalPlayer)
 
 	if (const FDelegateHandle* PlayerControllerSetHandle = PlayerControllerSetDelegatesForLocalPlayer.Find(LocalPlayer))
 	{
-		if (UWcLocalPlayer* WcLocalPlayer = Cast<UWcLocalPlayer>(LocalPlayer->PlayerController))
+		if (UWcLocalPlayer* WcLocalPlayer = Cast<UWcLocalPlayer>(LocalPlayer))
 		{
 			WcLocalPlayer->OnPlayerControllerSet().Remove(*PlayerControllerSetHandle);
 		}
