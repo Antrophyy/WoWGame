@@ -22,7 +22,7 @@ bool FIndicatorProjection::Project(const UIndicatorDescriptor& IndicatorDescript
 
 		FBox2f ScreenBox = FBox2f(FVector2f::Zero(), ScreenSize);
 
-		FVector2D UnClampedScreenSpacePosition;
+		FVector2D UnClampedScreenSpacePosition{};
 		if (IndicatorDescriptor.bIsClamped)
 		{
 			const TSharedPtr<SWidget> CanvasHost = IndicatorDescriptor.GetCanvasHost().Pin();
@@ -82,7 +82,7 @@ bool FIndicatorProjection::Project(const UIndicatorDescriptor& IndicatorDescript
 				const FVector& BoundingBoxAnchor = IndicatorDescriptor.BoundingBoxAnchor;
 				const FVector2D& ScreenSpaceOffset = IndicatorDescriptor.ScreenSpaceOffset;
 
-				FVector ScreenPositionWithDepth;
+				FVector ScreenPositionWithDepth{};
 				ScreenPositionWithDepth.X -= UnClampedScreenSpacePosition.X;
 				ScreenPositionWithDepth.Y -= UnClampedScreenSpacePosition.Y;
 				
