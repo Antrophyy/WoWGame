@@ -23,7 +23,9 @@ public class WoWUI : ModuleRules
 
 				// Game
 				"GameplayMessageRuntime",
-				"UIExtensions",
+				"RareUI",
+				"GameIndicatorSystem",
+				"GameLoadingScreen",
 				"WoWGame",
 			}
 		);
