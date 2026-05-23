@@ -2,7 +2,7 @@
 
 #include "LogWoWUI.h"
 #include "RarePrimaryGameLayout.h"
-#include "UINativeTags.h"
+#include "WoWUITags.h"
 #include "Behaviors/WcTargetingBehaviorComponent.h"
 #include "Components/CanvasPanelSlot.h"
 #include "Engine/HitResult.h"
@@ -107,7 +107,7 @@ void UWHUDScreen::HandleInvokePauseMenuAction()
 	// If we don't have a target, we're free to go to the escape menu.
 	if (URarePrimaryGameLayout* RootLayout = URarePrimaryGameLayout::GetPrimaryGameLayout(GetOwningPlayer()))
 	{
-		RootLayout->PushWidgetToLayerAsync(TAG_UI_LAYER_MENUSCREEN, true, PauseScreen_Class);
+		RootLayout->PushWidgetToLayerAsync(WoWUITags::Layer::MenuScreen, true, PauseScreen_Class);
 	}
 }
 

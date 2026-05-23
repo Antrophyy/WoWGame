@@ -3,7 +3,7 @@
 #include "LogWoWUI.h"
 #include "RareGameUIPolicy.h"
 #include "RarePrimaryGameLayout.h"
-#include "UINativeTags.h"
+#include "WoWUITags.h"
 #include "GameFramework/PlayerController.h"
 #include "Widgets/CommonActivatableWidgetContainer.h"
 
@@ -18,7 +18,7 @@ void UWUIManagerSubsystem::SyncHudVisibilityForPlayer(const bool bIsShown, const
 	{
 		const float DesiredOpacity = bIsShown ? 1.f : 0.f;
 
-		if (UCommonActivatableWidgetContainerBase* GameLayer = RootLayout->GetLayerWidget(TAG_UI_LAYER_GAME))
+		if (UCommonActivatableWidgetContainerBase* GameLayer = RootLayout->GetLayerWidget(WoWUITags::Layer::Game))
 		{
 			if (FMath::IsNearlyEqual(GameLayer->GetRenderOpacity(), DesiredOpacity))
 			{
@@ -29,7 +29,7 @@ void UWUIManagerSubsystem::SyncHudVisibilityForPlayer(const bool bIsShown, const
 			GameLayer->SetRenderOpacity(DesiredOpacity);
 		}
 
-		if (UCommonActivatableWidgetContainerBase* GameWindowLayer = RootLayout->GetLayerWidget(TAG_UI_LAYER_GAMEWINDOW))
+		if (UCommonActivatableWidgetContainerBase* GameWindowLayer = RootLayout->GetLayerWidget(WoWUITags::Layer::GameWindow))
 		{
 			GameWindowLayer->SetRenderOpacity(DesiredOpacity);
 		}

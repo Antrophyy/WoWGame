@@ -1,0 +1,14 @@
+﻿#pragma once
+
+#include "NativeGameplayTags.h"
+
+namespace WoWUITags
+{
+	namespace Layer
+	{
+		WOWTAGS_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Game);
+		WOWTAGS_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameWindow);
+		WOWTAGS_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(MenuScreen);
+		WOWTAGS_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Modal);
+	}
+}

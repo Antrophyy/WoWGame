@@ -24,7 +24,4 @@ private: // Widget Bindings
 
 	UPROPERTY(meta=(BindWidget))
 	TObjectPtr<UCommonActivatableWidgetStack> Modal_Stack;
-
-	UPROPERTY(meta=(BindWidget))
-	TObjectPtr<UCommonActivatableWidgetStack> Error_Stack;
 };

@@ -13,6 +13,11 @@
 			"Name": "WoWUI",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "WoWTags",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [
@@ -36,7 +41,7 @@
 			"Enabled": true
 		},
 		{
-			"Name": "GameLoadingScreen",
+			"Name": "CommonLoadingScreen",
 			"Enabled": true
 		}
 	]

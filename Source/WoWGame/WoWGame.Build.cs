@@ -19,6 +19,7 @@ public class WoWGame : ModuleRules
 
 			// Game
 			"GameplayMessageRuntime",
+			"WoWTags",
 		});
 	}
 }

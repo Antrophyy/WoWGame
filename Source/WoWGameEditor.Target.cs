@@ -11,7 +11,8 @@ public class WoWGameEditorTarget : TargetRules
 		ExtraModuleNames.AddRange(new[]
 		{
 			"WoWGame",
-			"WoWUI"
+			"WoWUI",
+			"WoWTags",
 		});
 	}
 }
