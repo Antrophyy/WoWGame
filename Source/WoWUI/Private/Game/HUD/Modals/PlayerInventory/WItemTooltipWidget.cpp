@@ -42,6 +42,28 @@ void UWItemTooltipWidget::UpdateTooltipInformation(const FWcItemDetail& Item) co
 	
 	Name_Label->SetColorAndOpacity(NameColor);
 	Name_Label->SetText(Item.Name);
-	BindType_Label->SetText(UEnum::GetDisplayValueAsText(Item.Binding));
+	BindType_Label->SetText(GetBindTypeText(Item.Binding));
 	LevelRequirement_Label->SetText(FText::FromString(FString::FromInt(Item.LevelRequirement)));
+}
+
+const FText& UWItemTooltipWidget::GetBindTypeText(const EWcItemBinding Binding) const
+{
+	static const FText BindOnPickupText = FText::FromString("Bind on Pickup");
+	static const FText BindOnAcquireText = FText::FromString("Bind on Acquire");
+	static const FText BindOnUseText = FText::FromString("Bind on Use");
+	static const FText BindToAccountText = FText::FromString("Bind to Account");
+	
+	switch (Binding)
+	{
+		case EWcItemBinding::BindOnPickup:
+			return BindOnPickupText;
+		case EWcItemBinding::BindOnAcquire:
+			return BindOnAcquireText;
+		case EWcItemBinding::BindOnUse:
+			return BindOnUseText;
+		case EWcItemBinding::BindToAccount:
+			return BindToAccountText;
+		default:
+			return FText::GetEmpty();
+	}
 }

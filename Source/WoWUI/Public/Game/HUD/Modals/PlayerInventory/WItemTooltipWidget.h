@@ -3,6 +3,7 @@
 #include "Foundation/WUserWidget.h"
 #include "WItemTooltipWidget.generated.h"
 
+enum class EWcItemBinding : uint8;
 class UTextBlock;
 struct FWcItemDetail;
 
@@ -13,6 +14,9 @@ class WOWUI_API UWItemTooltipWidget : public UWUserWidget
 
 public:
 	void UpdateTooltipInformation(const FWcItemDetail& Item) const;
+	
+private:
+	const FText& GetBindTypeText(const EWcItemBinding Binding) const;
 
 private: // Widget Bindings
 
