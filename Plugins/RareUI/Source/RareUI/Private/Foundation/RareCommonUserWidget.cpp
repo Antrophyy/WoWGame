@@ -1,4 +1,6 @@
-﻿#include "Foundation/RareCommonUserWidget.h"
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#include "Foundation/RareCommonUserWidget.h"
 #include "RareClassValidation.h"
 
 #if WITH_EDITOR

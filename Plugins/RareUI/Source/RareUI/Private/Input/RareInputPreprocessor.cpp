@@ -1,4 +1,6 @@
-﻿#include "Input/RareInputPreprocessor.h"
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#include "Input/RareInputPreprocessor.h"
 #include "Input/Events.h"
 #include "Input/RareGamepadValuesHandler.h"
 

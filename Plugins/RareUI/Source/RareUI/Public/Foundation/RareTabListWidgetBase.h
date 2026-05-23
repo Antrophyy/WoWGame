@@ -1,4 +1,6 @@
-﻿#pragma once
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#pragma once
 
 #include "CommonTabListWidgetBase.h"
 #include "RareTabListWidgetBase.generated.h"

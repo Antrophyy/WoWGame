@@ -1,4 +1,6 @@
-﻿#include "Foundation/RareListView/RareListView.h"
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#include "Foundation/RareListView/RareListView.h"
 
 #include "Foundation/RareListView/SStructTableRow.h"
 

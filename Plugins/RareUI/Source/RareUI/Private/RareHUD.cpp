@@ -1,4 +1,6 @@
-﻿#include "RareHUD.h"
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#include "RareHUD.h"
 #include "RareGameUIManagerSubsystem.h"
 
 void ARareHUD::PostInitializeComponents()

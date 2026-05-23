@@ -1,4 +1,6 @@
-﻿#include "Foundation/RareCommonActivatableWidget.h"
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#include "Foundation/RareCommonActivatableWidget.h"
 #include "RareClassValidation.h"
 
 bool URareCommonActivatableWidget::TryHandleBackAction()

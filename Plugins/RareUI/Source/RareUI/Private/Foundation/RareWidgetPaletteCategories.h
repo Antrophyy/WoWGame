@@ -1,4 +1,6 @@
-﻿#pragma once
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#pragma once
 
 #include "Internationalization/Internationalization.h"
 #include "Internationalization/Text.h"

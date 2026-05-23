@@ -1,13 +1,16 @@
-﻿#include "Modals/RareGameDialogDescriptor.h"
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#include "Modals/RareGameDialogDescriptor.h"
 
 #include "LogRareUI.h"
 
 URareGameDialogDescriptor* URareGameDialogDescriptor::CreateConfirmation(const FText& Header, const FText& Body,
                                                                          const ERareConfirmationDialogType Type,
                                                                          const FRareModalsResultDelegate& ResultCallback,
-                                                                         const bool bInShouldCloseAfterResolve)
+                                                                         const bool bInShouldCloseAfterResolve,
+                                                                         const int32 Priority)
 {
-	URareGameDialogDescriptor* Descriptor = CreateNewDescriptor(Header, Body, ResultCallback, bInShouldCloseAfterResolve);
+	URareGameDialogDescriptor* Descriptor = CreateNewDescriptor(Header, Body, ResultCallback, bInShouldCloseAfterResolve, Priority);
 
 	switch (Type)
 	{
@@ -38,13 +41,14 @@ URareGameDialogDescriptor* URareGameDialogDescriptor::CreateConfirmation(const F
 	return Descriptor;
 }
 
-URareGameDialogDescriptor* URareGameDialogDescriptor::CreateNewDescriptor(const FText& Header, const FText& Body, const FRareModalsResultDelegate& ResultCallback, const bool bInShouldCloseAfterResolve)
+URareGameDialogDescriptor* URareGameDialogDescriptor::CreateNewDescriptor(const FText& Header, const FText& Body, const FRareModalsResultDelegate& ResultCallback, const bool bInShouldCloseAfterResolve, const int32 Priority)
 {
 	URareGameDialogDescriptor* Descriptor = NewObject<URareGameDialogDescriptor>();
 	Descriptor->bShouldCloseAfterResolve = bInShouldCloseAfterResolve;
 	Descriptor->Header = Header;
 	Descriptor->Body = Body;
 	Descriptor->ResultCallback = ResultCallback;
+	Descriptor->Priority = Priority;
 
 	return Descriptor;
 }

@@ -1,4 +1,6 @@
-﻿#include "RareWidgetFactory_Class.h"
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#include "RareWidgetFactory_Class.h"
 #include "Blueprint/UserWidget.h"
 #include "Templates/SubclassOf.h"
 

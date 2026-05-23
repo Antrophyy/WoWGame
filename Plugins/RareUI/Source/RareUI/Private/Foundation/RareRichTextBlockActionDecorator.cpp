@@ -1,10 +1,14 @@
+// Copyright (C) Grip Studios. All Rights Reserved
+
 #include "Foundation/RareRichTextBlockActionDecorator.h"
 
 #include "EnhancedActionKeyMapping.h"
 #include "EnhancedInputSubsystems.h"
+#include "RareGameUIManagerSubsystem.h"
+#include "RareGameUIPolicy.h"
+#include "RarePrimaryGameLayout.h"
 #include "RareUISettings.h"
 #include "Foundation/RareEnhancedActionWidget.h"
-#include "Blueprint/WidgetTree.h"
 #include "Components/RichTextBlock.h"
 #include "Fonts/FontMeasure.h"
 #include "Framework/Application/SlateApplication.h"
@@ -14,6 +18,7 @@
 #include "Widgets/Layout/SBox.h"
 #include "Widgets/Layout/SScaleBox.h"
 #include "RareUI.h"
+#include "Foundation/RareActionKeyWidget.h"
 
 FRareRichInlineAction::FRareRichInlineAction(URichTextBlock* InOwner, URareRichTextBlockActionDecorator* InDecorator) : FRichTextDecorator(InOwner)
 {
@@ -30,23 +35,29 @@ TSharedPtr<SWidget> FRareRichInlineAction::CreateDecoratorWidget(const FTextRunI
 	const FString NameRange = RunInfo.MetaData[TEXT("id")];
 	const FName Name = FName(NameRange);
 
-	const UUserWidget* Outer = Owner->GetTypedOuter<UUserWidget>();
+	UUserWidget* Outer = Owner->GetTypedOuter<UUserWidget>();
 
-	const URareUISettings* UISettings = GetDefault<URareUISettings>();
-
-	const TSubclassOf<URareEnhancedActionWidget> ActionWidgetClass = UISettings->DefaultEnhancedActionWidgetClass;
-
-	if (!IsValid(ActionWidgetClass))
+	TSubclassOf<URareActionKeyWidget> ActionKeyWidgetClass;
+	if (const URareGameUIManagerSubsystem* GameUIManagerSubsystem = UGameInstance::GetSubsystem<URareGameUIManagerSubsystem>(Outer->GetGameInstance()))
 	{
-		ensureAlwaysMsgf(false, TEXT("URareRichTextBlockActionDecorator::CreateDecoratorWidget: ActionWidgetClass is not valid! Please check your URareUISettings configuration."));
+		ActionKeyWidgetClass = GameUIManagerSubsystem->GetCurrentUIPolicy()->GetActionKeyWidget();
+	}
+
+	if (!IsValid(ActionKeyWidgetClass))
+	{
+		ensureMsgf(false, TEXT("URareRichTextBlockActionDecorator::CreateDecoratorWidget: ActionWidgetClass is not valid! Please check your GameUIPolicy configuration."));
 		return nullptr;
 	}
-	
-	URareEnhancedActionWidget* ActionWidget = NewObject<URareEnhancedActionWidget>(Outer ? Outer->WidgetTree : nullptr, ActionWidgetClass);
+
+	// TODO: Should use FUserWidgetPool for this somewhere.
+	URareActionKeyWidget* ActionKeyWidget = CreateWidget<URareActionKeyWidget>(Outer, ActionKeyWidgetClass);
+
+	// We don't want to display hold progress bar in rich texts.
+	ActionKeyWidget->GetActionWidget()->SetAlwaysHideProgressBar(true);
 
 	const TSharedRef<FSlateFontMeasure> FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
 
-	Decorator->RegisterNewDecoratorWidget(Name, ActionWidget);
+	Decorator->RegisterNewDecoratorWidget(Name, ActionKeyWidget);
 
 	return SNew(SBox)
 		.HeightOverride(FontMeasure->GetMaxCharacterHeight(TextStyle.Font, 1.0f))
@@ -58,7 +69,7 @@ TSharedPtr<SWidget> FRareRichInlineAction::CreateDecoratorWidget(const FTextRunI
 			.VAlign(VAlign_Center)
 			.HAlign(HAlign_Center)
 			[
-				ActionWidget->TakeWidget()
+				ActionKeyWidget->TakeWidget()
 			]
 		];
 }
@@ -74,12 +85,12 @@ TSharedPtr<ITextDecorator> URareRichTextBlockActionDecorator::CreateDecorator(UR
 	return MakeShareable(new FRareRichInlineAction(InOwner, this));
 }
 
-void URareRichTextBlockActionDecorator::RegisterNewDecoratorWidget(const FName& InInputActionName, URareEnhancedActionWidget* InWidget)
+void URareRichTextBlockActionDecorator::RegisterNewDecoratorWidget(const FName& InInputActionName, URareActionKeyWidget* InWidget)
 {
 	FRareInlineActionDecoratorInfo DecoratorInfo;
 	DecoratorInfo.InputActionName = InInputActionName;
-	DecoratorInfo.ActionWidget = InWidget;
-	
+	DecoratorInfo.ActionKeyWidget = InWidget;
+
 	DecoratorWidgets.Emplace(DecoratorInfo);
 
 	UpdateRepresentedActions();
@@ -113,8 +124,8 @@ void URareRichTextBlockActionDecorator::UpdateRepresentedActions()
 			SetDesignTimeKey(DecoratorWidget);
 			continue;
 		}
-		
-		DecoratorWidget.ActionWidget->SetDesignerFlags(EWidgetDesignFlags::None);
+
+		DecoratorWidget.ActionKeyWidget->SetDesignerFlags(EWidgetDesignFlags::None);
 #endif // WITH_EDITOR
 
 		// Let's try to look for Enhanced Input Action first.
@@ -140,17 +151,17 @@ bool URareRichTextBlockActionDecorator::TrySetEnhancedAction(const FRareInlineAc
 	{
 		return false;
 	}
-	
+
 	for (const FEnhancedActionKeyMapping& EnhancedActionMapping : GetEnhancedActionKeyMappingsOf(PlayerInput))
 	{
-		if (EnhancedActionMapping.Action.GetName().Equals(DecoratorWidget.InputActionName.ToString())) 
+		if (EnhancedActionMapping.Action.GetName().Equals(DecoratorWidget.InputActionName.ToString()))
 		{
 			// We are an enhanced input action.
-			DecoratorWidget.ActionWidget->SetEnhancedInputAction(const_cast<UInputAction*>(EnhancedActionMapping.Action.Get()));
+			DecoratorWidget.ActionKeyWidget->GetActionWidget()->SetEnhancedInputAction(const_cast<UInputAction*>(EnhancedActionMapping.Action.Get()));
 			return true;
 		}
 	}
-	
+
 	return false;
 }
 
@@ -185,10 +196,10 @@ bool URareRichTextBlockActionDecorator::TrySetUIAction(FRareInlineActionDecorato
 		// Again start listening for when the hold action progresses.
 		DecoratorWidget.ActionProgressHandle = NewActionBinding->OnHoldActionProgressed.AddWeakLambda(this, [DecoratorWidget](const float Progress)
 		{
-			DecoratorWidget.ActionWidget->OnActionProgress(Progress);
+			DecoratorWidget.ActionKeyWidget->GetActionWidget()->OnActionProgress(Progress);
 		});
 
-		DecoratorWidget.ActionWidget->SetInputAction(NewActionBinding->LegacyActionTableRow);
+		DecoratorWidget.ActionKeyWidget->GetActionWidget()->SetInputAction(NewActionBinding->LegacyActionTableRow);
 		return true;
 	}
 
@@ -198,7 +209,7 @@ bool URareRichTextBlockActionDecorator::TrySetUIAction(FRareInlineActionDecorato
 #if WITH_EDITOR
 void URareRichTextBlockActionDecorator::SetDesignTimeKey(const FRareInlineActionDecoratorInfo& DecoratorWidget) const
 {
-	DecoratorWidget.ActionWidget->SetDesignerFlags(EWidgetDesignFlags::Designing);
-	DecoratorWidget.ActionWidget->SetDesignTimeKey(EKeys::Gamepad_FaceButton_Right);
+	DecoratorWidget.ActionKeyWidget->SetDesignerFlags(EWidgetDesignFlags::Designing);
+	DecoratorWidget.ActionKeyWidget->GetActionWidget()->SetDesignTimeKey(EKeys::Gamepad_FaceButton_Right);
 }
 #endif // WITH_EDITOR

@@ -1,4 +1,6 @@
-﻿#include "Foundation/RareBoundActionButton.h"
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#include "Foundation/RareBoundActionButton.h"
 
 #include "CommonTextBlock.h"
 #include "CommonUITypes.h"
@@ -24,6 +26,10 @@ void URareBoundActionButton::SetRepresentedAction(const FUIActionBindingHandle I
 	if (InBindingHandle.GetDisplayName().IsEmpty())
 	{
 		Text_ActionName->SetVisibility(ESlateVisibility::Collapsed);
+	}
+	else
+	{
+		Text_ActionName->SetVisibility(ESlateVisibility::Visible);
 	}
 
 	if (const TSharedPtr<FUIActionBinding> Binding = FUIActionBinding::FindBinding(InBindingHandle))

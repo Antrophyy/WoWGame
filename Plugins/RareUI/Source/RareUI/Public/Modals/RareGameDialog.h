@@ -1,4 +1,6 @@
-﻿#pragma once
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#pragma once
 
 #include "Foundation/RareCommonActivatableWidget.h"
 #include "RareGameDialog.generated.h"
@@ -34,6 +36,9 @@ class RAREUI_API URareGameDialog : public URareCommonActivatableWidget
 public:
 	virtual void SetupDialog(URareGameDialogDescriptor* Descriptor);
 	URareGameDialogDescriptor* GetDialogDescriptor() const { return DialogDescriptor; }
+	
+	// Priority of this dialog in the modal queue. Higher priority dialogs are shown first.
+	int32 Priority = 0;
 
 private:
 	UPROPERTY()

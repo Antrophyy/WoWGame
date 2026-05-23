@@ -1,4 +1,6 @@
-﻿#include "RareClassValidation.h"
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#include "RareClassValidation.h"
 
 #include "GameplayTagContainer.h"
 #include "Blueprint/UserWidget.h"

@@ -1,4 +1,6 @@
-﻿#include "Foundation/RareLazyLoadingSwitcher.h"
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#include "Foundation/RareLazyLoadingSwitcher.h"
 
 #include "CommonUIUtils.h"
 #include "Foundation/RareCommonActivatableWidget.h"

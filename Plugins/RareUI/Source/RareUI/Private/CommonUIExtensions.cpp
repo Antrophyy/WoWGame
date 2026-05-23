@@ -1,3 +1,5 @@
+// Copyright (C) Grip Studios. All Rights Reserved
+
 #include "CommonUIExtensions.h"
 #include "RareGameUIManagerSubsystem.h"
 #include "LogRareUI.h"

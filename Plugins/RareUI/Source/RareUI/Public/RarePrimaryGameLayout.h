@@ -1,4 +1,6 @@
-﻿#pragma once
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#pragma once
 
 #include "CommonUIExtensions.h"
 #include "CommonUserWidget.h"

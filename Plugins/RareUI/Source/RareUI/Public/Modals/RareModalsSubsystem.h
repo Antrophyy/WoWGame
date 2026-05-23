@@ -1,4 +1,6 @@
-﻿#pragma once
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#pragma once
 
 #include "Subsystems/LocalPlayerSubsystem.h"
 #include "RareModalsSubsystem.generated.h"
@@ -14,16 +16,6 @@ enum class ERareModalsResult : uint8
 	Declined,
 	Cancelled,
 	Unknown UMETA(Hidden)
-};
-
-// Possible priorities for error messages, we might add more if needed.
-UENUM(Category=UI)
-enum class ERareModalsPriority : uint8
-{
-	None UMETA(Hidden),
-	Normal,
-	High,
-	ControllerDisconnected // This must be always the highest priority.
 };
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FRareModalsResultDelegate, ERareModalsResult /* Result */, URareGameDialog* /*Dialog*/);

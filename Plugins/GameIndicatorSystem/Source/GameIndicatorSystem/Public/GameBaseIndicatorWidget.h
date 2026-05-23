@@ -1,4 +1,6 @@
-﻿#pragma once
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#pragma once
 
 #include "Blueprint/UserWidget.h"
 #include "GameBaseIndicatorWidget.generated.h"

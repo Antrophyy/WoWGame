@@ -1,3 +1,5 @@
+// Copyright (C) Grip Studios. All Rights Reserved
+
 #include "RareGameUIManagerSubsystem.h"
 
 #include "CommonGameViewportClient.h"

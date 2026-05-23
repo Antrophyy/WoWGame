@@ -1,3 +1,5 @@
+// Copyright (C) Grip Studios. All Rights Reserved
+
 #include "RarePrimaryGameLayout.h"
 
 #if WITH_EDITOR

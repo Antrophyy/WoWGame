@@ -1,4 +1,6 @@
-﻿#include "Foundation/RareLazyWidget.h"
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#include "Foundation/RareLazyWidget.h"
 
 #include "CommonLoadGuard.h"
 #include "RarePrimaryGameLayout.h"
@@ -64,7 +66,7 @@ void URareLazyWidget::SetContentClass(const TSoftClassPtr<UUserWidget>& SoftWidg
 	LazyWidgetContent_Class = SoftWidget;
 }
 
-FDelegateHandle URareLazyWidget::CallAndRegister_ContentLoadedDelegate(FLazyWidgetContentLoaded::FDelegate Delegate)
+FDelegateHandle URareLazyWidget::CallAndRegister_ContentLoadedDelegate(const FLazyWidgetContentLoaded::FDelegate& Delegate)
 {
 	if (ContentWeak.IsValid())
 	{
@@ -74,7 +76,7 @@ FDelegateHandle URareLazyWidget::CallAndRegister_ContentLoadedDelegate(FLazyWidg
 	return OnContentLoadedEvent.Add(Delegate);
 }
 
-void URareLazyWidget::UnregisterContentLoadedDelegate(FDelegateHandle& InHandle)
+void URareLazyWidget::UnregisterContentLoadedDelegate(const FDelegateHandle& InHandle)
 {
 	OnContentLoadedEvent.Remove(InHandle);
 }
@@ -125,7 +127,7 @@ void URareLazyWidget::LazyConstructWidget(const TFunction<void(UUserWidget*)>& O
 
 	if (bShouldSyncLoad)
 	{
-		UAssetManager::Get().GetStreamableManager().RequestSyncLoad(LazyWidgetContent_Class.ToSoftObjectPath());
+		UAssetManager::GetStreamableManager().RequestSyncLoad(LazyWidgetContent_Class.ToSoftObjectPath());
 		ensureAlwaysMsgf(LazyWidgetContent_Class.Get(), TEXT("Failed to sync load %s"), *LazyWidgetContent_Class.ToSoftObjectPath().ToString());
 
 		const TSubclassOf<UUserWidget> LoadedWidget = LazyWidgetContent_Class.Get();
@@ -139,11 +141,15 @@ void URareLazyWidget::LazyConstructWidget(const TFunction<void(UUserWidget*)>& O
 		return;
 	}
 
-	const FName SuspendInputToken = UCommonUIExtensions::SuspendInputForPlayer(GetOwningPlayer(), "ConstructingLazyWidget");
+	FName SuspendInputToken;
+	if (bShouldSuspendInputDuringLoad)
+	{
+		SuspendInputToken = UCommonUIExtensions::SuspendInputForPlayer(GetOwningPlayer(), "ConstructingLazyWidget");
+	}
 	
 	FStreamableManager& StreamableManager = UAssetManager::GetStreamableManager();
 	StreamingHandle = StreamableManager.RequestAsyncLoad(LazyWidgetContent_Class.ToSoftObjectPath(), FStreamableDelegate::CreateWeakLambda(this,
-	[WeakThis = MakeWeakObjectPtr(this), OnWidgetContentLoaded, SuspendInputToken]
+	[OnWidgetContentLoaded, WeakThis = MakeWeakObjectPtr(this), SuspendInputToken]
 	{
 		 if (!WeakThis.IsValid())
 		 {
@@ -160,11 +166,14 @@ void URareLazyWidget::LazyConstructWidget(const TFunction<void(UUserWidget*)>& O
 			 	OnWidgetContentLoaded(ConstructedWidget);
 			 }
 		 }
-		
-		UCommonUIExtensions::ResumeInputForPlayer(WeakThis->GetOwningPlayer(), SuspendInputToken);
+
+		 if (WeakThis->bShouldSuspendInputDuringLoad)
+		 {
+		 	UCommonUIExtensions::ResumeInputForPlayer(WeakThis->GetOwningPlayer(), SuspendInputToken);
+		 }
 	}), FStreamableManager::AsyncLoadHighPriority);
 
-	// Setup a cancel delegate so that we can resume input if this handler is canceled.
+	// Set up a cancel delegate so that we can resume input if this handler is canceled.
 	StreamingHandle->BindCancelDelegate(FStreamableDelegate::CreateWeakLambda(this,
 	  [this, SuspendInputToken]
 	  {

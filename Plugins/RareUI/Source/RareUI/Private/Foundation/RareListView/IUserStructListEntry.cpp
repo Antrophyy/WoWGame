@@ -1,4 +1,6 @@
-﻿#include "Foundation/RareListView/IUserStructListEntry.h"
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#include "Foundation/RareListView/IUserStructListEntry.h"
 
 UUserStructListEntry::UUserStructListEntry(const FObjectInitializer& Initializer)
 	: Super(Initializer)

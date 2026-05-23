@@ -1,4 +1,6 @@
-﻿#include "RareUISettings.h"
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#include "RareUISettings.h"
 
 URareUISettings::URareUISettings()
 {

@@ -1,4 +1,6 @@
-﻿#include "Foundation/RareEnhancedActionWidget.h"
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#include "Foundation/RareEnhancedActionWidget.h"
 
 #include "CommonInputSubsystem.h"
 #include "CommonUIExtensions.h"
@@ -23,8 +25,6 @@ TSharedRef<SWidget> URareEnhancedActionWidget::RebuildWidget()
 	BuildMaterial(GamepadProgressDynamicMaterial, GamepadProgressMaterialBrush);
 	BuildMaterial(KeyboardProgressDynamicMaterial, KeyboardProgressMaterialBrush);
 	BuildMaterial(CachedProgressDynamicMaterial, ProgressMaterialBrush);
-
-	UpdateProgressMaterialStyle();
 
 	bInteractionEnabled = GetIsEnabled();
 	
@@ -174,6 +174,12 @@ FText URareEnhancedActionWidget::GetActionDisplayText() const
 	return FText();
 }
 
+void URareEnhancedActionWidget::SetAlwaysHideProgressBar(const bool bHide)
+{
+	bAlwaysHideProgressBar = bHide;
+	UpdateActionWidget();
+}
+
 void URareEnhancedActionWidget::SetIsInteractionEnabled(const bool bInInteractionEnabled)
 {
 	bInteractionEnabled = bInInteractionEnabled;
@@ -214,7 +220,9 @@ void URareEnhancedActionWidget::SetEnhancedInputAction(UInputAction* InInputActi
 void URareEnhancedActionWidget::SetEnhancedInputAction(UInputAction* InInputAction)
 {
 	if (IsDesignTime())
+	{
 		return;
+	}
 
 	UpdateBindingHandleInternal(FUIActionBindingHandle());
 	RepresentedEnhancedInputAction = InInputAction;
@@ -371,12 +379,6 @@ void URareEnhancedActionWidget::ReplaceIconWithActionDisplayName()
 	{
 		Key = UCommonUIExtensions::GetKeyForInputType(GetOwningLocalPlayer(), CommonInputSubsystem->GetCurrentInputType(), RepresentedEnhancedInputAction, ActionKeyIndex);
 
-		if (!Key.IsValid())
-		{
-			// Can happen if enhanced actions haven't been rebuilt yet and as such it doesn't have a key assigned.
-			UE_LOG(LogRareUI, Display, TEXT("%s -> Unable to find icon for action %s, displaying '?' instead. Gamepad name: %s"), *GetName(), *RepresentedEnhancedInputAction.GetName(), *CommonInputSubsystem->GetCurrentGamepadName().ToString());
-		}
-		
 		bFoundInputAction = true;
 	}
 	else
@@ -386,12 +388,6 @@ void URareEnhancedActionWidget::ReplaceIconWithActionDisplayName()
 		{
 			const FCommonInputTypeInfo& TypeInfo = InputActionData->GetCurrentInputTypeInfo(CommonInputSubsystem);
 			Key = TypeInfo.GetKey();
-
-			if (!Key.IsValid())
-			{
-				// Can happen if the action data is not properly set up.
-				UE_LOG(LogRareUI, Display, TEXT("%s -> Unable to find icon for action %s, displaying '?' instead. Gamepad name: %s"), *GetName(), *InputActionData->DisplayName.ToString(), *CommonInputSubsystem->GetCurrentGamepadName().ToString());
-			}
 			
 			bFoundInputAction = true;
 		}
@@ -422,8 +418,12 @@ void URareEnhancedActionWidget::ReplaceIconWithActionDisplayName()
 void URareEnhancedActionWidget::UpdateActionWidget()
 {
 	if (!IsValid(GetWorld()))
+	{
 		return;
+	}
 
+	UpdateProgressMaterialStyle();
+	
 	bool bDirty = false;
 	
 	const UCommonInputSubsystem* CommonInputSubsystem = GetInputSubsystem();
@@ -496,7 +496,7 @@ void URareEnhancedActionWidget::UpdateActionWidget()
 
 				if (MyProgressImage.IsValid())
 				{
-					if (IsHeldAction())
+					if (IsHeldAction() && !bAlwaysHideProgressBar)
 					{
 						if (MyProgressImage->GetVisibility() != EVisibility::SelfHitTestInvisible)
 						{

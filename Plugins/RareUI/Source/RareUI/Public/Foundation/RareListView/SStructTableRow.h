@@ -1,4 +1,6 @@
-﻿#pragma once
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#pragma once
 
 #include "Slate/SObjectTableRow.h"
 #include "IUserStructListEntry.h"

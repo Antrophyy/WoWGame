@@ -1,4 +1,6 @@
-﻿#include "Foundation/RareEnhancedActionDescriptorWidget.h"
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#include "Foundation/RareEnhancedActionDescriptorWidget.h"
 
 #include "CommonInputSubsystem.h"
 #include "CommonUITypes.h"

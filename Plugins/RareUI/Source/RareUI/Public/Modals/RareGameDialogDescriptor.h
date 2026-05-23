@@ -1,4 +1,6 @@
-﻿#pragma once
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#pragma once
 
 #include "UObject/Object.h"
 #include "RareGameDialog.h"
@@ -17,22 +19,25 @@ public:
 	                                                     const FText& Body,
 	                                                     ERareConfirmationDialogType Type,
 	                                                     const FRareModalsResultDelegate& ResultCallback = FRareModalsResultDelegate(),
-	                                                     const bool bInShouldCloseAfterResolve = true);
+	                                                     const bool bInShouldCloseAfterResolve = true,
+	                                                     const int32 Priority = 0);
 
 	FText Header;
 	FText Body;
-	
+
 	TArray<FRareConfirmationDialogAction> ButtonActions;
-	ERareModalsPriority ErrorPriority = ERareModalsPriority::None;
 	bool bShouldCloseAfterResolve = true;
 
 	FRareModalsResultDelegate ResultCallback;
+
+	int32 Priority = 0;
 
 private:
 	static URareGameDialogDescriptor* CreateNewDescriptor(const FText& Header,
 	                                                      const FText& Body,
 	                                                      const FRareModalsResultDelegate& ResultCallback,
-	                                                      const bool bInShouldCloseAfterResolve = true);
+	                                                      const bool bInShouldCloseAfterResolve = true,
+	                                                      const int32 Priority = 0);
 
 	static FRareConfirmationDialogAction CreateOKAction();
 	static FRareConfirmationDialogAction CreateYesAction();

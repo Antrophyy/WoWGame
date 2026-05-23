@@ -1,3 +1,5 @@
+// Copyright (C) Grip Studios. All Rights Reserved
+
 #pragma once
 
 #include "Input/CommonUIActionRouterBase.h"
@@ -21,6 +23,8 @@ public:
 
 	void AddGamepadValuesListener(const TWeakInterfacePtr<IRareGamepadValuesHandler> InHandler) const;
 	void RemoveGamepadValuesListener(const TWeakInterfacePtr<IRareGamepadValuesHandler> InHandler) const;
+	
+	virtual bool CanProcessNormalGameInput() const override;
 
 protected:
 	virtual TSharedRef<FCommonAnalogCursor> MakeAnalogCursor() const override;

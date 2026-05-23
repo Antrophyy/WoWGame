@@ -1,4 +1,6 @@
-﻿#include "GameBaseIndicatorWidget.h"
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#include "GameBaseIndicatorWidget.h"
 #include "GameIndicatorDescriptor.h"
 #include "LogGameIndicatorSystem.h"
 #include "Animation/WidgetAnimation.h"
@@ -40,11 +42,8 @@ void UGameBaseIndicatorWidget::PlayIndicatorRemovedAnimation()
 
 void UGameBaseIndicatorWidget::NativeOnClampedStatusChanged(const bool bIsClamped)
 {
-	if (bCollapseWhenClamped)
-	{
-		// Hide indicator widget once it has been clamped
-		SetVisibility(bIsClamped ? ESlateVisibility::Collapsed : ESlateVisibility::SelfHitTestInvisible);
-	}
+	// Hide indicator widget once it has been clamped
+	SetVisibility(bIsClamped && bCollapseWhenClamped ? ESlateVisibility::Collapsed : ESlateVisibility::SelfHitTestInvisible);
 }
 
 void UGameBaseIndicatorWidget::HandleIndicatorRemovedAnimationFinished()

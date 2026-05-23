@@ -1,13 +1,15 @@
+// Copyright (C) Grip Studios. All Rights Reserved
+
 #pragma once
 
 #include "Components/RichTextBlockDecorator.h"
 
 #include "RareRichTextBlockActionDecorator.generated.h"
 
+class URareActionKeyWidget;
 struct FUIActionBinding;
 class URareRichTextBlockActionDecorator;
 class ULocalPlayer;
-class URareEnhancedActionWidget;
 
 class FRareRichInlineAction final : public FRichTextDecorator
 {
@@ -32,10 +34,10 @@ public: // General
 	FName InputActionName;
 
 	UPROPERTY()
-	TObjectPtr<URareEnhancedActionWidget> ActionWidget;
+	TObjectPtr<URareActionKeyWidget> ActionKeyWidget;
 
 public: // UI Action specifics
-	
+
 	TSharedPtr<FUIActionBinding> CurrentUIBinding;
 	FDelegateHandle ActionProgressHandle;
 };
@@ -52,8 +54,8 @@ class URareRichTextBlockActionDecorator : public URichTextBlockDecorator
 
 public:
 	virtual TSharedPtr<ITextDecorator> CreateDecorator(URichTextBlock* InOwner) override;
-	void RegisterNewDecoratorWidget(const FName& InInputActionName, URareEnhancedActionWidget* InWidget);
-	
+	void RegisterNewDecoratorWidget(const FName& InInputActionName, URareActionKeyWidget* InWidget);
+
 private:
 	void RegisterListeners();
 
@@ -63,13 +65,13 @@ private:
 #if WITH_EDITOR
 	void SetDesignTimeKey(const FRareInlineActionDecoratorInfo& DecoratorWidget) const;
 #endif // WITH_EDITOR
-	
+
 	UFUNCTION()
 	void UpdateRepresentedActions();
 
 	TWeakObjectPtr<ULocalPlayer> OwningLocalPlayer;
 	FDelegateHandle BoundActionsUpdatedHandle;
-	
+
 	UPROPERTY(Transient)
 	TArray<FRareInlineActionDecoratorInfo> DecoratorWidgets;
 };

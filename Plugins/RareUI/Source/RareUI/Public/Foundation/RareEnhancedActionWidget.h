@@ -1,4 +1,6 @@
-﻿#pragma once
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#pragma once
 
 #include "CommonActionWidget.h"
 #include "RareEnhancedActionWidget.generated.h"
@@ -32,6 +34,8 @@ public:
 	/** End UCommonActionWidget */
 	
 	virtual FText GetActionDisplayText() const;
+	
+	void SetAlwaysHideProgressBar(const bool bHide);
 
 	// Sets whether the progress display of the action should update (fill up).
 	void SetIsInteractionEnabled(const bool bInInteractionEnabled);
@@ -99,6 +103,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category=CommonActionWidget)
 	TObjectPtr<const UInputAction> RepresentedEnhancedInputAction;
+	
+	UPROPERTY(EditAnywhere, Category=CommonActionWidget)
+	bool bAlwaysHideProgressBar = false;
 	
 	UPROPERTY(Transient)
 	TObjectPtr<UMaterialInstanceDynamic> GamepadProgressDynamicMaterial;

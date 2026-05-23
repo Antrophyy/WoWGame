@@ -1,4 +1,6 @@
-﻿#include "Modals/RareModalsSubsystem.h"
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#include "Modals/RareModalsSubsystem.h"
 
 #include "Engine/GameInstance.h"
 #include "Engine/LocalPlayer.h"

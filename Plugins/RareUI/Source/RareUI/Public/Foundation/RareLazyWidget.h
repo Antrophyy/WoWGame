@@ -1,4 +1,6 @@
-﻿#pragma once
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#pragma once
 
 #include "Components/Widget.h"
 
@@ -31,8 +33,8 @@ public:
 	void SetContentClass(const TSoftClassPtr<UUserWidget>& SoftWidget);
 
 	// Attempts to load the content (if not yet loaded) and creates a widget (if not yet created). Uses pooling if possible.
-	FDelegateHandle CallAndRegister_ContentLoadedDelegate(FLazyWidgetContentLoaded::FDelegate Delegate);
-	void UnregisterContentLoadedDelegate(FDelegateHandle& InHandle);
+	FDelegateHandle CallAndRegister_ContentLoadedDelegate(const FLazyWidgetContentLoaded::FDelegate& Delegate);
+	void UnregisterContentLoadedDelegate(const FDelegateHandle& InHandle);
 
 	// Returns the loaded content, if any.
 	UUserWidget* GetContent() const { return ContentWeak.Get(); }
@@ -52,6 +54,9 @@ protected: // Set By The Editor
 	
 	UPROPERTY(EditAnywhere, Category = "Load Properties")
 	TSoftClassPtr<UUserWidget> LazyWidgetContent_Class;
+	
+	UPROPERTY(EditAnywhere, Category = "Load Properties", meta=(EditCondition="!bShouldSyncLoad"))
+	bool bShouldSuspendInputDuringLoad = false;
 
 private: // Internal
 

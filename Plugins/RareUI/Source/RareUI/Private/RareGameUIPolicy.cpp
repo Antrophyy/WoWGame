@@ -1,4 +1,6 @@
-﻿#include "RareGameUIPolicy.h"
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#include "RareGameUIPolicy.h"
 
 #include "CommonGameViewportClient.h"
 #include "CommonUITypes.h"
@@ -28,23 +30,12 @@ URareGameUIPolicy* URareGameUIPolicy::GetGameUIPolicy(const UObject* WorldContex
 
 URareGameUIManagerSubsystem* URareGameUIPolicy::GetOwningUIManager() const
 {
-	if (IsValid(GetOuter()))
-	{
-		return Cast<URareGameUIManagerSubsystem>(GetOuter());
-	}
-	
-	return nullptr;
+	return CastChecked<URareGameUIManagerSubsystem>(GetOuter());
 }
 
 UWorld* URareGameUIPolicy::GetWorld() const
 {
-	const URareGameUIManagerSubsystem* UIManager = GetOwningUIManager();
-	if (!IsValid(UIManager))
-	{
-		return nullptr;
-	}
-	
-	return UIManager->GetGameInstance()->GetWorld();
+	return GetOwningUIManager()->GetGameInstance()->GetWorld();
 }
 
 URarePrimaryGameLayout* URareGameUIPolicy::GetRootLayout(const ULocalPlayer* LocalPlayer) const
@@ -127,11 +118,21 @@ void URareGameUIPolicy::NotifyPlayerDestroyed(ULocalPlayer* LocalPlayer)
 	}
 }
 
+TSubclassOf<URareActionKeyWidget> URareGameUIPolicy::GetActionKeyWidget()
+{
+	return DefaultEnhancedActionWidgetClass;
+}
+
 void URareGameUIPolicy::AddLayoutToViewport(ULocalPlayer* LocalPlayer, URarePrimaryGameLayout* Layout)
 {
-	UE_LOG(LogRareUI, Log, TEXT("Adding player [%s]'s root layout [%s] to the viewport"), *GetNameSafe(LocalPlayer), *GetNameSafe(Layout));
-	ensureAlwaysMsgf(LocalPlayer->ViewportClient->IsA(UCommonGameViewportClient::StaticClass()), TEXT("GameViewportClient is not of class UCommonGameViewportClient, go to project settings and set correct Viewport Class"));
-	
+	UE_LOG(LogRareUI, Log, TEXT("[%s::%hs] -> Adding player [%s]'s root layout [%s] to the viewport"), *StaticClass()->GetName(), __func__,
+	       *GetNameSafe(LocalPlayer), *GetNameSafe(Layout));
+
+	ensureAlwaysMsgf(LocalPlayer->ViewportClient->IsA(UCommonGameViewportClient::StaticClass()),
+	                 TEXT(
+		                 "GameViewportClient is not of class UCommonGameViewportClient, go to project settings and set correct Viewport Class"
+	                 ));
+
 	Layout->SetPlayerContext(FLocalPlayerContext(LocalPlayer));
 
 	const URareUISettings* UISettings = GetDefault<URareUISettings>();
@@ -152,13 +153,16 @@ void URareGameUIPolicy::RemoveLayoutFromViewport(ULocalPlayer* LocalPlayer, URar
 	const TWeakPtr<SWidget> LayoutSlateWidget = Layout->GetCachedWidget();
 	if (LayoutSlateWidget.IsValid())
 	{
-		UE_LOG(LogRareUI, Log, TEXT("Removing player [%s]'s root layout [%s] from the viewport"), *GetNameSafe(LocalPlayer), *GetNameSafe(Layout));
+		UE_LOG(LogRareUI, Log, TEXT("[%s::%hs] -> Removing player [%s]'s root layout [%s] from the viewport"),
+			   *StaticClass()->GetName(), __func__, *GetNameSafe(LocalPlayer), *GetNameSafe(Layout));
 
 		Layout->RemoveFromParent();
-		
 		if (LayoutSlateWidget.IsValid())
 		{
-			UE_LOG(LogRareUI, Log,TEXT("Player [%s]'s root layout [%s] has been removed from the viewport, but other references to its underlying Slate widget still exist. Noting in case we leak it."), *GetNameSafe(LocalPlayer), *GetNameSafe(Layout));
+			UE_LOG(LogRareUI, Log,
+				   TEXT(
+					   "[%s::%hs] -> Player [%s]'s root layout [%s] has been removed from the viewport, but other references to its underlying Slate widget still exist. Noting in case we leak it."
+				   ), *StaticClass()->GetName(), __func__, *GetNameSafe(LocalPlayer), *GetNameSafe(Layout));
 		}
 
 		OnRootLayoutRemovedFromViewport(LocalPlayer, Layout);

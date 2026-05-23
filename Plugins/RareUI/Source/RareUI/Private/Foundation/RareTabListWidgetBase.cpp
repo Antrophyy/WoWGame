@@ -1,4 +1,6 @@
-﻿#include "Foundation/RareTabListWidgetBase.h"
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#include "Foundation/RareTabListWidgetBase.h"
 
 #include "CommonActionWidget.h"
 #include "CommonAnimatedSwitcher.h"

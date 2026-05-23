@@ -1,4 +1,6 @@
-﻿using UnrealBuildTool;
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+using UnrealBuildTool;
 
 public class RareUI : ModuleRules
 {

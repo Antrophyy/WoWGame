@@ -1,4 +1,6 @@
-﻿#pragma once
+﻿// Copyright (C) Grip Studios. All Rights Reserved
+
+#pragma once
 
 #include "CoreMinimal.h"
 #include "Containers/Queue.h"
@@ -15,9 +17,9 @@ struct TRareDispatchQueue
 	
 public:
 
-	DECLARE_MULTICAST_DELEGATE_TwoParams(FIgnitePerkDelegate, const TPayloadType& /*PayloadType*/, const float /*DispatchDuration*/);
+	DECLARE_MULTICAST_DELEGATE_TwoParams(FRareDispatchDelegate, const TPayloadType& /*PayloadType*/, const float /*DispatchDuration*/);
 	// Delegate to be called when a payload is dispatched.
-	FIgnitePerkDelegate OnDispatched;
+	FRareDispatchDelegate OnDispatched;
 
 	bool bWaitingForFirstMessage = true;
 

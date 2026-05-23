@@ -1,3 +1,5 @@
+// Copyright (C) Grip Studios. All Rights Reserved
+
 #include "Foundation/RareImage.h"
 
 URareImage::URareImage()
@@ -7,7 +9,7 @@ URareImage::URareImage()
 
 void URareImage::OnImageStreamingStarted(TSoftObjectPtr<UObject> SoftObject)
 {
-	SetVisibility(ESlateVisibility::Collapsed);
+	SetVisibility(ESlateVisibility::Hidden);
 }
 
 void URareImage::OnImageStreamingComplete(TSoftObjectPtr<UObject> LoadedSoftObject)

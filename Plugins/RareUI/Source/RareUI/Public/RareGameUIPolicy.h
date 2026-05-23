@@ -1,8 +1,12 @@
-﻿#pragma once
+﻿// Copyright (C) Grip Studios. All Rights Reserved
 
+#pragma once
+
+#include "Templates/SubclassOf.h"
 #include "UObject/Object.h"
 #include "RareGameUIPolicy.generated.h"
 
+class URareActionKeyWidget;
 class URareGameDialog;
 class UInputMappingContext;
 class ULocalPlayer;
@@ -83,6 +87,8 @@ public:
 	void NotifyPlayerAdded(ULocalPlayer* LocalPlayer);
 	void NotifyPlayerRemoved(ULocalPlayer* LocalPlayer);
 	void NotifyPlayerDestroyed(ULocalPlayer* LocalPlayer);
+	
+	TSubclassOf<URareActionKeyWidget> GetActionKeyWidget();
 
 protected: // Set by the Editor
 
@@ -94,6 +100,9 @@ protected: // Set by the Editor
 
 	UPROPERTY(EditAnywhere, Category = "Input", meta = (EditCondition = "CommonInput.CommonInputSettings.IsEnhancedInputSupportEnabled", EditConditionHides))
 	int32 GenericInputMappingPriority;
+	
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TSubclassOf<URareActionKeyWidget> DefaultEnhancedActionWidgetClass;
 
 	UPROPERTY(EditAnywhere, Category = "Dialogs")
 	TSoftClassPtr<URareGameDialog> BaseDialog_Class;

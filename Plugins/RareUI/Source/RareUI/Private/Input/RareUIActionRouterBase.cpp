@@ -1,3 +1,5 @@
+// Copyright (C) Grip Studios. All Rights Reserved
+
 #include "Input/RareUIActionRouterBase.h"
 
 #include "Input/RareAnalogCursor.h"
@@ -45,6 +47,11 @@ void URareUIActionRouterBase::RemoveGamepadValuesListener(const TWeakInterfacePt
 	{
 		RareInputPreprocessor->GamepadValuesHandlers.Remove(InHandler);
 	}
+}
+
+bool URareUIActionRouterBase::CanProcessNormalGameInput() const
+{
+	return true;
 }
 
 TSharedRef<FCommonAnalogCursor> URareUIActionRouterBase::MakeAnalogCursor() const
