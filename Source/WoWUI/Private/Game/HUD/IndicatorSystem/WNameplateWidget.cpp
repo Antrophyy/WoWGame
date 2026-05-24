@@ -12,7 +12,7 @@ void UWNameplateWidget::NativeOnIndicatorWidgetInitialized()
 	Super::NativeOnIndicatorWidgetInitialized();
 
 	ActorToAttach = Cast<AActor>(DataObject);
-	Name_Label->SetText(FText::FromString(ActorToAttach->GetActorLabel()));
+	Name_Label->SetText(FText::FromString(ActorToAttach->GetName()));
 	Health_ProgressBar->SetPercent(0.5f);
 
 	TargetingBehaviorComponent = GetOwningPlayerPawn()->FindComponentByClass<UWcTargetingBehaviorComponent>();

@@ -41,7 +41,7 @@
 			"Enabled": true
 		},
 		{
-			"Name": "CommonLoadingScreen",
+			"Name": "GameLoadingScreen",
 			"Enabled": true
 		}
 	]

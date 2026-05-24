@@ -43,31 +43,31 @@ protected:
 
 protected: // Set by the Editor
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=Input)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="WoW|Input")
 	TObjectPtr<UInputMappingContext> DefaultMappingContext;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=Input)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="WoW|Input")
 	TObjectPtr<UInputAction> JumpAction;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=Input)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="WoW|Input")
 	TObjectPtr<UInputAction> MoveAction;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=Input)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="WoW|Input")
 	TObjectPtr<UInputAction> LookAction;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=Input)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="WoW|Input")
 	TObjectPtr<UInputAction> ZoomAction;
 
 	// By how much will the zoom move the camera when you scroll once.
-	UPROPERTY(EditAnywhere, Category=Input)
+	UPROPERTY(EditAnywhere, Category="WoW|Input")
 	float ZoomStep = 50.f;
 
 	// What is the maximum zoom from the character.
-	UPROPERTY(EditAnywhere, Category=Input)
+	UPROPERTY(EditAnywhere, Category="WoW|Input")
 	float ZoomMax = 800.f;
 
 	// What is the minimum zoom from the character.
-	UPROPERTY(EditAnywhere, Category=Input)
+	UPROPERTY(EditAnywhere, Category="WoW|Input")
 	float ZoomMin = 100.f;
 
 private: // Components

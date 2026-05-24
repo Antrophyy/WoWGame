@@ -7,6 +7,7 @@ void AWGameHUD::BeginPlay()
 {
 	Super::BeginPlay();
 
+	FPlatformProcess::Sleep(5.0f);
 	if (URarePrimaryGameLayout* RootLayout = URarePrimaryGameLayout::GetPrimaryGameLayout(GetOwningPlayerController()))
 	{
 		RootLayout->PushWidgetToLayerAsync(WoWUITags::Layer::Game, true, HUDScreen_Class);

@@ -27,7 +27,7 @@ void UWUnitFrameWidget_Target::HandleTargetSelectionChanged(const FGameplayTag G
 		return;
 	}
 
-	UnitName_Label->SetText(FText::FromString(Message.CurrentTarget->GetActorLabel()));
+	UnitName_Label->SetText(FText::FromString(Message.CurrentTarget->GetName()));
 
 	// TODO: Add current level.
 	UnitLevel_NumericLabel->SetCurrentValue(60);

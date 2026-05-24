@@ -25,7 +25,7 @@ public class WoWUI : ModuleRules
 				"GameplayMessageRuntime",
 				"RareUI",
 				"GameIndicatorSystem",
-				"CommonLoadingScreen",
+				"GameLoadingScreen",
 				"WoWGame",
 				"WoWTags",
 			}

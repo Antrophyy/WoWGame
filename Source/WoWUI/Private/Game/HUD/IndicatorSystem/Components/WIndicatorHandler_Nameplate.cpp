@@ -33,7 +33,7 @@ void UWIndicatorHandler_Nameplate::NativeComponentInitialized()
 void UWIndicatorHandler_Nameplate::HandleNameplateVisibilityBeginOverlap(UPrimitiveComponent*, AActor* OtherActor, UPrimitiveComponent*, int, bool, const FHitResult&)
 {
 	const bool bIsTrackablePawn = (bool)Cast<AWcNonPlayerCharacter>(OtherActor);
-	const bool bIsAlreadyTracked = IndicatorOwnersMap.Contains(OtherActor->GetActorLabel());
+	const bool bIsAlreadyTracked = IndicatorOwnersMap.Contains(OtherActor->GetName());
 
 	if (!bIsTrackablePawn || bIsAlreadyTracked)
 		return;
@@ -52,17 +52,17 @@ void UWIndicatorHandler_Nameplate::HandleNameplateVisibilityBeginOverlap(UPrimit
 		Descriptor->bIsHitTestable = true;
 
 		IndicatorManager->AddIndicator(Descriptor);
-		IndicatorOwnersMap.Emplace(OtherActor->GetActorLabel(), Descriptor);
+		IndicatorOwnersMap.Emplace(OtherActor->GetName(), Descriptor);
 	}
 }
 
 void UWIndicatorHandler_Nameplate::HandleNameplateVisibilityEndOverlap(UPrimitiveComponent*, AActor* OtherActor, UPrimitiveComponent*, int)
 {
-	if (!IndicatorOwnersMap.Contains(OtherActor->GetActorLabel()))
+	if (!IndicatorOwnersMap.Contains(OtherActor->GetName()))
 		return;
 
 	if (UGameIndicatorManagerComponent* IndicatorManager = UGameIndicatorManagerComponent::GetComponent(OwningPlayer.Get()))
 	{
-		IndicatorManager->RemoveIndicator(IndicatorOwnersMap.FindAndRemoveChecked(OtherActor->GetActorLabel()).ResolveObjectPtr());
+		IndicatorManager->RemoveIndicator(IndicatorOwnersMap.FindAndRemoveChecked(OtherActor->GetName()).ResolveObjectPtr());
 	}
 }
