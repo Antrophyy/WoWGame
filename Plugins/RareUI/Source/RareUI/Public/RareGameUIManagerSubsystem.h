@@ -1,6 +1,4 @@
-﻿// Copyright (C) Grip Studios. All Rights Reserved
-
-#pragma once
+﻿#pragma once
 
 #include "Engine/GameInstance.h"
 #include "Containers/Ticker.h"

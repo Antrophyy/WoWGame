@@ -1,5 +1,3 @@
-// Copyright (C) Grip Studios. All Rights Reserved
-
 #include "Foundation/RareImage.h"
 
 URareImage::URareImage()

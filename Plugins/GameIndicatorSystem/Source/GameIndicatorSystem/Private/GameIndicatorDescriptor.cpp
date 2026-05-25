@@ -1,5 +1,3 @@
-// Copyright (C) Grip Studios. All Rights Reserved
-
 #include "GameIndicatorDescriptor.h"
 #include "Engine/LocalPlayer.h"
 #include "GameIndicatorManagerComponent.h"

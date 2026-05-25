@@ -1,6 +1,4 @@
-﻿// Copyright (C) Grip Studios. All Rights Reserved
-
-#include "Modals/RareUIParameters.h"
+﻿#include "Modals/RareUIParameters.h"
 
 #include "LogRareUI.h"
 

@@ -1,5 +1,7 @@
 ﻿#include "Frontend/MainMenu/WMainMenuScreen.h"
 
+#include "RarePrimaryGameLayout.h"
+#include "WoWUITags.h"
 #include "Foundation/WLabeledButton.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -10,33 +12,32 @@ void UWMainMenuScreen::NativeOnInitialized()
 
 	PlayGame_Button->OnClicked().AddUObject(this, &ThisClass::HandlePlayGameButtonClicked);
 	Settings_Button->OnClicked().AddUObject(this, &ThisClass::HandleSettingsButtonClicked);
-	
-	Settings_Button->SetIsInteractionEnabled(false);
-	Settings_Button->DisableButtonWithReason(FText::FromString(TEXT("Not yet implemented.")));
-	
 	Credits_Button->OnClicked().AddUObject(this, &ThisClass::HandleCreditsButtonClicked);
-	Credits_Button->SetIsInteractionEnabled(false);
-	Credits_Button->DisableButtonWithReason(FText::FromString(TEXT("Not yet implemented.")));
-	
 	QuitGame_Button->OnClicked().AddUObject(this, &ThisClass::HandleQuitGameButtonClicked);
 }
 
-void UWMainMenuScreen::HandlePlayGameButtonClicked()
+void UWMainMenuScreen::HandlePlayGameButtonClicked() const
 {
 	UGameplayStatics::OpenLevelBySoftObjectPtr(this, GameMap, true);
 }
 
-void UWMainMenuScreen::HandleSettingsButtonClicked()
+void UWMainMenuScreen::HandleSettingsButtonClicked() const
 {
-	// #TODO: Add
+	if (URarePrimaryGameLayout* PrimaryGameLayout = URarePrimaryGameLayout::GetPrimaryGameLayout(GetOwningPlayer()))
+	{
+		PrimaryGameLayout->PushWidgetToLayerAsync(WoWUITags::Layer::MenuScreen, true, SettingsScreen_Class);
+	}
 }
 
-void UWMainMenuScreen::HandleCreditsButtonClicked()
+void UWMainMenuScreen::HandleCreditsButtonClicked() const
 {
-	// #TODO: Add
+	if (URarePrimaryGameLayout* PrimaryGameLayout = URarePrimaryGameLayout::GetPrimaryGameLayout(GetOwningPlayer()))
+	{
+		PrimaryGameLayout->PushWidgetToLayerAsync(WoWUITags::Layer::MenuScreen, true, CreditsScreen_Class);
+	}
 }
 
-void UWMainMenuScreen::HandleQuitGameButtonClicked()
+void UWMainMenuScreen::HandleQuitGameButtonClicked() const
 {
 	UKismetSystemLibrary::QuitGame(this, GetOwningPlayer(), EQuitPreference::Quit, false);
 }

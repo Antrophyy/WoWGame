@@ -1,5 +1,4 @@
-﻿// Copyright (C) Grip Studios. All Rights Reserved
-
+﻿
 #include "GameLoadingScreenManager.h"
 #include "HAL/ThreadHeartBeat.h"
 #include "GameFramework/GameStateBase.h"

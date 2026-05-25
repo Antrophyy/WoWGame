@@ -1,5 +1,4 @@
-﻿// Copyright (C) Grip Studios. All Rights Reserved
-
+﻿
 #include "IGameLoadingProcess.h"
 
 bool IGameLoadingProcess::ShouldShowLoadingScreen(UObject* TestObject, FString& OutReason)

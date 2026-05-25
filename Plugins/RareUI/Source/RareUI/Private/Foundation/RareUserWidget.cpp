@@ -1,5 +1,4 @@
-﻿// Copyright (C) Grip Studios. All Rights Reserved
-
+﻿
 #include "Foundation/RareUserWidget.h"
 #include "RareClassValidation.h"
 

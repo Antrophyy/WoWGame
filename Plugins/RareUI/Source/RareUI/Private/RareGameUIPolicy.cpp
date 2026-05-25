@@ -1,6 +1,4 @@
-﻿// Copyright (C) Grip Studios. All Rights Reserved
-
-#include "RareGameUIPolicy.h"
+﻿#include "RareGameUIPolicy.h"
 
 #include "CommonGameViewportClient.h"
 #include "CommonUITypes.h"
@@ -10,6 +8,7 @@
 #include "RareGameUIManagerSubsystem.h"
 #include "RarePrimaryGameLayout.h"
 #include "RareUISettings.h"
+#include "Core/RareInputAction.h"
 #include "Engine/Engine.h"
 
 URareGameUIPolicy* URareGameUIPolicy::GetGameUIPolicy(const UObject* WorldContextObject)
@@ -123,14 +122,19 @@ TSubclassOf<URareActionKeyWidget> URareGameUIPolicy::GetActionKeyWidget()
 	return DefaultEnhancedActionWidgetClass;
 }
 
+const FRareUIActionData& URareGameUIPolicy::GetBackInputActionData()
+{
+	return BackActionData;
+}
+
 void URareGameUIPolicy::AddLayoutToViewport(ULocalPlayer* LocalPlayer, URarePrimaryGameLayout* Layout)
 {
 	UE_LOG(LogRareUI, Log, TEXT("[%s::%hs] -> Adding player [%s]'s root layout [%s] to the viewport"), *StaticClass()->GetName(), __func__,
 	       *GetNameSafe(LocalPlayer), *GetNameSafe(Layout));
 
-	ensureAlwaysMsgf(LocalPlayer->ViewportClient->IsA(UCommonGameViewportClient::StaticClass()),
+	ensureAlwaysMsgf(!LocalPlayer->ViewportClient->IsA(UCommonGameViewportClient::StaticClass()),
 	                 TEXT(
-		                 "GameViewportClient is not of class UCommonGameViewportClient, go to project settings and set correct Viewport Class"
+		                 "GameViewportClient is of class UCommonGameViewportClient, go to project settings and don't use this viewport as it uses legacy input."
 	                 ));
 
 	Layout->SetPlayerContext(FLocalPlayerContext(LocalPlayer));
@@ -169,11 +173,6 @@ void URareGameUIPolicy::RemoveLayoutFromViewport(ULocalPlayer* LocalPlayer, URar
 	}
 }
 
-TObjectPtr<UInputMappingContext> URareGameUIPolicy::GetInputMapping() const
-{
-	return GenericInputMapping;
-}
-
 void URareGameUIPolicy::OnRootLayoutAddedToViewport(ULocalPlayer* LocalPlayer, URarePrimaryGameLayout* Layout)
 {
 #if WITH_EDITOR
@@ -184,22 +183,22 @@ void URareGameUIPolicy::OnRootLayoutAddedToViewport(ULocalPlayer* LocalPlayer, U
 	}
 #endif
 
-	if (CommonUI::IsEnhancedInputSupportEnabled() && GenericInputMapping)
+	for (const UInputMappingContext* InputMappingContext : UserInterfaceInputMappingContexts)
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* InputSystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
 		{
-			InputSystem->AddMappingContext(GenericInputMapping, GenericInputMappingPriority);
+			InputSystem->AddMappingContext(InputMappingContext, 0);
 		}
 	}
 }
 
 void URareGameUIPolicy::OnRootLayoutRemovedFromViewport(ULocalPlayer* LocalPlayer, URarePrimaryGameLayout* Layout)
 {
-	if (CommonUI::IsEnhancedInputSupportEnabled() && GenericInputMapping)
+	for (const UInputMappingContext* InputMappingContext : UserInterfaceInputMappingContexts)
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* InputSystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
 		{
-			InputSystem->RemoveMappingContext(GenericInputMapping);
+			InputSystem->RemoveMappingContext(InputMappingContext);
 		}
 	}
 }

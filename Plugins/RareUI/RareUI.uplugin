@@ -1,29 +1,34 @@
-﻿{
-	"FileVersion": 3,
-	"Version": 1,
-	"VersionName": "1.0",
-	"FriendlyName": "RareUI",
-	"Description": "The framework plugin used for screen management using CommonUI (UMG/Slate)",
-	"Category": "UI",
-	"CreatedBy": "",
-	"CreatedByURL": "",
-	"DocsURL": "",
-	"MarketplaceURL": "",
-	"CanContainContent": true,
-	"IsBetaVersion": false,
-	"IsExperimentalVersion": false,
-	"Installed": false,
-	"Modules": [
-		{
-			"Name": "RareUI",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
-		}
-	],
-	"Plugins": [
-		{
-			"Name": "CommonUI",
-			"Enabled": true
-		}
-	]
+{
+"FileVersion": 3,
+"Version": 1,
+"VersionName": "1.0",
+"FriendlyName": "RareUI",
+"Description": "The framework plugin used for screen management using CommonUI (UMG/Slate)",
+"Category": "UI",
+"CreatedBy": "",
+"CreatedByURL": "",
+"DocsURL": "",
+"MarketplaceURL": "",
+"CanContainContent": true,
+"IsBetaVersion": false,
+"IsExperimentalVersion": false,
+"Installed": false,
+"Modules": [
+{
+"Name": "RareInput",
+"Type": "Runtime",
+"LoadingPhase": "Default"
+},
+{
+"Name": "RareUI",
+"Type": "Runtime",
+"LoadingPhase": "Default"
+}
+],
+"Plugins": [
+{
+"Name": "CommonUI",
+"Enabled": true
+}
+]
 }

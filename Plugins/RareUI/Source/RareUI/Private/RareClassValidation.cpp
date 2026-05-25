@@ -1,9 +1,9 @@
-﻿// Copyright (C) Grip Studios. All Rights Reserved
-
-#include "RareClassValidation.h"
+﻿#include "RareClassValidation.h"
 
 #include "GameplayTagContainer.h"
 #include "Blueprint/UserWidget.h"
+#include "Core/RareInputAction.h"
+#include "Core/RareUIActionData.h"
 #include "Editor/WidgetCompilerLog.h"
 #include "Engine/DataTable.h"
 
@@ -107,6 +107,12 @@ bool URareClassValidation::IsPropertyValid_Struct(const FStructProperty* Propert
 	{
 		const FDataTableRowHandle* DataTableRowHandle = Property->ContainerPtrToValuePtr<FDataTableRowHandle>(Widget);
 		return !DataTableRowHandle->IsNull();
+	}
+	
+	if (Property->Struct == TBaseStructure<FRareUIActionData>::Get())
+	{
+		const FRareUIActionData* UIActionData = Property->ContainerPtrToValuePtr<FRareUIActionData>(Widget);
+		return IsValid(UIActionData->InputAction);
 	}
 
 	ensureAlwaysMsgf(false, TEXT("Unsupported struct type for validation on %s.%s"), *Widget->GetName(), *Property->GetName());

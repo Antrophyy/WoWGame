@@ -1,6 +1,4 @@
-﻿// Copyright (C) Grip Studios. All Rights Reserved
-
-#include "Foundation/RareButtonBase.h"
+﻿#include "Foundation/RareButtonBase.h"
 
 void URareButtonBase::NativeConstruct()
 {

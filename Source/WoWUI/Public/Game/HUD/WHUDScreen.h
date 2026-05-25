@@ -1,9 +1,9 @@
 ﻿#pragma once
 
 #include "Foundation/WActivatableWidget.h"
-#include "Engine/DataTable.h"
 #include "WHUDScreen.generated.h"
 
+class UInputAction;
 class UWQuestLogWidget;
 class UWUserWidget;
 class UWInventoryWidget;
@@ -25,15 +25,15 @@ protected: // Set from the Editor
 
 	UPROPERTY(EditDefaultsOnly, meta=(Validate))
 	TSoftClassPtr<UWActivatableWidget> PauseScreen_Class;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Actions, meta=(RowType="/Script/CommonUI.CommonInputActionDataBase", Validate))
-	FDataTableRowHandle InvokePauseMenuActionData;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Actions, meta=(RowType="/Script/CommonUI.CommonInputActionDataBase", Validate))
-	FDataTableRowHandle TogglePlayerInventoryActionData;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Actions, meta=(RowType="/Script/CommonUI.CommonInputActionDataBase", Validate))
-	FDataTableRowHandle ToggleQuestLogActionData;
+	UPROPERTY(EditDefaultsOnly, Category=Input, meta=(Validate))
+	FRareUIActionData InvokePauseMenuInputActionData;
+
+	UPROPERTY(EditDefaultsOnly, Category=Input, meta=(Validate))
+	FRareUIActionData TogglePlayerInventoryInputActionData;
+
+	UPROPERTY(EditDefaultsOnly, Category=Input, meta=(Validate))
+	FRareUIActionData ToggleQuestLogInputActionData;
 
 private: // Actions
 

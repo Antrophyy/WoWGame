@@ -1,8 +1,9 @@
-﻿// Copyright (C) Grip Studios. All Rights Reserved
-
+﻿
 #pragma once
 
 #include "CommonTabListWidgetBase.h"
+#include "Core/RareUIActionData.h"
+#include "Routing/RareActionBindingHandle.h"
 #include "RareTabListWidgetBase.generated.h"
 
 class URareEnhancedActionWidget;
@@ -48,10 +49,6 @@ public:
 	// Content widget that belongs to this tab.
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Setup)
 	TSoftClassPtr<UUserWidget> TabContentType;
-
-	// Reference to created lazy widget that loads tab content.
-	UPROPERTY()
-	TObjectPtr<URareLazyWidget> LazyContent;
 };
 
 UCLASS(Abstract, ClassGroup= UI)
@@ -82,27 +79,33 @@ public: // Exposed
 	UFUNCTION(BlueprintCallable, Category = "Tab List")
 	int32 GetVisibleTabCount() const;
 
-	void RegisterDynamicTab(FRareTabDescriptor& TabInfo);
+	void RegisterDynamicTab(const FRareTabDescriptor& TabInfo);
 
 	void ToggleTabListEnable(bool bEnabled);
 
-protected:
 	virtual void SynchronizeProperties() override;
-	virtual void NativeConstruct() override;
-	virtual void NativeDestruct() override;
-
+	
 	virtual void HandleTabCreation_Implementation(FName TabId, UCommonButtonBase* TabButton) override;
 	virtual void HandleTabRemoval_Implementation(FName TabId, UCommonButtonBase* TabButton) override;
+
+protected:
+	virtual void NativeConstruct() override;
+	virtual void NativeDestruct() override;
 
 	FRareTabDescriptor GetTabInfoById(FName TabId) const;
 
 	virtual void UpdateTabVisuals(UUserWidget* TabButton) const;
+	virtual void UpdateBindings() override;
+	
+	// TODO: Idk why these functions are not protected from the parent, but once they are, they can be replaced.
+	virtual void HandleNextTabActionPressed();
+	virtual void HandlePrevTabActionPressed();
 	
 protected: // Set by the Editor
 
 	// Anim Switcher in the hierarchy that's going to be used to display content.
 	UPROPERTY(EditAnywhere, Category="Setup|General")
-	TObjectPtr<URareLazyLoadingSwitcher> AnimSwitcher;
+	TObjectPtr<UCommonAnimatedSwitcher> AnimSwitcher;
 
 	// If you know what tabs and what content you want to use, you can set them up here instead of doing it dynamically (most of the time you know it beforehand).
 	UPROPERTY(EditAnywhere, Category="Setup|General")
@@ -123,6 +126,12 @@ protected: // Set by the Editor
 	// Is the TabList supposed to be horizontal or vertical?
 	UPROPERTY(EditAnywhere, Category="Setup|Layout")
 	TEnumAsByte<EOrientation> Orientation = Orient_Horizontal;
+	
+	UPROPERTY(EditAnywhere, Category="Setup|Input")
+	FRareUIActionData NextTab_InputAction;
+	
+	UPROPERTY(EditAnywhere, Category="Setup|Input")
+	FRareUIActionData PrevTab_InputAction;
 
 #if WITH_EDITORONLY_DATA
 
@@ -141,7 +150,6 @@ private: // Internal
 	void SetupPreregisteredTabs();
 	void SetupDynamicTabs();
 	void SetupTab(const FRareTabDescriptor& TabInfo);
-	void PrepareTabForLazyLoad(FRareTabDescriptor& TabInfo);
 	void UpdatePaddings() const;
 
 #if WITH_EDITOR
@@ -150,6 +158,9 @@ private: // Internal
 
 	UPROPERTY()
 	TMap<FName, FRareTabDescriptor> DynamicTabInfoMap;
+	
+	FRareActionBindingHandle NextTabActionHandle;
+	FRareActionBindingHandle PrevTabActionHandle;
 
 private: // Widget Bindings
 

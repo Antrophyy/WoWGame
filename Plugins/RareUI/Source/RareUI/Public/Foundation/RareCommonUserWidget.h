@@ -1,8 +1,9 @@
-﻿// Copyright (C) Grip Studios. All Rights Reserved
-
+﻿
 #pragma once
 
 #include "CommonUserWidget.h"
+#include "Routing/RareActionBindingHandle.h"
+#include "Routing/RareInputActionBindingArgs.h"
 #include "RareCommonUserWidget.generated.h"
 
 UCLASS(Abstract, ClassGroup=UI)
@@ -16,8 +17,18 @@ public:
 	virtual void ValidateCompiledDefaults(IWidgetCompilerLog& CompileLog) const override;
 #endif // WITH_EDITOR
 
+	/** Registers an Enhanced Input action binding on this widget and stores the handle. */
+	FRareActionBindingHandle RegisterInputActionBinding(const FRareInputActionBindingArgs& BindActionArgs);
+
+	/** Removes a previously registered input action binding. */
+	void RemoveInputActionBinding(FRareActionBindingHandle ActionBinding);
+
+	/** Removes all bindings registered by this widget. */
+	void RemoveAllInputActionBindings();
+
 protected:
 	virtual void NativeConstruct() override;
+	virtual void NativeDestruct() override;
 
 protected: // Overridable Functions
 	
@@ -38,6 +49,9 @@ protected:
 	{
 		return Cast<T>(GetHUD());
 	}
-	
+
+private:
+	/** Handles for actions registered through RegisterInputActionBinding. */
+	TArray<FRareActionBindingHandle> BoundInputActions;
 
 };

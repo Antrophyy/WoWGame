@@ -1,7 +1,6 @@
-﻿// Copyright (C) Grip Studios. All Rights Reserved
+﻿#pragma once
 
-#pragma once
-
+#include "UObject/Object.h"
 #include "RareClassValidation.generated.h"
 
 class IWidgetCompilerLog;

@@ -1,8 +1,9 @@
-﻿// Copyright (C) Grip Studios. All Rights Reserved
-
+﻿
 #pragma once
 
 #include "CommonActivatableWidget.h"
+#include "Routing/RareActionBindingHandle.h"
+#include "Routing/RareInputActionBindingArgs.h"
 #include "RareCommonActivatableWidget.generated.h"
 
 UCLASS(Abstract, ClassGroup=UI)
@@ -27,6 +28,9 @@ public:
 	
 protected:
 	virtual void NativeOnActivated() override;
+	
+	virtual void NativeConstruct() override;
+	virtual void NativeDestruct() override;
 
 protected: // Overrideable Functions
 
@@ -39,6 +43,14 @@ protected: // Overrideable Functions
 
 protected:
 	
+	/** Registers an Enhanced Input action binding on this widget and stores the handle. */
+	FRareActionBindingHandle RegisterInputActionBinding(const FRareInputActionBindingArgs& BindActionArgs);
+	
+	void RemoveInputActionBinding(FRareActionBindingHandle ActionBinding);
+
+	/** Removes all bindings registered by this widget. */
+	void RemoveAllInputActionBindings();
+	
 	// Gets the HUD associated with Player Controller.
 	AHUD* GetHUD() const;
 
@@ -50,18 +62,16 @@ protected:
 	}
 
 protected: // Set by the Editor
-
-	// When a widget gets activated, it tries to change input mode and mouse capture mode.
-	// For some widgets, we don't want this behaviour (e.g. when the widget is a child of another widget that already does this).
-	// Useful for widgets that just want to handle registered actions without having to register/unregister them all the time.
-	UPROPERTY(EditAnywhere, Category=Input)
-	bool bShouldAffectInputMode = true;
 	
 	// The desired input mode to use while this UI is activated, for example do you want key presses to still reach the game/player controller?
-	UPROPERTY(EditAnywhere, Category=Input, meta = (EditCondition = "bShouldAffectInputMode"))
+	UPROPERTY(EditAnywhere, Category=Input)
 	ECommonInputMode InputConfig = ECommonInputMode::Menu;
 
 	// The desired mouse behavior when the game gets input.
-	UPROPERTY(EditAnywhere, Category=Input, meta = (EditCondition = "bShouldAffectInputMode"))
+	UPROPERTY(EditAnywhere, Category=Input)
 	EMouseCaptureMode GameMouseCaptureMode = EMouseCaptureMode::NoCapture;
+
+private:
+	/** Handles for actions registered through RegisterInputActionBinding. */
+	TArray<FRareActionBindingHandle> BoundInputActions;
 };

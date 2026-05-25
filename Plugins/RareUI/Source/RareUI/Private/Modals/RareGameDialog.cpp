@@ -1,6 +1,4 @@
-﻿// Copyright (C) Grip Studios. All Rights Reserved
-
-#include "Modals/RareGameDialog.h"
+﻿#include "Modals/RareGameDialog.h"
 
 #include "Modals/RareGameDialogDescriptor.h"
 

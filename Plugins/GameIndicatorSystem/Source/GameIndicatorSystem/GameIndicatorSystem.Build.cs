@@ -1,6 +1,4 @@
-﻿// Copyright (C) Grip Studios. All Rights Reserved
-
-using UnrealBuildTool;
+﻿using UnrealBuildTool;
 
 public class GameIndicatorSystem : ModuleRules
 {

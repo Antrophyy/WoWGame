@@ -1,5 +1,4 @@
-﻿// Copyright (C) Grip Studios. All Rights Reserved
-
+﻿
 #include "Foundation/RareTabListWidgetBase.h"
 
 #include "CommonActionWidget.h"
@@ -9,22 +8,12 @@
 #include "Components/StackBox.h"
 #include "Components/StackBoxSlot.h"
 #include "Foundation/RareEnhancedActionWidget.h"
-#include "Foundation/RareLazyLoadingSwitcher.h"
-#include "Foundation/RareLazyWidget.h"
+#include "Groups/CommonButtonGroupBase.h"
+#include "Routing/RareUIActionRouterBase.h"
 
 void URareTabListWidgetBase::SynchronizeProperties()
 {
 	Super::SynchronizeProperties();
-
-	if (PrevTabAction)
-	{
-		PrevTabAction->SetInputAction(PreviousTabInputActionData);
-	}
-
-	if (NextTabAction)
-	{
-		NextTabAction->SetInputAction(NextTabInputActionData);
-	}
 
 	if (TabsContainer_StackBox)
 	{
@@ -63,11 +52,6 @@ void URareTabListWidgetBase::NativeConstruct()
 
 	SetLinkedSwitcher(AnimSwitcher);
 
-	if (IsValid(AnimSwitcher))
-	{
-		AnimSwitcher->SetIsBeingDestroyed(false);
-	}
-
 	if (!IsDesignTime() && GetCachedWidget().IsValid())
 	{
 		// Don't bother making tabs if we're in the designer or haven't been constructed yet
@@ -78,11 +62,6 @@ void URareTabListWidgetBase::NativeConstruct()
 
 void URareTabListWidgetBase::NativeDestruct()
 {
-	if (IsValid(AnimSwitcher))
-	{
-		AnimSwitcher->SetIsBeingDestroyed(true);
-	}
-
 	DynamicTabInfoMap.Empty();
 
 	if (IsValid(TabsContainer_StackBox))
@@ -181,17 +160,12 @@ int32 URareTabListWidgetBase::GetVisibleTabCount() const
 	return Result;
 }
 
-void URareTabListWidgetBase::RegisterDynamicTab(FRareTabDescriptor& TabInfo)
+void URareTabListWidgetBase::RegisterDynamicTab(const FRareTabDescriptor& TabInfo)
 {
 	if (!TabInfo.bRegistered)
 		return;
 
 	DynamicTabInfoMap.Add(TabInfo.TabId, TabInfo);
-
-	if (IsValid(AnimSwitcher))
-	{
-		PrepareTabForLazyLoad(TabInfo);
-	}
 
 	SetupTab(TabInfo);
 }
@@ -245,6 +219,39 @@ void URareTabListWidgetBase::UpdateTabVisuals(UUserWidget* TabButton) const
 	}
 }
 
+void URareTabListWidgetBase::UpdateBindings()
+{
+	if (bIsListeningForInput)
+	{
+		if (URareUIActionRouterBase* Router = URareUIActionRouterBase::Get(*this))
+		{
+			NextTabActionHandle = Router->RegisterInputAction(*this, FRareInputActionBindingArgs{NextTab_InputAction, ETriggerEvent::Triggered, FSimpleDelegate::CreateUObject(this, &ThisClass::HandleNextTabActionPressed)});
+			PrevTabActionHandle = Router->RegisterInputAction(*this, FRareInputActionBindingArgs{PrevTab_InputAction, ETriggerEvent::Triggered, FSimpleDelegate::CreateUObject(this, &ThisClass::HandlePrevTabActionPressed)});
+		}
+	}
+	else
+	{
+		NextTabActionHandle.Unregister();
+		PrevTabActionHandle.Unregister();
+	}
+}
+
+void URareTabListWidgetBase::HandleNextTabActionPressed()
+{
+	if (ensure(TabButtonGroup))
+	{
+		TabButtonGroup->SelectNextButton(bShouldWrapNavigation);
+	}
+}
+
+void URareTabListWidgetBase::HandlePrevTabActionPressed()
+{
+	if (ensure(TabButtonGroup))
+	{
+		TabButtonGroup->SelectPreviousButton(bShouldWrapNavigation);
+	}
+}
+
 #if WITH_EDITOR
 void URareTabListWidgetBase::Debug_CreateTabsDesigner()
 {
@@ -273,7 +280,7 @@ void URareTabListWidgetBase::Debug_CreateTabsDesigner()
 		{
 			if (!IsValid(TabInfo.TabButtonType))
 				continue;
-			
+
 			UCommonButtonBase* Button = CreateWidget<UCommonButtonBase>(GetRootWidget(), TabInfo.TabButtonType);
 			HandleTabCreation_Implementation(TabInfo.TabId, Button);
 		}
@@ -285,11 +292,6 @@ void URareTabListWidgetBase::SetupPreregisteredTabs()
 {
 	for (FRareTabDescriptor& TabInfo : PreregisteredTabInfoArray)
 	{
-		if (IsValid(AnimSwitcher))
-		{
-			PrepareTabForLazyLoad(TabInfo);
-		}
-
 		SetupTab(TabInfo);
 	}
 }
@@ -298,13 +300,6 @@ void URareTabListWidgetBase::SetupDynamicTabs()
 {
 	for (TPair<FName, FRareTabDescriptor>& Pair : DynamicTabInfoMap)
 	{
-		FRareTabDescriptor& TabInfo = Pair.Value;
-
-		if (IsValid(AnimSwitcher))
-		{
-			PrepareTabForLazyLoad(TabInfo);
-		}
-
 		SetupTab(Pair.Value);
 	}
 }
@@ -317,19 +312,9 @@ void URareTabListWidgetBase::SetupTab(const FRareTabDescriptor& TabInfo)
 	// If the tab is not already registered, register it.
 	if (GetTabButtonBaseByID(TabInfo.TabId) == nullptr)
 	{
-		RegisterTab(TabInfo.TabId, TabInfo.TabButtonType, TabInfo.LazyContent);
+		// TODO: Fix
+		// RegisterTab(TabInfo.TabId, TabInfo.TabButtonType, );
 	}
-}
-
-void URareTabListWidgetBase::PrepareTabForLazyLoad(FRareTabDescriptor& TabInfo)
-{
-	URareLazyWidget* LazyWidget = NewObject<URareLazyWidget>(this);
-	LazyWidget->SetContentClass(TabInfo.TabContentType);
-	LazyWidget->bShouldSyncLoad = TabInfo.bShouldSyncLoad;
-
-	AnimSwitcher->AddChild(LazyWidget);
-
-	TabInfo.LazyContent = LazyWidget;
 }
 
 void URareTabListWidgetBase::UpdatePaddings() const

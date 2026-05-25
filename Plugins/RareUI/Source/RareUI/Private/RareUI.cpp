@@ -1,6 +1,4 @@
-﻿// Copyright (C) Grip Studios. All Rights Reserved
-
-#include "RareUI.h"
+﻿#include "RareUI.h"
 
 #include "Modules/ModuleManager.h"
 

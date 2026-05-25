@@ -10,15 +10,14 @@
 #include "Game/HUD/Modals/WcDragWindowOperation.h"
 #include "Game/HUD/Modals/PlayerInventory/WInventoryWidget.h"
 #include "Game/HUD/Modals/QuestLog/WQuestLogWidget.h"
-#include "Input/CommonUIInputTypes.h"
 
 void UWHUDScreen::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
-	RegisterUIActionBinding(FBindUIActionArgs(InvokePauseMenuActionData, false, FSimpleDelegate::CreateUObject(this, &ThisClass::HandleInvokePauseMenuAction)));
-	RegisterUIActionBinding(FBindUIActionArgs(TogglePlayerInventoryActionData, false, FSimpleDelegate::CreateUObject(this, &ThisClass::HandleTogglePlayerInventoryAction)));
-	RegisterUIActionBinding(FBindUIActionArgs(ToggleQuestLogActionData, false, FSimpleDelegate::CreateUObject(this, &ThisClass::HandleToggleQuestLogAction)));
+	RegisterInputActionBinding(FRareInputActionBindingArgs(InvokePauseMenuInputActionData, ETriggerEvent::Triggered, FSimpleDelegate::CreateUObject(this, &ThisClass::HandleInvokePauseMenuAction)));
+	RegisterInputActionBinding(FRareInputActionBindingArgs(TogglePlayerInventoryInputActionData, ETriggerEvent::Triggered, FSimpleDelegate::CreateUObject(this, &ThisClass::HandleTogglePlayerInventoryAction)));
+	RegisterInputActionBinding(FRareInputActionBindingArgs(ToggleQuestLogInputActionData, ETriggerEvent::Triggered, FSimpleDelegate::CreateUObject(this, &ThisClass::HandleToggleQuestLogAction)));
 }
 
 void UWHUDScreen::NativeOnActivated()

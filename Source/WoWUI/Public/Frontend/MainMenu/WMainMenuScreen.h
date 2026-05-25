@@ -17,13 +17,19 @@ protected: // Set from the Editor
 
 	UPROPERTY(EditDefaultsOnly, meta=(Validate))
 	TSoftObjectPtr<UWorld> GameMap;
+	
+	UPROPERTY(EditDefaultsOnly, meta=(Validate))
+	TSoftClassPtr<UCommonActivatableWidget> SettingsScreen_Class;
+	
+	UPROPERTY(EditDefaultsOnly, meta=(Validate))
+	TSoftClassPtr<UCommonActivatableWidget> CreditsScreen_Class;
 
 private: // Delegate Handling
 
-	void HandlePlayGameButtonClicked();
-	void HandleSettingsButtonClicked();
-	void HandleCreditsButtonClicked();
-	void HandleQuitGameButtonClicked();
+	void HandlePlayGameButtonClicked() const;
+	void HandleSettingsButtonClicked() const;
+	void HandleCreditsButtonClicked() const;
+	void HandleQuitGameButtonClicked() const;
 
 private: // Widget Bindings
 

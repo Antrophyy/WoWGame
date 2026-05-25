@@ -1,6 +1,4 @@
-﻿// Copyright (C) Grip Studios. All Rights Reserved
-
-#include "Foundation/RareEnhancedActionWidget.h"
+﻿#include "Foundation/RareEnhancedActionWidget.h"
 
 #include "CommonInputSubsystem.h"
 #include "CommonUIExtensions.h"

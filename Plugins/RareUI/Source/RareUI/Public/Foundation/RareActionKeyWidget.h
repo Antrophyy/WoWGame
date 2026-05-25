@@ -1,4 +1,3 @@
-// Copyright (C) Grip Studios. All Rights Reserved
 
 #pragma once
 

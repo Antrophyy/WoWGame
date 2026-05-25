@@ -15,6 +15,7 @@ public class WoWUI : ModuleRules
 				"Core",
 				"CoreUObject",
 				"Engine",
+				"EnhancedInput",
 				"GameplayTags",
 				"InputCore",
 				"Slate",
@@ -23,6 +24,7 @@ public class WoWUI : ModuleRules
 
 				// Game
 				"GameplayMessageRuntime",
+				"RareInput",
 				"RareUI",
 				"GameIndicatorSystem",
 				"GameLoadingScreen",

@@ -1,11 +1,12 @@
-﻿// Copyright (C) Grip Studios. All Rights Reserved
-
+﻿
 #pragma once
 
 #include "Input/CommonBoundActionButton.h"
 #include "RareBoundActionButton.generated.h"
 
+struct FRareActionBindingHandle;
 class URareEnhancedActionWidget;
+
 // We don't want to allow the creation of this class, so we make it abstract. Create project specific ones instead.
 UCLASS(Abstract, ClassGroup=UI)
 class RAREUI_API URareBoundActionButton : public UCommonBoundActionButton
@@ -15,7 +16,7 @@ class RAREUI_API URareBoundActionButton : public UCommonBoundActionButton
 public:
 	void SetDisplayText(const FText& InDisplayText);
 
-	virtual void SetRepresentedAction(FUIActionBindingHandle InBindingHandle) override;
+	void SetRepresentedInputAction(FRareActionBindingHandle InBindingHandle) const;
 
 protected:
 

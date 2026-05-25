@@ -1,5 +1,3 @@
-﻿// Copyright (C) Grip Studios. All Rights Reserved
-
 using UnrealBuildTool;
 
 public class RareUI : ModuleRules
@@ -7,11 +5,15 @@ public class RareUI : ModuleRules
 	public RareUI(ReadOnlyTargetRules target) : base(target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-		
+		PublicDependencyModuleNames.AddRange(
+			new[]
+			{
+				"RareInput"
+			});
 		PrivateDependencyModuleNames.AddRange(
 			new[]
 			{
-				// Engine
+// Engine
 				"CommonInput",
 				"CommonUI",
 				"Core",
@@ -25,13 +27,12 @@ public class RareUI : ModuleRules
 				"SlateCore",
 				"UMG"
 			});
-
 		if (Target.bBuildEditor)
 		{
 			PrivateDependencyModuleNames.AddRange(
 				new[]
 				{
-					// Engine
+// Engine
 					"UnrealEd"
 				});
 		}

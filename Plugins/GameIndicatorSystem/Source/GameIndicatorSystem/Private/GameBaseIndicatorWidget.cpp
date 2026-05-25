@@ -1,6 +1,4 @@
-﻿// Copyright (C) Grip Studios. All Rights Reserved
-
-#include "GameBaseIndicatorWidget.h"
+﻿#include "GameBaseIndicatorWidget.h"
 #include "GameIndicatorDescriptor.h"
 #include "LogGameIndicatorSystem.h"
 #include "Animation/WidgetAnimation.h"

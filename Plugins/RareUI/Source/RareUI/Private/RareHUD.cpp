@@ -1,5 +1,4 @@
-﻿// Copyright (C) Grip Studios. All Rights Reserved
-
+﻿
 #include "RareHUD.h"
 #include "RareGameUIManagerSubsystem.h"
 

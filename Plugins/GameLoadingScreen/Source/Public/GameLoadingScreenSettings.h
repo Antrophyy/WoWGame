@@ -1,6 +1,4 @@
-﻿// Copyright (C) Grip Studios. All Rights Reserved
-
-#pragma once
+﻿#pragma once
 
 #include "Engine/DeveloperSettingsBackedByCVars.h"
 #include "UObject/SoftObjectPath.h"

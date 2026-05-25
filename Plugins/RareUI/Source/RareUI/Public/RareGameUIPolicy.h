@@ -1,11 +1,12 @@
-﻿// Copyright (C) Grip Studios. All Rights Reserved
+﻿#pragma once
 
-#pragma once
-
+#include "Core/RareUIActionData.h"
 #include "Templates/SubclassOf.h"
 #include "UObject/Object.h"
+#include "UObject/SoftObjectPtr.h"
 #include "RareGameUIPolicy.generated.h"
 
+class URareInputAction;
 class URareActionKeyWidget;
 class URareGameDialog;
 class UInputMappingContext;
@@ -82,27 +83,27 @@ public:
 	TSubclassOf<URarePrimaryGameLayout> GetLayoutWidgetClass(ULocalPlayer* LocalPlayer);
 	TSoftClassPtr<URareGameDialog> GetBaseDialogClass() const;
 
-	TObjectPtr<UInputMappingContext> GetInputMapping() const;
-
 	void NotifyPlayerAdded(ULocalPlayer* LocalPlayer);
 	void NotifyPlayerRemoved(ULocalPlayer* LocalPlayer);
 	void NotifyPlayerDestroyed(ULocalPlayer* LocalPlayer);
 	
 	TSubclassOf<URareActionKeyWidget> GetActionKeyWidget();
+	const FRareUIActionData& GetBackInputActionData();
 
 protected: // Set by the Editor
 
 	UPROPERTY(EditAnywhere, Category = "Layout")
 	TSoftClassPtr<URarePrimaryGameLayout> LayoutClass;
 
-	UPROPERTY(EditAnywhere, Category = "Input", meta = (EditCondition = "CommonInput.CommonInputSettings.IsEnhancedInputSupportEnabled", EditConditionHides))
-	TObjectPtr<UInputMappingContext> GenericInputMapping;
-
-	UPROPERTY(EditAnywhere, Category = "Input", meta = (EditCondition = "CommonInput.CommonInputSettings.IsEnhancedInputSupportEnabled", EditConditionHides))
-	int32 GenericInputMappingPriority;
+	// The input mapping context to use for all UI widgets. These IMCs are added all the time and filtered using InputMode tags on EI.
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TArray<TObjectPtr<UInputMappingContext>> UserInterfaceInputMappingContexts;
 	
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TSubclassOf<URareActionKeyWidget> DefaultEnhancedActionWidgetClass;
+	
+	UPROPERTY(EditAnywhere, Category = "Input")
+	FRareUIActionData BackActionData;
 
 	UPROPERTY(EditAnywhere, Category = "Dialogs")
 	TSoftClassPtr<URareGameDialog> BaseDialog_Class;

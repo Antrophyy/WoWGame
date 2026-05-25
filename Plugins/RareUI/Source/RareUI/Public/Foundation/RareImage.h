@@ -1,12 +1,11 @@
-// Copyright (C) Grip Studios. All Rights Reserved
 
 #pragma once
 
-#include "Components/Image.h"
+#include "CommonLazyImage.h"
 #include "RareImage.generated.h"
 
 UCLASS()
-class RAREUI_API URareImage : public UImage
+class RAREUI_API URareImage : public UCommonLazyImage
 {
 	GENERATED_BODY()
 

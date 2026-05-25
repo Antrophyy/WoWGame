@@ -1,11 +1,10 @@
-﻿// Copyright (C) Grip Studios. All Rights Reserved
-
-#include "Foundation/RareBoundActionButton.h"
+﻿#include "Foundation/RareBoundActionButton.h"
 
 #include "CommonTextBlock.h"
-#include "CommonUITypes.h"
 #include "Foundation/RareEnhancedActionWidget.h"
 #include "Input/UIActionBinding.h"
+#include "Routing/RareActionBinding.h"
+#include "Routing/RareActionBindingHandle.h"
 
 void URareBoundActionButton::SetDisplayText(const FText& InDisplayText)
 {
@@ -19,30 +18,20 @@ void URareBoundActionButton::SetDisplayText(const FText& InDisplayText)
 	Text_ActionName->SetText(CustomDisplayText);
 }
 
-void URareBoundActionButton::SetRepresentedAction(const FUIActionBindingHandle InBindingHandle)
+void URareBoundActionButton::SetRepresentedInputAction(const FRareActionBindingHandle InBindingHandle) const
 {
-	Super::SetRepresentedAction(InBindingHandle);
-
-	if (InBindingHandle.GetDisplayName().IsEmpty())
+	const TSharedPtr<FRareActionBinding> Binding = FRareActionBinding::FindBinding(InBindingHandle);
+	if (Binding->DisplayName.IsEmpty())
 	{
 		Text_ActionName->SetVisibility(ESlateVisibility::Collapsed);
 	}
 	else
 	{
-		Text_ActionName->SetVisibility(ESlateVisibility::Visible);
+		Text_ActionName->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 	}
-
-	if (const TSharedPtr<FUIActionBinding> Binding = FUIActionBinding::FindBinding(InBindingHandle))
-	{
-		const FCommonInputActionDataBase* DataTableRow = Binding->GetLegacyInputActionData();
-		bRequiresHold = DataTableRow->HasHoldBindings();
-		UpdateInputActionWidget();
-		if (const UCommonInputSubsystem* InputSubsystem = GetInputSubsystem())
-		{
-			HoldTime = DataTableRow->GetCurrentInputTypeInfo(InputSubsystem).HoldTime;
-			HoldRollbackTime = DataTableRow->GetCurrentInputTypeInfo(InputSubsystem).HoldRollbackTime;
-		}
-	}
+	
+	InputActionWidget->SetEnhancedInputAction(Binding->InputAction.Get());
+	Text_ActionName->SetText(Binding->DisplayName);
 }
 
 void URareBoundActionButton::NativeConstruct()
