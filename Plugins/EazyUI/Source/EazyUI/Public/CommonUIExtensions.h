@@ -1,8 +1,8 @@
 #pragma once
 
-#include "CommonActivatableWidget.h"
 #include "CommonInputBaseTypes.h"
 #include "GameplayTagContainer.h"
+#include "Foundation/EazyCommonActivatableWidget.h"
 #include "CommonUIExtensions.generated.h"
 
 class UInputAction;
@@ -25,15 +25,15 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Global UI Extensions")
 	static UCommonActivatableWidget* PushContentToLayer_ForPlayer(const ULocalPlayer* LocalPlayer,
 	                                                              UPARAM(meta = (Categories = "UI.Layer")) FGameplayTag LayerName,
-	                                                              UPARAM(meta = (AllowAbstract = false)) TSubclassOf<UCommonActivatableWidget> WidgetClass);
+	                                                              UPARAM(meta = (AllowAbstract = false)) TSubclassOf<UEazyCommonActivatableWidget> WidgetClass);
 
 	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Global UI Extensions")
 	static void PushStreamedContentToLayer_ForPlayer(const ULocalPlayer* LocalPlayer,
 	                                                 UPARAM(meta = (Categories = "UI.Layer")) FGameplayTag LayerName,
-	                                                 UPARAM(meta = (AllowAbstract = false)) TSoftClassPtr<UCommonActivatableWidget> WidgetClass);
+	                                                 UPARAM(meta = (AllowAbstract = false)) TSoftClassPtr<UEazyCommonActivatableWidget> WidgetClass);
 
 	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Global UI Extensions")
-	static void PopContentFromLayer(UPARAM(meta = (AllowAbstract = false)) UCommonActivatableWidget* ActivatableWidget,
+	static void PopContentFromLayer(UPARAM(meta = (AllowAbstract = false)) UEazyCommonActivatableWidget* ActivatableWidget,
 	                                UPARAM(meta = (Categories = "UI.Layer")) const FGameplayTag LayerName);
 
 	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Global UI Extensions")

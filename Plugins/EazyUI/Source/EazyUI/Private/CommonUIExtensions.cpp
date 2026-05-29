@@ -47,7 +47,7 @@ bool UCommonUIExtensions::IsOwningPlayerUsingGamepad(const UUserWidget* WidgetCo
 	return false;
 }
 
-UCommonActivatableWidget* UCommonUIExtensions::PushContentToLayer_ForPlayer(const ULocalPlayer* LocalPlayer, const FGameplayTag LayerName, const TSubclassOf<UCommonActivatableWidget> WidgetClass)
+UCommonActivatableWidget* UCommonUIExtensions::PushContentToLayer_ForPlayer(const ULocalPlayer* LocalPlayer, const FGameplayTag LayerName, const TSubclassOf<UEazyCommonActivatableWidget> WidgetClass)
 {
 	if (const UEazyGameUIManagerSubsystem* UIManager = LocalPlayer->GetGameInstance()->GetSubsystem<UEazyGameUIManagerSubsystem>())
 	{
@@ -63,7 +63,7 @@ UCommonActivatableWidget* UCommonUIExtensions::PushContentToLayer_ForPlayer(cons
 	return nullptr;
 }
 
-void UCommonUIExtensions::PushStreamedContentToLayer_ForPlayer(const ULocalPlayer* LocalPlayer, const FGameplayTag LayerName, TSoftClassPtr<UCommonActivatableWidget> WidgetClass)
+void UCommonUIExtensions::PushStreamedContentToLayer_ForPlayer(const ULocalPlayer* LocalPlayer, const FGameplayTag LayerName, const TSoftClassPtr<UEazyCommonActivatableWidget> WidgetClass)
 {
 	if (const UEazyGameUIManagerSubsystem* UIManager = LocalPlayer->GetGameInstance()->GetSubsystem<UEazyGameUIManagerSubsystem>())
 	{
@@ -78,7 +78,7 @@ void UCommonUIExtensions::PushStreamedContentToLayer_ForPlayer(const ULocalPlaye
 	}
 }
 
-void UCommonUIExtensions::PopContentFromLayer(UCommonActivatableWidget* ActivatableWidget, const FGameplayTag LayerName)
+void UCommonUIExtensions::PopContentFromLayer(UEazyCommonActivatableWidget* ActivatableWidget, const FGameplayTag LayerName)
 {
 	if (!IsValid(ActivatableWidget))
 	{

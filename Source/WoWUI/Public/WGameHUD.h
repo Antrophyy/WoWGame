@@ -4,7 +4,7 @@
 #include "WGameHUD.generated.h"
 
 class UWItemTooltipWidget;
-class UCommonActivatableWidget;
+class UEazyCommonActivatableWidget;
 
 UCLASS(Abstract, ClassGroup=UI)
 class WOWUI_API AWGameHUD final : public AEazyHUD
@@ -20,7 +20,7 @@ protected:
 protected: // Set by the Editor
 	
 	UPROPERTY(EditDefaultsOnly)
-	TSoftClassPtr<UCommonActivatableWidget> HUDScreen_Class;
+	TSoftClassPtr<UEazyCommonActivatableWidget> HUDScreen_Class;
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UWItemTooltipWidget> ItemTooltip_Class;

@@ -93,7 +93,7 @@ void UEazyPrimaryGameLayout::OnLayerTransitioning(UCommonActivatableWidgetContai
 	}
 }
 
-void UEazyPrimaryGameLayout::FindAndRemoveWidgetFromLayer(UCommonActivatableWidget* ActivatableWidget, const FGameplayTag LayerName) const
+void UEazyPrimaryGameLayout::FindAndRemoveWidgetFromLayer(UEazyCommonActivatableWidget* ActivatableWidget, const FGameplayTag LayerName) const
 {
 	if (!ensureMsgf(IsValid(ActivatableWidget), TEXT("[FindAndRemoveWidgetFromLayer] ActivatableWidget is invalid")))
 	{

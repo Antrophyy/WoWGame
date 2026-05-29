@@ -6,10 +6,11 @@
 #include "GameplayTagContainer.h"
 #include "Engine/AssetManager.h"
 #include "LogEazyUI.h"
+#include "Foundation/EazyCommonActivatableWidget.h"
 #include "EazyPrimaryGameLayout.generated.h"
 
 class UEazyCommonActivatableWidgetStack;
-class UCommonActivatableWidget;
+class UEazyCommonActivatableWidget;
 class UCommonActivatableWidgetStack;
 class UCommonActivatableWidgetContainerBase;
 
@@ -27,7 +28,7 @@ enum class EAsyncWidgetLayerState : uint8
 };
 
 /**
- * The primary game UI layout of your game.  This widget class represents how to layout, push and display all layers
+ * The primary game UI layout of your game.  This widget class represents how to lay out, push and display all layers
  * of the UI for a single player.
  */
 UCLASS(Abstract, meta = (DisableNativeTick), ClassGroup=UI)
@@ -41,18 +42,18 @@ public:
 	static UEazyPrimaryGameLayout* GetPrimaryGameLayout(const ULocalPlayer* LocalPlayer);
 
 public:
-	UEazyPrimaryGameLayout(const FObjectInitializer& ObjectInitializer);
+	explicit UEazyPrimaryGameLayout(const FObjectInitializer& ObjectInitializer);
 
-	template <typename ActivatableWidgetT = UCommonActivatableWidget>
-	TSharedPtr<FStreamableHandle> PushWidgetToLayerAsync(FGameplayTag LayerName, bool bSuspendInputUntilComplete, TSoftClassPtr<UCommonActivatableWidget> ActivatableWidgetClass)
+	template <typename ActivatableWidgetT = UEazyCommonActivatableWidget>
+	TSharedPtr<FStreamableHandle> PushWidgetToLayerAsync(FGameplayTag LayerName, bool bSuspendInputUntilComplete, TSoftClassPtr<UEazyCommonActivatableWidget> ActivatableWidgetClass)
 	{
 		return PushWidgetToLayerAsync<ActivatableWidgetT>(LayerName, bSuspendInputUntilComplete, ActivatableWidgetClass, [](EAsyncWidgetLayerState, ActivatableWidgetT*) {});
 	}
 
-	template <typename ActivatableWidgetT = UCommonActivatableWidget>
-	TSharedPtr<FStreamableHandle> PushWidgetToLayerAsync(FGameplayTag LayerName, const bool bSuspendInputUntilComplete, TSoftClassPtr<UCommonActivatableWidget> ActivatableWidgetClass, TFunction<void(EAsyncWidgetLayerState, ActivatableWidgetT*)> StateFunc)
+	template <typename ActivatableWidgetT = UEazyCommonActivatableWidget>
+	TSharedPtr<FStreamableHandle> PushWidgetToLayerAsync(FGameplayTag LayerName, const bool bSuspendInputUntilComplete, TSoftClassPtr<UEazyCommonActivatableWidget> ActivatableWidgetClass, TFunction<void(EAsyncWidgetLayerState, ActivatableWidgetT*)> StateFunc)
 	{
-		static_assert(TIsDerivedFrom<ActivatableWidgetT, UCommonActivatableWidget>::IsDerived, "Only CommonActivatableWidgets can be used here");
+		static_assert(TIsDerivedFrom<ActivatableWidgetT, UEazyCommonActivatableWidget>::IsDerived, "Only CommonActivatableWidgets can be used here");
 
 		if (!ensureAlwaysMsgf(!ActivatableWidgetClass.IsNull(), TEXT("[PushWidgetToLayerAsync] Attempting to push null activatable widget class to stack %s"), *LayerName.ToString()))
 		{
@@ -90,16 +91,16 @@ public:
 		return StreamingHandle;
 	}
 
-	template <typename ActivatableWidgetT = UCommonActivatableWidget>
+	template <typename ActivatableWidgetT = UEazyCommonActivatableWidget>
 	ActivatableWidgetT* PushWidgetToLayer(FGameplayTag LayerName, UClass* ActivatableWidgetClass)
 	{
 		return PushWidgetToLayer<ActivatableWidgetT>(LayerName, ActivatableWidgetClass, [](ActivatableWidgetT&) {});
 	}
 
-	template <typename ActivatableWidgetT = UCommonActivatableWidget>
+	template <typename ActivatableWidgetT = UEazyCommonActivatableWidget>
 	ActivatableWidgetT* PushWidgetToLayer(const FGameplayTag LayerName, UClass* ActivatableWidgetClass, TFunctionRef<void(ActivatableWidgetT&)> InitInstanceFunc)
 	{
-		static_assert(TIsDerivedFrom<ActivatableWidgetT, UCommonActivatableWidget>::IsDerived, "Only CommonActivatableWidgets can be used here");
+		static_assert(TIsDerivedFrom<ActivatableWidgetT, UEazyCommonActivatableWidget>::IsDerived, "Only CommonActivatableWidgets can be used here");
 
 		if (!IsValid(ActivatableWidgetClass))
 		{
@@ -111,7 +112,14 @@ public:
 		if (IsValid(Layer))
 		{
 			UE_LOG(LogEazyUI, Display, TEXT("[PushWidgetToLayer] Pushing widget with name %s to stack %s"), *ActivatableWidgetClass->GetName(), *LayerName.ToString());
-			return Layer->AddWidget<ActivatableWidgetT>(ActivatableWidgetClass, InitInstanceFunc);
+			ActivatableWidgetT* PushedWidget = Layer->AddWidget<ActivatableWidgetT>(ActivatableWidgetClass, InitInstanceFunc);
+
+			if (IsValid(PushedWidget))
+			{
+				PushedWidget->NativeOnPushed();
+			}
+			
+			return PushedWidget;
 		}
 
 		ensureAlwaysMsgf(IsValid(Layer), TEXT("[PushWidgetToLayer] Attempting to Push widget %s to nonexistent %s layer stack!"), *ActivatableWidgetClass->GetName(), *LayerName.ToString());
@@ -119,7 +127,7 @@ public:
 	}
 
 	// Overloaded function that removes it from a specific layer.
-	void FindAndRemoveWidgetFromLayer(UCommonActivatableWidget* ActivatableWidget, const FGameplayTag LayerName) const;
+	void FindAndRemoveWidgetFromLayer(UEazyCommonActivatableWidget* ActivatableWidget, const FGameplayTag LayerName) const;
 
 	// Remove all widgets from the layer.
 	void ClearWidgetsFromLayer(const FGameplayTag LayerName) const;

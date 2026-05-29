@@ -3,7 +3,7 @@
 #include "EazyHUD.h"
 #include "WFrontendHUD.generated.h"
 
-class UCommonActivatableWidget;
+class UEazyCommonActivatableWidget;
 
 UCLASS(Abstract, ClassGroup=UI)
 class WOWUI_API AWFrontendHUD : public AEazyHUD
@@ -16,5 +16,5 @@ protected:
 protected: // Set by the Editor
 	
 	UPROPERTY(EditDefaultsOnly)
-	TSoftClassPtr<UCommonActivatableWidget> MainMenuScreen_Class;
+	TSoftClassPtr<UEazyCommonActivatableWidget> MainMenuScreen_Class;
 };

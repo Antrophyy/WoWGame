@@ -19,10 +19,10 @@ protected: // Set from the Editor
 	TSoftObjectPtr<UWorld> GameMap;
 	
 	UPROPERTY(EditDefaultsOnly, meta=(Validate))
-	TSoftClassPtr<UCommonActivatableWidget> SettingsScreen_Class;
+	TSoftClassPtr<UEazyCommonActivatableWidget> SettingsScreen_Class;
 	
 	UPROPERTY(EditDefaultsOnly, meta=(Validate))
-	TSoftClassPtr<UCommonActivatableWidget> CreditsScreen_Class;
+	TSoftClassPtr<UEazyCommonActivatableWidget> CreditsScreen_Class;
 
 private: // Delegate Handling
 

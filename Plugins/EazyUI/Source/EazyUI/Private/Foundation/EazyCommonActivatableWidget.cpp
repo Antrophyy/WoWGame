@@ -70,6 +70,12 @@ void UEazyCommonActivatableWidget::NativeDestruct()
 	Super::NativeDestruct();
 }
 
+void UEazyCommonActivatableWidget::NativeOnPushed()
+{
+	BP_OnPushed();
+	OnPushed().Broadcast();
+}
+
 FEazyActionBindingHandle UEazyCommonActivatableWidget::RegisterInputActionBinding(const FEazyInputActionBindingArgs& BindActionArgs)
 {
 	if (UEazyUIActionRouterBase* Router = UEazyUIActionRouterBase::Get(*this))
