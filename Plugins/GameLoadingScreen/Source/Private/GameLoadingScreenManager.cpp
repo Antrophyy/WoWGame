@@ -1,4 +1,3 @@
-﻿
 #include "GameLoadingScreenManager.h"
 #include "HAL/ThreadHeartBeat.h"
 #include "GameFramework/GameStateBase.h"
@@ -40,7 +39,6 @@ namespace LoadingScreenCVars
 		ECVF_Default);
 }
 
-
 void UGameLoadingScreenManager::Initialize(FSubsystemCollectionBase& Collection)
 {
 	FCoreUObjectDelegates::PreLoadMapWithContext.AddUObject(this, &ThisClass::HandlePreLoadMap);
@@ -75,7 +73,7 @@ void UGameLoadingScreenManager::Deinitialize()
 	SetTickableTickType(ETickableTickType::Never);
 }
 
-UGameLoadingScreenManager* UGameLoadingScreenManager::Get(UObject* WorldContextObject)
+UGameLoadingScreenManager* UGameLoadingScreenManager::Get(const UObject* WorldContextObject)
 {
 	if (!IsValid(WorldContextObject))
 	{
@@ -122,8 +120,8 @@ ETickableTickType UGameLoadingScreenManager::GetTickableTickType() const
 bool UGameLoadingScreenManager::IsTickable() const
 {
 	// Don't tick if we don't have a game viewport client, this catches cases that ShouldCreateSubsystem does not
-	UGameInstance* GameInstance = GetGameInstance();
-	return (GameInstance && GameInstance->GetGameViewportClient());
+	const UGameInstance* GameInstance = GetGameInstance();
+	return GameInstance && GameInstance->GetGameViewportClient();
 }
 
 void UGameLoadingScreenManager::RegisterLoadingProcessor(const TScriptInterface<IGameLoadingProcess> Interface)
@@ -138,12 +136,12 @@ void UGameLoadingScreenManager::UnregisterLoadingProcessor(const TScriptInterfac
 
 void UGameLoadingScreenManager::BeginStreamingPause(class FViewport* Viewport)
 {
-	//Do nothing by default - override it if needed
+	// Do nothing by default - override it if needed
 }
 
 void UGameLoadingScreenManager::StopStreamingPause()
 {
-	//Do nothing by default - override it if needed
+	// Do nothing by default - override it if needed
 }
 
 void UGameLoadingScreenManager::StartLoadingScreen()
@@ -575,5 +573,5 @@ void UGameLoadingScreenManager::StopBlockingInput()
 bool UGameLoadingScreenManager::IsShowingInitialLoadingScreen() const
 {
 	const FPreLoadScreenManager* PreLoadScreenManager = FPreLoadScreenManager::Get();
-	return (PreLoadScreenManager != nullptr) && PreLoadScreenManager->HasValidActivePreLoadScreen();
+	return PreLoadScreenManager != nullptr && PreLoadScreenManager->HasValidActivePreLoadScreen();
 }

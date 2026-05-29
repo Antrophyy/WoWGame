@@ -1,10 +1,12 @@
-﻿#pragma once
+#pragma once
 
-#include "RarePrimaryGameLayout.h"
+#include "EazyPrimaryGameLayout.h"
 #include "WPrimaryGameLayout.generated.h"
 
+class UEazyActivatableModalPriorityQueue;
+
 UCLASS(Abstract, ClassGroup=UI)
-class WOWUI_API UWPrimaryGameLayout final : public URarePrimaryGameLayout
+class WOWUI_API UWPrimaryGameLayout final : public UEazyPrimaryGameLayout
 {
 	GENERATED_BODY()
 
@@ -23,5 +25,5 @@ private: // Widget Bindings
 	TObjectPtr<UCommonActivatableWidgetStack> MenuScreen_Stack;
 
 	UPROPERTY(meta=(BindWidget))
-	TObjectPtr<UCommonActivatableWidgetStack> Modal_Stack;
+	TObjectPtr<UEazyActivatableModalPriorityQueue> Modal_Stack;
 };

@@ -1,4 +1,3 @@
-﻿
 #include "IGameLoadingProcess.h"
 
 bool IGameLoadingProcess::ShouldShowLoadingScreen(UObject* TestObject, FString& OutReason)

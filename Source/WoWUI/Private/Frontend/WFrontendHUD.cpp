@@ -1,13 +1,13 @@
-﻿#include "Frontend/WFrontendHUD.h"
+#include "Frontend/WFrontendHUD.h"
 
-#include "RarePrimaryGameLayout.h"
+#include "EazyPrimaryGameLayout.h"
 #include "WoWUITags.h"
 
 void AWFrontendHUD::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	if (URarePrimaryGameLayout* RootLayout = URarePrimaryGameLayout::GetPrimaryGameLayout(GetOwningPlayerController()))
+	if (UEazyPrimaryGameLayout* RootLayout = UEazyPrimaryGameLayout::GetPrimaryGameLayout(GetOwningPlayerController()))
 	{
 		RootLayout->PushWidgetToLayerAsync(WoWUITags::Layer::MenuScreen, true, MainMenuScreen_Class);
 	}

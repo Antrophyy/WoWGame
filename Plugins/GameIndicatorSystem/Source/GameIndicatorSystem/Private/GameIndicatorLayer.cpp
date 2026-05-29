@@ -50,4 +50,3 @@ TSharedPtr<SActorCanvas> UGameIndicatorLayer::MakeActorCanvas() const
 	
 	return nullptr;
 }
-

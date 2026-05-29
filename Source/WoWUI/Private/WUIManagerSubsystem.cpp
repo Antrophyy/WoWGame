@@ -1,8 +1,8 @@
-﻿#include "WUIManagerSubsystem.h"
+#include "WUIManagerSubsystem.h"
 
 #include "LogWoWUI.h"
-#include "RareGameUIPolicy.h"
-#include "RarePrimaryGameLayout.h"
+#include "EazyGameUIPolicy.h"
+#include "EazyPrimaryGameLayout.h"
 #include "WoWUITags.h"
 #include "GameFramework/PlayerController.h"
 #include "Widgets/CommonActivatableWidgetContainer.h"
@@ -14,7 +14,7 @@ void UWUIManagerSubsystem::SyncHudVisibilityForPlayer(const bool bIsShown, const
 		return;
 	}
 
-	if (const URarePrimaryGameLayout* RootLayout = GetCurrentUIPolicy()->GetRootLayout(OwningPlayerController->GetLocalPlayer()))
+	if (const UEazyPrimaryGameLayout* RootLayout = GetCurrentUIPolicy()->GetRootLayout(OwningPlayerController->GetLocalPlayer()))
 	{
 		const float DesiredOpacity = bIsShown ? 1.f : 0.f;
 

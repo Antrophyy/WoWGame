@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "Subsystems/GameInstanceSubsystem.h"
@@ -32,7 +31,7 @@ public: // GameInstanceSubsystem overriden functions.
 
 	virtual void Deinitialize() override;
 	
-	static UGameLoadingScreenManager* Get(UObject* WorldContextObject);
+	static UGameLoadingScreenManager* Get(const UObject* WorldContextObject);
 
 public: // TickableGameObject overriden functions.
 
@@ -158,4 +157,3 @@ private:
 	
 	bool bCurrentlyInLoadMap = false;
 };
-

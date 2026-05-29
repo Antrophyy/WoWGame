@@ -1,13 +1,13 @@
-﻿#pragma once
+#pragma once
 
 #include "CommonButtonBase.h"
-#include "Foundation/RareButtonBase.h"
+#include "Foundation/EazyButtonBase.h"
 #include "WLabeledButton.generated.h"
 
 class UCommonTextBlock;
 
 UCLASS(ClassGroup=UI)
-class WOWUI_API UWLabeledButton : public URareButtonBase
+class WOWUI_API UWLabeledButton : public UEazyButtonBase
 {
 	GENERATED_BODY()
 

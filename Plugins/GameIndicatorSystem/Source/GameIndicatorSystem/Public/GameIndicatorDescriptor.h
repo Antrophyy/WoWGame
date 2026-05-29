@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "Types/SlateEnums.h"

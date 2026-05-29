@@ -1,5 +1,5 @@
-﻿#include "WGameHUD.h"
-#include "RarePrimaryGameLayout.h"
+#include "WGameHUD.h"
+#include "EazyPrimaryGameLayout.h"
 #include "WoWUITags.h"
 #include "Game/HUD/Modals/PlayerInventory/WItemTooltipWidget.h"
 
@@ -8,7 +8,7 @@ void AWGameHUD::BeginPlay()
 	Super::BeginPlay();
 
 	FPlatformProcess::Sleep(5.0f);
-	if (URarePrimaryGameLayout* RootLayout = URarePrimaryGameLayout::GetPrimaryGameLayout(GetOwningPlayerController()))
+	if (UEazyPrimaryGameLayout* RootLayout = UEazyPrimaryGameLayout::GetPrimaryGameLayout(GetOwningPlayerController()))
 	{
 		RootLayout->PushWidgetToLayerAsync(WoWUITags::Layer::Game, true, HUDScreen_Class);
 	}

@@ -1,4 +1,3 @@
-﻿
 #include "GameLoadingScreenSettings.h"
 
 UGameLoadingScreenSettings::UGameLoadingScreenSettings()

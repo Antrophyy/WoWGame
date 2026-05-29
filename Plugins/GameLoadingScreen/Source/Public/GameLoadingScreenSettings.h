@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "Engine/DeveloperSettingsBackedByCVars.h"
 #include "UObject/SoftObjectPath.h"

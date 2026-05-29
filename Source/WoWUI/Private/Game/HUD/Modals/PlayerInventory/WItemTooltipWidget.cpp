@@ -1,4 +1,4 @@
-﻿#include "Game/HUD/Modals/PlayerInventory/WItemTooltipWidget.h"
+#include "Game/HUD/Modals/PlayerInventory/WItemTooltipWidget.h"
 
 #include "Components/TextBlock.h"
 #include "Items/EWcItemRarity.h"
@@ -20,7 +20,7 @@ void UWItemTooltipWidget::UpdateTooltipInformation(const FWcItemDetail& Item) co
 		case EWcItemRarity::Uncommon:
 			NameColor = FColor(30, 255, 0);
 			break;
-		case EWcItemRarity::Rare:
+		case EWcItemRarity::Ez:
 			NameColor = FColor(0, 112, 221);
 			break;
 		case EWcItemRarity::Epic:

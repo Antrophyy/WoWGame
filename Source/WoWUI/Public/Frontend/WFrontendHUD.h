@@ -1,12 +1,12 @@
-﻿#pragma once
+#pragma once
 
-#include "RareHUD.h"
+#include "EazyHUD.h"
 #include "WFrontendHUD.generated.h"
 
 class UCommonActivatableWidget;
 
 UCLASS(Abstract, ClassGroup=UI)
-class WOWUI_API AWFrontendHUD : public ARareHUD
+class WOWUI_API AWFrontendHUD : public AEazyHUD
 {
 	GENERATED_BODY()
 	

@@ -1,7 +1,7 @@
-﻿#include "Game/HUD/WHUDScreen.h"
+#include "Game/HUD/WHUDScreen.h"
 
 #include "LogWoWUI.h"
-#include "RarePrimaryGameLayout.h"
+#include "EazyPrimaryGameLayout.h"
 #include "WoWUITags.h"
 #include "Behaviors/WcTargetingBehaviorComponent.h"
 #include "Components/CanvasPanelSlot.h"
@@ -15,9 +15,9 @@ void UWHUDScreen::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
-	RegisterInputActionBinding(FRareInputActionBindingArgs(InvokePauseMenuInputActionData, ETriggerEvent::Triggered, FSimpleDelegate::CreateUObject(this, &ThisClass::HandleInvokePauseMenuAction)));
-	RegisterInputActionBinding(FRareInputActionBindingArgs(TogglePlayerInventoryInputActionData, ETriggerEvent::Triggered, FSimpleDelegate::CreateUObject(this, &ThisClass::HandleTogglePlayerInventoryAction)));
-	RegisterInputActionBinding(FRareInputActionBindingArgs(ToggleQuestLogInputActionData, ETriggerEvent::Triggered, FSimpleDelegate::CreateUObject(this, &ThisClass::HandleToggleQuestLogAction)));
+	RegisterInputActionBinding(FEazyInputActionBindingArgs(InvokePauseMenuInputActionData, ETriggerEvent::Triggered, FSimpleDelegate::CreateUObject(this, &ThisClass::HandleInvokePauseMenuAction)));
+	RegisterInputActionBinding(FEazyInputActionBindingArgs(TogglePlayerInventoryInputActionData, ETriggerEvent::Triggered, FSimpleDelegate::CreateUObject(this, &ThisClass::HandleTogglePlayerInventoryAction)));
+	RegisterInputActionBinding(FEazyInputActionBindingArgs(ToggleQuestLogInputActionData, ETriggerEvent::Triggered, FSimpleDelegate::CreateUObject(this, &ThisClass::HandleToggleQuestLogAction)));
 }
 
 void UWHUDScreen::NativeOnActivated()
@@ -104,7 +104,7 @@ void UWHUDScreen::HandleInvokePauseMenuAction()
 	}
 
 	// If we don't have a target, we're free to go to the escape menu.
-	if (URarePrimaryGameLayout* RootLayout = URarePrimaryGameLayout::GetPrimaryGameLayout(GetOwningPlayer()))
+	if (UEazyPrimaryGameLayout* RootLayout = UEazyPrimaryGameLayout::GetPrimaryGameLayout(GetOwningPlayer()))
 	{
 		RootLayout->PushWidgetToLayerAsync(WoWUITags::Layer::MenuScreen, true, PauseScreen_Class);
 	}

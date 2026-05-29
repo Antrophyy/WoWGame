@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "UObject/ObjectMacros.h"
 #include "UObject/Object.h"
@@ -9,7 +9,7 @@ enum class EWcItemRarity : uint8
 	Poor,
 	Common,
 	Uncommon,
-	Rare,
+	Ez,
 	Epic,
 	Legendary,
 	Artifact,

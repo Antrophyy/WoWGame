@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "Foundation/WActivatableWidget.h"
 #include "WHUDScreen.generated.h"
@@ -27,13 +27,13 @@ protected: // Set from the Editor
 	TSoftClassPtr<UWActivatableWidget> PauseScreen_Class;
 
 	UPROPERTY(EditDefaultsOnly, Category=Input, meta=(Validate))
-	FRareUIActionData InvokePauseMenuInputActionData;
+	FEazyUIActionData InvokePauseMenuInputActionData;
 
 	UPROPERTY(EditDefaultsOnly, Category=Input, meta=(Validate))
-	FRareUIActionData TogglePlayerInventoryInputActionData;
+	FEazyUIActionData TogglePlayerInventoryInputActionData;
 
 	UPROPERTY(EditDefaultsOnly, Category=Input, meta=(Validate))
-	FRareUIActionData ToggleQuestLogInputActionData;
+	FEazyUIActionData ToggleQuestLogInputActionData;
 
 private: // Actions
 

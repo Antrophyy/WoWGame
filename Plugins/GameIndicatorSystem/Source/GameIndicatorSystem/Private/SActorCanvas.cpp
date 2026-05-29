@@ -1,4 +1,3 @@
-
 #include "SActorCanvas.h"
 
 #include "Engine/GameViewportClient.h"
@@ -31,7 +30,6 @@ const FVector2D ArrowOffsets[EArrowDirection::MAX] =
 	FVector2D(1.0f, 0.0f),
 	FVector2D(0.0f, 1.0f)
 };
-
 
 class SActorCanvasArrowWidget final : public SLeafWidget
 {

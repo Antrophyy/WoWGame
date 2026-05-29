@@ -1,4 +1,4 @@
-﻿using UnrealBuildTool;
+using UnrealBuildTool;
 
 public class WoWUI : ModuleRules
 {
@@ -24,8 +24,8 @@ public class WoWUI : ModuleRules
 
 				// Game
 				"GameplayMessageRuntime",
-				"RareInput",
-				"RareUI",
+				"EazyUIInput",
+				"EazyUI",
 				"GameIndicatorSystem",
 				"GameLoadingScreen",
 				"WoWGame",

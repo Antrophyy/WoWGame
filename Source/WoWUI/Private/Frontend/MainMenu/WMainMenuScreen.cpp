@@ -1,6 +1,6 @@
-﻿#include "Frontend/MainMenu/WMainMenuScreen.h"
+#include "Frontend/MainMenu/WMainMenuScreen.h"
 
-#include "RarePrimaryGameLayout.h"
+#include "EazyPrimaryGameLayout.h"
 #include "WoWUITags.h"
 #include "Foundation/WLabeledButton.h"
 #include "Kismet/GameplayStatics.h"
@@ -23,7 +23,7 @@ void UWMainMenuScreen::HandlePlayGameButtonClicked() const
 
 void UWMainMenuScreen::HandleSettingsButtonClicked() const
 {
-	if (URarePrimaryGameLayout* PrimaryGameLayout = URarePrimaryGameLayout::GetPrimaryGameLayout(GetOwningPlayer()))
+	if (UEazyPrimaryGameLayout* PrimaryGameLayout = UEazyPrimaryGameLayout::GetPrimaryGameLayout(GetOwningPlayer()))
 	{
 		PrimaryGameLayout->PushWidgetToLayerAsync(WoWUITags::Layer::MenuScreen, true, SettingsScreen_Class);
 	}
@@ -31,7 +31,7 @@ void UWMainMenuScreen::HandleSettingsButtonClicked() const
 
 void UWMainMenuScreen::HandleCreditsButtonClicked() const
 {
-	if (URarePrimaryGameLayout* PrimaryGameLayout = URarePrimaryGameLayout::GetPrimaryGameLayout(GetOwningPlayer()))
+	if (UEazyPrimaryGameLayout* PrimaryGameLayout = UEazyPrimaryGameLayout::GetPrimaryGameLayout(GetOwningPlayer()))
 	{
 		PrimaryGameLayout->PushWidgetToLayerAsync(WoWUITags::Layer::MenuScreen, true, CreditsScreen_Class);
 	}

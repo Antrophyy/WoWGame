@@ -1,4 +1,4 @@
-﻿#include "GameBaseIndicatorWidget.h"
+#include "GameBaseIndicatorWidget.h"
 #include "GameIndicatorDescriptor.h"
 #include "LogGameIndicatorSystem.h"
 #include "Animation/WidgetAnimation.h"

@@ -186,7 +186,6 @@ bool UK2Node_AsyncAction_ListenForGameplayMessages::HandlePayloadImplementation(
 		UEdGraphPin* GetPayloadPin = CallGetPayloadNode->FindPinChecked(TEXT("OutPayload"));
 		bIsErrorFree &= Schema->TryCreateConnection(TempVarOutput->GetVariablePin(), GetPayloadPin);
 
-
 		UK2Node_AssignmentStatement* AssignNode = CompilerContext.SpawnIntermediateNode<UK2Node_AssignmentStatement>(this, SourceGraph);
 		AssignNode->AllocateDefaultPins();
 		bIsErrorFree &= Schema->TryCreateConnection(GetPayloadThenPin, AssignNode->GetExecPin());
@@ -194,7 +193,6 @@ bool UK2Node_AsyncAction_ListenForGameplayMessages::HandlePayloadImplementation(
 		AssignNode->NotifyPinConnectionListChanged(AssignNode->GetVariablePin());
 		bIsErrorFree &= Schema->TryCreateConnection(AssignNode->GetValuePin(), TempVarOutput->GetVariablePin());
 		AssignNode->NotifyPinConnectionListChanged(AssignNode->GetValuePin());
-
 
 		bIsErrorFree &= CompilerContext.MovePinLinksToIntermediate(*InOutLastActivatedThenPin, *AssignNode->GetThenPin()).CanSafeConnect();
 		bIsErrorFree &= Schema->TryCreateConnection(InOutLastActivatedThenPin, GetPayloadExecPin);
@@ -246,4 +244,3 @@ UEdGraphPin* UK2Node_AsyncAction_ListenForGameplayMessages::GetOutputChannelPin(
 }
 
 #undef LOCTEXT_NAMESPACE
-

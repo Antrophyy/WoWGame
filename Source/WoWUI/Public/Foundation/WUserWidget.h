@@ -1,10 +1,10 @@
-﻿#pragma once
+#pragma once
 
-#include "Foundation/RareUserWidget.h"
+#include "Foundation/EazyUserWidget.h"
 #include "WUserWidget.generated.h"
 
 UCLASS(Abstract, ClassGroup=UI)
-class WOWUI_API UWUserWidget : public URareUserWidget
+class WOWUI_API UWUserWidget : public UEazyUserWidget
 {
 	GENERATED_BODY()
 };

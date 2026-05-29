@@ -1,5 +1,6 @@
-﻿#include "WPrimaryGameLayout.h"
+#include "WPrimaryGameLayout.h"
 #include "WoWUITags.h"
+#include "Modals/EazyActivatableModalPriorityQueue.h"
 
 void UWPrimaryGameLayout::NativeOnInitialized()
 {

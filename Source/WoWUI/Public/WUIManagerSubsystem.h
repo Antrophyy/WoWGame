@@ -1,10 +1,10 @@
-﻿#pragma once
+#pragma once
 
-#include "RareGameUIManagerSubsystem.h"
+#include "EazyGameUIManagerSubsystem.h"
 #include "WUIManagerSubsystem.generated.h"
 
 UCLASS()
-class WOWUI_API UWUIManagerSubsystem final : public URareGameUIManagerSubsystem
+class WOWUI_API UWUIManagerSubsystem final : public UEazyGameUIManagerSubsystem
 {
 	GENERATED_BODY()
 

@@ -1,13 +1,13 @@
-﻿#pragma once
+#pragma once
 
-#include "RareHUD.h"
+#include "EazyHUD.h"
 #include "WGameHUD.generated.h"
 
 class UWItemTooltipWidget;
 class UCommonActivatableWidget;
 
 UCLASS(Abstract, ClassGroup=UI)
-class WOWUI_API AWGameHUD final : public ARareHUD
+class WOWUI_API AWGameHUD final : public AEazyHUD
 {
 	GENERATED_BODY()
 
