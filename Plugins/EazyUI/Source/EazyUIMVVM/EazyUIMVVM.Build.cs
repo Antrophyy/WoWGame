@@ -6,22 +6,16 @@ public class EazyUIMVVM : ModuleRules
     {
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-        PublicDependencyModuleNames.AddRange(
+        PrivateDependencyModuleNames.AddRange(
             [
                 // Engine
                 "Core",
                 "CoreUObject",
                 "Engine",
                 "ModelViewViewModel",
-                "UMG"
-            ]
-        );
-
-        PrivateDependencyModuleNames.AddRange(
-            [
-                // Engine
                 "Slate",
-                "SlateCore"
+                "SlateCore",
+                "UMG",
             ]
         );
     }
