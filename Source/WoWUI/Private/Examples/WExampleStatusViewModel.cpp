@@ -8,7 +8,7 @@
 UWExampleStatusViewModel::UWExampleStatusViewModel()
 {
 	bIsPersistent = false;
-	bAllowMultipleInstances = false;
+	bAlwaysCreateNewInstance = false;
 }
 
 void UWExampleStatusViewModel::OnCreated()

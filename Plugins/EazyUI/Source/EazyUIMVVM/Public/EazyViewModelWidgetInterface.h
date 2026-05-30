@@ -20,3 +20,4 @@ protected:
 	void InitializeViewModelsForWidget(UUserWidget* Widget, TArray<TObjectPtr<UEazyViewModelBase>>& InOutViewModels) const;
 	void ReleaseViewModelsForWidget(UUserWidget* Widget, TArray<TObjectPtr<UEazyViewModelBase>>& InOutViewModels) const;
 };
+

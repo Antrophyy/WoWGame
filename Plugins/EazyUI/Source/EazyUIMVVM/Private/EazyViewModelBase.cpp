@@ -1,4 +1,4 @@
-﻿#include "Core/EazyViewModelBase.h"
+﻿#include "EazyViewModelBase.h"
 #include "GameFramework/PlayerState.h"
 
 UWorld* UEazyViewModelBase::GetWorld() const
@@ -54,3 +54,5 @@ APlayerState* UEazyViewModelBase::BP_GetOwningPlayerState() const
 {
 	return GetOwningPlayerState<APlayerState>();
 }
+
+

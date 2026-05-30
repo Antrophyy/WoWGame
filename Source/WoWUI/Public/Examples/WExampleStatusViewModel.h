@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "EazyUIMVVM/Public/Core/EazyViewModelBase.h"
+#include "EazyUIMVVM/Public/EazyViewModelBase.h"
 #include "TimerManager.h"
 #include "WExampleStatusViewModel.generated.h"
 

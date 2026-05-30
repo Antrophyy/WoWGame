@@ -2,7 +2,7 @@
 
 #include "CommonActivatableWidget.h"
 #include "Input/EazyInputBindingWidgetInterface.h"
-#include "Core/EazyViewModelWidgetInterface.h"
+#include "EazyViewModelWidgetInterface.h"
 #include "Routing/EazyActionBindingHandle.h"
 #include "Routing/EazyInputActionBindingArgs.h"
 #include "EazyCommonActivatableWidget.generated.h"

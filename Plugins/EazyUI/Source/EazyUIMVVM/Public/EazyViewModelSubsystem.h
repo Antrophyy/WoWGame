@@ -52,3 +52,4 @@ private:
 	
 	friend class IEazyViewModelWidgetInterface;
 };
+

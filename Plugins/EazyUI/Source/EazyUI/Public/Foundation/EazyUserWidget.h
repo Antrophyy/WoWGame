@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Blueprint/UserWidget.h"
-#include "Core/EazyViewModelWidgetInterface.h"
+#include "EazyViewModelWidgetInterface.h"
 #include "EazyUserWidget.generated.h"
 
 class UEazyViewModelBase;

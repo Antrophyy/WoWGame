@@ -1,8 +1,8 @@
-﻿#include "Core/EazyViewModelWidgetInterface.h"
+﻿#include "EazyViewModelWidgetInterface.h"
 
 #include "Blueprint/UserWidget.h"
-#include "Core/EazyViewModelBase.h"
-#include "Core/EazyViewModelSubsystem.h"
+#include "EazyViewModelBase.h"
+#include "EazyViewModelSubsystem.h"
 #include "Engine/LocalPlayer.h"
 #include "MVVMBlueprintLibrary.h"
 #include "View/MVVMView.h"
@@ -63,7 +63,7 @@ void IEazyViewModelWidgetInterface::ReleaseViewModelsForWidget(UUserWidget* Widg
 			continue;
 		}
 
-		if (ViewModel->AllowMultipleInstances() && !ViewModel->IsPersistent())
+		if (ViewModel->AlwaysCreateNewInstance() && !ViewModel->IsPersistent())
 		{
 			ViewModelSubsystem->DestroyViewModel(ViewModel);
 			continue;
@@ -75,3 +75,4 @@ void IEazyViewModelWidgetInterface::ReleaseViewModelsForWidget(UUserWidget* Widg
 
 	InOutViewModels.Reset();
 }
+

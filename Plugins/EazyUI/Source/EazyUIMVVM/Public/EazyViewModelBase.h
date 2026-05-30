@@ -24,7 +24,7 @@ public:
 	void DeinitializeViewModel();
 	
 	bool IsPersistent() const { return bIsPersistent; }
-	bool AllowMultipleInstances() const { return bAllowMultipleInstances; }
+	bool AlwaysCreateNewInstance() const { return bAlwaysCreateNewInstance; }
 	
 	FSimpleMulticastDelegate OnDestroyedEvent;
 	FSimpleMulticastDelegate OnCreatedEvent;
@@ -43,7 +43,7 @@ protected: // Set by the Editor
 	
 	// If set to true, a new instance is always created when requested. If false, the subsystem will try to reuse an existing instance if possible.
 	UPROPERTY(EditAnywhere, Category="EazyUI|ViewModel", meta=(EditCondition="!bIsPersistent"))
-	bool bAllowMultipleInstances = false;
+	bool bAlwaysCreateNewInstance = false;
 	
 	// If set to true, once the viewmodel is first created, it will never be destroyed and will be re-used. AllowMultipleInstances will be ignored if this is true.
 	UPROPERTY(EditAnywhere, Category="EazyUI|ViewModel")
@@ -90,3 +90,4 @@ protected: // Helper functions.
 private:
 	TWeakObjectPtr<ULocalPlayer> OwningLocalPlayer;
 };
+

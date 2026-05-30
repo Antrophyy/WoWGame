@@ -12,3 +12,4 @@ struct FEazyViewModelInstanceHandle
 	TWeakObjectPtr<UEazyViewModelBase> ViewModelInstance;
 	TArray<TWeakObjectPtr<UObject>> ReferencingObjects;
 };
+

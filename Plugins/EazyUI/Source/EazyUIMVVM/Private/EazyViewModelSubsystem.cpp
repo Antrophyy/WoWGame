@@ -1,6 +1,6 @@
-﻿#include "Core/EazyViewModelSubsystem.h"
+﻿#include "EazyViewModelSubsystem.h"
 
-#include "Core/EazyViewModelBase.h"
+#include "EazyViewModelBase.h"
 #include "Engine/GameInstance.h"
 #include "Engine/LocalPlayer.h"
 #include "GameFramework/PlayerController.h"
@@ -89,7 +89,7 @@ UEazyViewModelBase* UEazyViewModelSubsystem::GetOrCreateViewModel(UObject* Conte
 		return ViewModel;
 	}
 
-	if (CDO->AllowMultipleInstances())
+	if (CDO->AlwaysCreateNewInstance())
 	{
 		UE_LOG(LogEazyUIMVVM, Verbose, TEXT("Creating unique instance of ViewModel: %s for context: %s"), *ViewModelClass->GetName(), *ContextObject->GetName());
 		UEazyViewModelBase* ViewModel = CreateViewModelInstance(ViewModelClass);
@@ -107,12 +107,12 @@ UEazyViewModelBase* UEazyViewModelSubsystem::GetOrCreateViewModel(UObject* Conte
 
 	if (ViewModelInstanceHandles.Contains(ViewModelClass))
 	{
-		UE_LOG(LogEazyUIMVVM, Verbose, TEXT("Retrieving existing shared ViewModel: %s for context: %s"), *ViewModelClass->GetName(), *ContextObject->GetName());
+		UE_LOG(LogEazyUIMVVM, Verbose, TEXT("Retrieving existing ViewModel: %s for context: %s"), *ViewModelClass->GetName(), *ContextObject->GetName());
 		return GetExistingViewModel(ContextObject, ViewModelClass);
 	}
 	else
 	{
-		UE_LOG(LogEazyUIMVVM, Verbose, TEXT("Creating new shared ViewModel: %s for context: %s"), *ViewModelClass->GetName(), *ContextObject->GetName());
+		UE_LOG(LogEazyUIMVVM, Verbose, TEXT("Creating new ViewModel: %s for context: %s"), *ViewModelClass->GetName(), *ContextObject->GetName());
 		UEazyViewModelBase* ViewModel = CreateViewModelInstance(ViewModelClass);
 
 		FEazyViewModelInstanceHandle NewInstanceHandle;
@@ -144,13 +144,13 @@ void UEazyViewModelSubsystem::ReleaseViewModel(UObject* ContextObject, const TSu
 
 		if (InstanceHandle.ReferencingObjects.Num() == 0)
 		{
-			UE_LOG(LogEazyUIMVVM, Verbose, TEXT("Releasing shared ViewModel with no remaining references: %s"), *ViewModelClass->GetName());
+			UE_LOG(LogEazyUIMVVM, Verbose, TEXT("Releasing ViewModel with no remaining references: %s"), *ViewModelClass->GetName());
 			DestroyViewModel(InstanceHandle.ViewModelInstance.Get());
 			ViewModelInstanceHandles.Remove(ViewModelClass);
 		}
 		else
 		{
-			UE_LOG(LogEazyUIMVVM, Verbose, TEXT("Releasing reference to shared ViewModel: %s (remaining references: %d)"), *ViewModelClass->GetName(), InstanceHandle.ReferencingObjects.Num());
+			UE_LOG(LogEazyUIMVVM, Verbose, TEXT("Releasing reference to ViewModel: %s (remaining references: %d)"), *ViewModelClass->GetName(), InstanceHandle.ReferencingObjects.Num());
 		}
 	}
 
@@ -217,7 +217,7 @@ void UEazyViewModelSubsystem::DumpMultipleInstanceViewModels() const
 		MultipleInstanceEntriesByClass.FindOrAdd(Entry.ViewModelClass).Add(&Entry);
 	}
 
-	UE_LOG(LogEazyUIMVVM, Log, TEXT("--- Multiple-Instance ViewModels (%d) ---"), MultipleInstanceViewModelEntries.Num());
+	UE_LOG(LogEazyUIMVVM, Log, TEXT("--- Unique Instance ViewModels (%d) ---"), MultipleInstanceViewModelEntries.Num());
 	for (const TPair<TSubclassOf<UEazyViewModelBase>, TArray<const FEazyMultipleInstanceViewModelEntry*>>& Pair : MultipleInstanceEntriesByClass)
 	{
 		DumpMultipleInstanceViewModelEntry(Pair.Key, Pair.Value);
@@ -245,7 +245,7 @@ void UEazyViewModelSubsystem::DumpMultipleInstanceViewModelEntry(const TSubclass
 
 void UEazyViewModelSubsystem::DumpSharedViewModels() const
 {
-	UE_LOG(LogEazyUIMVVM, Log, TEXT("--- Shared ViewModels (%d) ---"), ViewModelInstanceHandles.Num());
+	UE_LOG(LogEazyUIMVVM, Log, TEXT("--- Active ViewModels (%d) ---"), ViewModelInstanceHandles.Num());
 	for (const TPair<TSubclassOf<UEazyViewModelBase>, FEazyViewModelInstanceHandle>& Pair : ViewModelInstanceHandles)
 	{
 		const TSubclassOf<UEazyViewModelBase>& ViewModelClass = Pair.Key;

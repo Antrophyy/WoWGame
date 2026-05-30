@@ -2,7 +2,7 @@
 
 #include "CommonUserWidget.h"
 #include "Input/EazyInputBindingWidgetInterface.h"
-#include "Core/EazyViewModelWidgetInterface.h"
+#include "EazyViewModelWidgetInterface.h"
 #include "Routing/EazyActionBindingHandle.h"
 #include "Routing/EazyInputActionBindingArgs.h"
 #include "EazyCommonUserWidget.generated.h"
