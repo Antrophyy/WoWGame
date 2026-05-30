@@ -26,6 +26,9 @@ public:
 
 private:
 	UEazyViewModelBase* GetOrCreateViewModel(UObject* ContextObject, TSubclassOf<UEazyViewModelBase> ViewModelClass);
+	UEazyViewModelBase* GetOrCreatePersistentViewModel(TSubclassOf<UEazyViewModelBase> ViewModelClass);
+	UEazyViewModelBase* CreateUniqueViewModel(UObject* ContextObject, TSubclassOf<UEazyViewModelBase> ViewModelClass);
+	UEazyViewModelBase* GetOrCreateSharedViewModel(UObject* ContextObject, TSubclassOf<UEazyViewModelBase> ViewModelClass);
 	void ReleaseViewModel(UObject* ContextObject, TSubclassOf<UEazyViewModelBase> ViewModelClass);
 	
 private:

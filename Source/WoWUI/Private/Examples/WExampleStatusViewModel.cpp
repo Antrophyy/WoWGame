@@ -5,12 +5,6 @@
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/PlayerState.h"
 
-UWExampleStatusViewModel::UWExampleStatusViewModel()
-{
-	bIsPersistent = false;
-	bAlwaysCreateNewInstance = false;
-}
-
 void UWExampleStatusViewModel::OnCreated()
 {
 	Super::OnCreated();

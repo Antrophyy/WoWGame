@@ -12,6 +12,17 @@
 #define VM_SET_GET_MACRO(_1, _2, NAME, ...) NAME
 #define VM_SET(...) VM_SET_GET_MACRO(__VA_ARGS__, VM_SET_2, VM_SET_1)(__VA_ARGS__)
 
+UENUM(Category=UI, BlueprintType)
+enum EEazyViewModelLifetimePolicy : uint8
+{
+	// The subsystem will try to reuse an existing VM if possible. A new instance will only be created if there is no existing instance that can be reused (after all users died).
+	Default,
+	// A new instance is always created when requested. The subsystem will never try to reuse an existing instance. VM will die with its owner.
+	AlwaysCreateNewInstance,
+	// After the first instance is created, it will be reused for all subsequent requests. The owner is the MVVM subsystem and will never die.
+	Persistent,
+};
+
 UCLASS(Abstract)
 class EAZYUIMVVM_API UEazyViewModelBase : public UMVVMViewModelBase
 {
@@ -23,8 +34,8 @@ public:
 	void InitializeViewModel(ULocalPlayer* InLocalPlayer);
 	void DeinitializeViewModel();
 	
-	bool IsPersistent() const { return bIsPersistent; }
-	bool AlwaysCreateNewInstance() const { return bAlwaysCreateNewInstance; }
+	// Can be overriden to specify a different lifetime policy for this VM.
+	virtual EEazyViewModelLifetimePolicy GetDesiredLifetimePolicy() const { return LifetimePolicy; }
 	
 	FSimpleMulticastDelegate OnDestroyedEvent;
 	FSimpleMulticastDelegate OnCreatedEvent;
@@ -39,16 +50,6 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCosmetic, DisplayName="OnDestroyed")
 	void BP_OnDestroyed();
 	
-protected: // Set by the Editor
-	
-	// If set to true, a new instance is always created when requested. If false, the subsystem will try to reuse an existing instance if possible.
-	UPROPERTY(EditAnywhere, Category="EazyUI|ViewModel", meta=(EditCondition="!bIsPersistent"))
-	bool bAlwaysCreateNewInstance = false;
-	
-	// If set to true, once the viewmodel is first created, it will never be destroyed and will be re-used. AllowMultipleInstances will be ignored if this is true.
-	UPROPERTY(EditAnywhere, Category="EazyUI|ViewModel")
-	bool bIsPersistent = false;
-
 protected: // Helper functions.
 
 	template <class TLocalPlayer = ULocalPlayer>
@@ -88,6 +89,10 @@ protected: // Helper functions.
 	APlayerState* BP_GetOwningPlayerState() const;
 
 private:
+	
+	UPROPERTY(EditAnywhere, Category="EazyUI", meta=(AllowPrivateAccess=true))
+	TEnumAsByte<EEazyViewModelLifetimePolicy> LifetimePolicy = EEazyViewModelLifetimePolicy::Default;
+	
 	TWeakObjectPtr<ULocalPlayer> OwningLocalPlayer;
 };
 

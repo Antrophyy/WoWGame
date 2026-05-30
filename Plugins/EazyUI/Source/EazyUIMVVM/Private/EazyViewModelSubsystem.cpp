@@ -73,56 +73,68 @@ UEazyViewModelBase* UEazyViewModelSubsystem::GetOrCreateViewModel(UObject* Conte
 	}
 
 	const UEazyViewModelBase* CDO = ViewModelClass->GetDefaultObject<UEazyViewModelBase>();
-
-	if (CDO->IsPersistent())
+	switch (CDO->GetDesiredLifetimePolicy())
 	{
-		if (PersistentViewModelInstances.Contains(ViewModelClass))
-		{
-			UE_LOG(LogEazyUIMVVM, Verbose, TEXT("Retrieving existing persistent ViewModel: %s"), *ViewModelClass->GetName());
-			return PersistentViewModelInstances[ViewModelClass].Get();
-		}
+		case EEazyViewModelLifetimePolicy::Persistent:
+			return GetOrCreatePersistentViewModel(ViewModelClass);
+		case EEazyViewModelLifetimePolicy::AlwaysCreateNewInstance:
+			return CreateUniqueViewModel(ContextObject, ViewModelClass);
+		case EEazyViewModelLifetimePolicy::Default:
+			return GetOrCreateSharedViewModel(ContextObject, ViewModelClass);
+		default:
+			return nullptr;
+	}
+}
 
-		UE_LOG(LogEazyUIMVVM, Verbose, TEXT("Creating new persistent ViewModel: %s"), *ViewModelClass->GetName());
-		UEazyViewModelBase* ViewModel = CreateViewModelInstance(ViewModelClass);
-		PersistentViewModelInstances.Add(ViewModelClass, ViewModel);
-
-		return ViewModel;
+UEazyViewModelBase* UEazyViewModelSubsystem::GetOrCreatePersistentViewModel(const TSubclassOf<UEazyViewModelBase> ViewModelClass)
+{
+	if (PersistentViewModelInstances.Contains(ViewModelClass))
+	{
+		UE_LOG(LogEazyUIMVVM, Verbose, TEXT("Retrieving existing Persistent ViewModel: %s"), *ViewModelClass->GetName());
+		return PersistentViewModelInstances[ViewModelClass].Get();
 	}
 
-	if (CDO->AlwaysCreateNewInstance())
-	{
-		UE_LOG(LogEazyUIMVVM, Verbose, TEXT("Creating unique instance of ViewModel: %s for context: %s"), *ViewModelClass->GetName(), *ContextObject->GetName());
-		UEazyViewModelBase* ViewModel = CreateViewModelInstance(ViewModelClass);
+	UE_LOG(LogEazyUIMVVM, Verbose, TEXT("Creating new Persistent ViewModel: %s"), *ViewModelClass->GetName());
+	UEazyViewModelBase* ViewModel = CreateViewModelInstance(ViewModelClass);
+	PersistentViewModelInstances.Add(ViewModelClass, ViewModel);
 
-		ViewModel->OnDestroyedEvent.AddUObject(this, &UEazyViewModelSubsystem::ReleaseViewModel, ContextObject, ViewModelClass);
-		
-		FEazyMultipleInstanceViewModelEntry NewMultipleInstanceEntry;
-		NewMultipleInstanceEntry.ViewModelInstance = ViewModel;
-		NewMultipleInstanceEntry.ContextObject = ContextObject;
-		NewMultipleInstanceEntry.ViewModelClass = ViewModelClass;
-		MultipleInstanceViewModelEntries.Emplace(MoveTemp(NewMultipleInstanceEntry));
+	return ViewModel;
+}
 
-		return ViewModel;
-	}
+UEazyViewModelBase* UEazyViewModelSubsystem::CreateUniqueViewModel(UObject* ContextObject, const TSubclassOf<UEazyViewModelBase> ViewModelClass)
+{
+	UE_LOG(LogEazyUIMVVM, Verbose, TEXT("Creating AlwaysCreateNewInstance ViewModel: %s for context: %s"), *ViewModelClass->GetName(), *ContextObject->GetName());
+	UEazyViewModelBase* ViewModel = CreateViewModelInstance(ViewModelClass);
 
+	ViewModel->OnDestroyedEvent.AddUObject(this, &UEazyViewModelSubsystem::ReleaseViewModel, ContextObject, ViewModelClass);
+
+	FEazyMultipleInstanceViewModelEntry NewMultipleInstanceEntry;
+	NewMultipleInstanceEntry.ViewModelInstance = ViewModel;
+	NewMultipleInstanceEntry.ContextObject = ContextObject;
+	NewMultipleInstanceEntry.ViewModelClass = ViewModelClass;
+	MultipleInstanceViewModelEntries.Emplace(MoveTemp(NewMultipleInstanceEntry));
+
+	return ViewModel;
+}
+
+UEazyViewModelBase* UEazyViewModelSubsystem::GetOrCreateSharedViewModel(UObject* ContextObject, const TSubclassOf<UEazyViewModelBase> ViewModelClass)
+{
 	if (ViewModelInstanceHandles.Contains(ViewModelClass))
 	{
-		UE_LOG(LogEazyUIMVVM, Verbose, TEXT("Retrieving existing ViewModel: %s for context: %s"), *ViewModelClass->GetName(), *ContextObject->GetName());
+		UE_LOG(LogEazyUIMVVM, Verbose, TEXT("Retrieving existing Default ViewModel: %s for context: %s"), *ViewModelClass->GetName(), *ContextObject->GetName());
 		return GetExistingViewModel(ContextObject, ViewModelClass);
 	}
-	else
-	{
-		UE_LOG(LogEazyUIMVVM, Verbose, TEXT("Creating new ViewModel: %s for context: %s"), *ViewModelClass->GetName(), *ContextObject->GetName());
-		UEazyViewModelBase* ViewModel = CreateViewModelInstance(ViewModelClass);
 
-		FEazyViewModelInstanceHandle NewInstanceHandle;
-		NewInstanceHandle.ViewModelInstance = ViewModel;
-		NewInstanceHandle.ReferencingObjects.Emplace(ContextObject);
+	UE_LOG(LogEazyUIMVVM, Verbose, TEXT("Creating new Default ViewModel: %s for context: %s"), *ViewModelClass->GetName(), *ContextObject->GetName());
+	UEazyViewModelBase* ViewModel = CreateViewModelInstance(ViewModelClass);
 
-		ViewModelInstanceHandles.Add(ViewModelClass, NewInstanceHandle);
+	FEazyViewModelInstanceHandle NewInstanceHandle;
+	NewInstanceHandle.ViewModelInstance = ViewModel;
+	NewInstanceHandle.ReferencingObjects.Emplace(ContextObject);
 
-		return ViewModel;
-	}
+	ViewModelInstanceHandles.Add(ViewModelClass, NewInstanceHandle);
+
+	return ViewModel;
 }
 
 void UEazyViewModelSubsystem::ReleaseViewModel(UObject* ContextObject, const TSubclassOf<UEazyViewModelBase> ViewModelClass)
@@ -130,7 +142,7 @@ void UEazyViewModelSubsystem::ReleaseViewModel(UObject* ContextObject, const TSu
 	if (PersistentViewModelInstances.Contains(ViewModelClass))
 	{
 		// Persistent ViewModels are never destroyed until the subsystem itself is deinitialized, so we don't need to do anything here.
-		UE_LOG(LogEazyUIMVVM, Verbose, TEXT("Ignoring release for persistent ViewModel: %s"), *ViewModelClass->GetName());
+		UE_LOG(LogEazyUIMVVM, Verbose, TEXT("Ignoring release for Persistent ViewModel: %s"), *ViewModelClass->GetName());
 		return;
 	}
 
@@ -167,9 +179,9 @@ void UEazyViewModelSubsystem::ReleaseViewModel(UObject* ContextObject, const TSu
 		{
 			if (bIsStaleEntry)
 			{
-				UE_LOG(LogEazyUIMVVM, Verbose, TEXT("Cleaning up stale unique ViewModel entry: %s"), *ViewModelClass->GetName());
+				UE_LOG(LogEazyUIMVVM, Verbose, TEXT("Cleaning up stale AlwaysCreateNewInstance ViewModel entry: %s"), *ViewModelClass->GetName());
 			}
-			
+
 			Entry.ViewModelInstance->OnDestroyedEvent.RemoveAll(this);
 			MultipleInstanceViewModelEntries.RemoveAt(Index);
 		}
@@ -217,7 +229,7 @@ void UEazyViewModelSubsystem::DumpMultipleInstanceViewModels() const
 		MultipleInstanceEntriesByClass.FindOrAdd(Entry.ViewModelClass).Add(&Entry);
 	}
 
-	UE_LOG(LogEazyUIMVVM, Log, TEXT("--- Unique Instance ViewModels (%d) ---"), MultipleInstanceViewModelEntries.Num());
+	UE_LOG(LogEazyUIMVVM, Log, TEXT("--- AlwaysCreateNewInstance ViewModels (%d) ---"), MultipleInstanceViewModelEntries.Num());
 	for (const TPair<TSubclassOf<UEazyViewModelBase>, TArray<const FEazyMultipleInstanceViewModelEntry*>>& Pair : MultipleInstanceEntriesByClass)
 	{
 		DumpMultipleInstanceViewModelEntry(Pair.Key, Pair.Value);
@@ -227,9 +239,9 @@ void UEazyViewModelSubsystem::DumpMultipleInstanceViewModels() const
 void UEazyViewModelSubsystem::DumpMultipleInstanceViewModelEntry(const TSubclassOf<UEazyViewModelBase>& ViewModelClass, const TArray<const FEazyMultipleInstanceViewModelEntry*>& Entries) const
 {
 	const FString ViewModelClassName = IsValid(ViewModelClass) ? ViewModelClass->GetName() : TEXT("Invalid Class");
-	UE_LOG(LogEazyUIMVVM, Log, TEXT("    [%s] Unique instances: %d"), *ViewModelClassName, Entries.Num());
+	UE_LOG(LogEazyUIMVVM, Log, TEXT("    [%s] AlwaysCreateNewInstance instances: %d"), *ViewModelClassName, Entries.Num());
 
-	UE_LOG(LogEazyUIMVVM, Log, TEXT("        WBPs with unique VM:"));
+	UE_LOG(LogEazyUIMVVM, Log, TEXT("        WBPs with AlwaysCreateNewInstance VM:"));
 	for (const FEazyMultipleInstanceViewModelEntry* Entry : Entries)
 	{
 		if (Entry == nullptr)
@@ -245,7 +257,7 @@ void UEazyViewModelSubsystem::DumpMultipleInstanceViewModelEntry(const TSubclass
 
 void UEazyViewModelSubsystem::DumpSharedViewModels() const
 {
-	UE_LOG(LogEazyUIMVVM, Log, TEXT("--- Active ViewModels (%d) ---"), ViewModelInstanceHandles.Num());
+	UE_LOG(LogEazyUIMVVM, Log, TEXT("--- Default ViewModels (%d) ---"), ViewModelInstanceHandles.Num());
 	for (const TPair<TSubclassOf<UEazyViewModelBase>, FEazyViewModelInstanceHandle>& Pair : ViewModelInstanceHandles)
 	{
 		const TSubclassOf<UEazyViewModelBase>& ViewModelClass = Pair.Key;
@@ -286,6 +298,6 @@ void UEazyViewModelSubsystem::DumpPersistentViewModels() const
 		}
 
 		const FString ClassName = IsValid(ViewModelClass) ? ViewModelClass->GetName() : TEXT("Invalid Class");
-		UE_LOG(LogEazyUIMVVM, Log, TEXT("    [%s] (Persistent - owned by subsystem)"), *ClassName);
+		UE_LOG(LogEazyUIMVVM, Log, TEXT("    [%s] (Persistent policy - owned by subsystem)"), *ClassName);
 	}
 }

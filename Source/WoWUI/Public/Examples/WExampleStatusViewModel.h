@@ -9,9 +9,6 @@ class WOWUI_API UWExampleStatusViewModel : public UEazyViewModelBase
 {
 	GENERATED_BODY()
 	
-public:
-	UWExampleStatusViewModel();
-
 protected:
 	virtual void OnCreated() override;
 	virtual void OnDestroyed() override;

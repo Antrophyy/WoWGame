@@ -63,7 +63,7 @@ void IEazyViewModelWidgetInterface::ReleaseViewModelsForWidget(UUserWidget* Widg
 			continue;
 		}
 
-		if (ViewModel->AlwaysCreateNewInstance() && !ViewModel->IsPersistent())
+		if (ViewModel->GetDesiredLifetimePolicy() == EEazyViewModelLifetimePolicy::AlwaysCreateNewInstance)
 		{
 			ViewModelSubsystem->DestroyViewModel(ViewModel);
 			continue;
