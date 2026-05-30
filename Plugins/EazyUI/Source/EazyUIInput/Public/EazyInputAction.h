@@ -11,4 +11,3 @@ class EAZYUIINPUT_API UEazyInputAction : public UInputAction
 public:
 	explicit UEazyInputAction(const FObjectInitializer& ObjectInitializer);
 };
-

@@ -6,7 +6,6 @@
 #include "Engine/LocalPlayer.h"
 #include "GameFramework/PlayerController.h"
 #include "Device/EazyAnalogCursor.h"
-#include "Device/EazyInputPreprocessor.h"
 #include "CommonUI/Private/Input/UIActionRouterTypes.h"
 #include "Algo/AnyOf.h"
 #include "EazyInputAction.h"
@@ -22,12 +21,6 @@ void UEazyUIActionRouterBase::Initialize(FSubsystemCollectionBase& Collection)
 	Super::Initialize(Collection);
 
 	AnalogCursor = StaticCastSharedPtr<FEazyAnalogCursor, FCommonAnalogCursor>(GetCommonAnalogCursor());
-	EazyInputPreprocessor = MakeShared<FEazyInputPreprocessor>();
-	
-	if (FSlateApplication::IsInitialized())
-	{
-		FSlateApplication::Get().RegisterInputPreProcessor(EazyInputPreprocessor, 0);
-	}
 
 	// Listen for player controller changes so we can rebind Enhanced Input bindings to the new component.
 	if (ULocalPlayer* LocalPlayer = GetLocalPlayer<ULocalPlayer>())
@@ -54,21 +47,9 @@ void UEazyUIActionRouterBase::Deinitialize()
 	ActiveBindings.Empty();
 	ActiveBindingsByInputAction.Empty();
 
-	if (EazyInputPreprocessor.IsValid())
-	{
-		EazyInputPreprocessor->GamepadValuesHandlers.Reset();
-		if (FSlateApplication::IsInitialized())
-		{
-			FSlateApplication::Get().UnregisterInputPreProcessor(EazyInputPreprocessor);
-		}
-		EazyInputPreprocessor.Reset();
-	}
-
 
 	Super::Deinitialize();
 }
-
-// ── Analog cursor ─────────────────────────────────────────────────────────────
 
 void UEazyUIActionRouterBase::SetAnalogMovementEnabled(const bool bEnable) const
 {
@@ -83,26 +64,6 @@ TSharedRef<FCommonAnalogCursor> UEazyUIActionRouterBase::MakeAnalogCursor() cons
 	return FCommonAnalogCursor::CreateAnalogCursor<FEazyAnalogCursor>(*this);
 }
 
-// ── Gamepad values listeners ──────────────────────────────────────────────────
-
-void UEazyUIActionRouterBase::AddGamepadValuesListener(const TWeakInterfacePtr<IEazyGamepadValuesHandler> InHandler) const
-{
-	if (EazyInputPreprocessor.IsValid())
-	{
-		EazyInputPreprocessor->GamepadValuesHandlers.Add(InHandler);
-	}
-}
-
-void UEazyUIActionRouterBase::RemoveGamepadValuesListener(const TWeakInterfacePtr<IEazyGamepadValuesHandler> InHandler) const
-{
-	if (EazyInputPreprocessor.IsValid() && EazyInputPreprocessor->GamepadValuesHandlers.Contains(InHandler))
-	{
-		EazyInputPreprocessor->GamepadValuesHandlers.Remove(InHandler);
-	}
-}
-
-// ── Enhanced Input registration ───────────────────────────────────────────────
-
 FEazyActionBindingHandle UEazyUIActionRouterBase::RegisterInputAction(const UWidget& Widget, const FEazyInputActionBindingArgs& BindActionArgs)
 {
 	if (!ensureMsgf(IsValid(BindActionArgs.Data.InputAction), TEXT("[UEazyUIActionRouterBase::RegisterInputAction] InputAction is null. Widget: %s"), *Widget.GetName()))
@@ -115,7 +76,6 @@ FEazyActionBindingHandle UEazyUIActionRouterBase::RegisterInputAction(const UWid
 	NewHandle.Router = this;
 
 	FEazyActionBinding NewBinding;
-	
 	NewBinding.BindingId = NewId;
 	NewBinding.Handle = NewHandle;
 	NewBinding.RegisteringWidget = &Widget;
@@ -135,7 +95,7 @@ FEazyActionBindingHandle UEazyUIActionRouterBase::RegisterInputAction(const UWid
 	// If the Enhanced Input Component is already available, subscribe immediately.
 	if (UEnhancedInputComponent* EnhancedInputComponent = GetEnhancedInputComponent())
 	{
-		EnsureUniqueEIBinding(BindActionArgs.Data.InputAction, BindActionArgs.TriggerEvent, EnhancedInputComponent);
+		EnsureUniqueBinding(BindActionArgs.Data.InputAction, BindActionArgs.TriggerEvent, EnhancedInputComponent);
 	}
 	else
 	{
@@ -189,7 +149,7 @@ void UEazyUIActionRouterBase::UnregisterInputAction(FEazyActionBindingHandle& Ha
 
 	if (!bStillNeeded)
 	{
-		RemoveUniqueEIBinding(RemovedAction, RemovedEvent);
+		RemoveUniqueBinding(RemovedAction, RemovedEvent);
 	}
 }
 
@@ -231,7 +191,7 @@ UEnhancedInputComponent* UEazyUIActionRouterBase::GetEnhancedInputComponent() co
 	return Cast<UEnhancedInputComponent>(PlayerController->InputComponent);
 }
 
-void UEazyUIActionRouterBase::EnsureUniqueEIBinding(const UInputAction* Action, const ETriggerEvent Event, UEnhancedInputComponent* EnhancedInputComponent)
+void UEazyUIActionRouterBase::EnsureUniqueBinding(const UInputAction* Action, const ETriggerEvent Event, UEnhancedInputComponent* EnhancedInputComponent)
 {
 	const TPair<TObjectKey<const UInputAction>, ETriggerEvent> ActionEventKey(TObjectKey<const UInputAction>(Action), Event);
 	if (UniqueEnhancedInputHandles.Contains(ActionEventKey))
@@ -243,7 +203,7 @@ void UEazyUIActionRouterBase::EnsureUniqueEIBinding(const UInputAction* Action, 
 	UniqueEnhancedInputHandles.Add(ActionEventKey, Binding.GetHandle());
 }
 
-void UEazyUIActionRouterBase::RemoveUniqueEIBinding(const UInputAction* Action, const ETriggerEvent Event)
+void UEazyUIActionRouterBase::RemoveUniqueBinding(const UInputAction* Action, const ETriggerEvent Event)
 {
 	const TPair<TObjectKey<const UInputAction>, ETriggerEvent> ActionEventKey(TObjectKey<const UInputAction>(Action), Event);
 	const uint32* Handle = UniqueEnhancedInputHandles.Find(ActionEventKey);
@@ -271,7 +231,7 @@ void UEazyUIActionRouterBase::BindAllToEnhancedInputComponent(UEnhancedInputComp
 	{
 		if (const TSharedPtr<FEazyActionBinding> Binding = FEazyActionBinding::FindBinding(BindingHandle); Binding && IsValid(Binding->InputAction.Get()))
 		{
-			EnsureUniqueEIBinding(Binding->InputAction.Get(), Binding->TriggerEvent, EnhancedInputComponent);
+			EnsureUniqueBinding(Binding->InputAction.Get(), Binding->TriggerEvent, EnhancedInputComponent);
 		}
 	}
 }
@@ -291,7 +251,6 @@ void UEazyUIActionRouterBase::UnbindAllFromEnhancedInputComponent()
 
 void UEazyUIActionRouterBase::HandlePlayerControllerChanged(APlayerController* /*NewController*/)
 {
-	// Stale handles belong to the old component — discard and rebind to the new one.
 	UniqueEnhancedInputHandles.Empty();
 
 	if (UEnhancedInputComponent* EnhancedInputComponent = GetEnhancedInputComponent())
