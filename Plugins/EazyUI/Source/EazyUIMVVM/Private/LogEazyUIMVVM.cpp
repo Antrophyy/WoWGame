@@ -1,0 +1,4 @@
+﻿#include "LogEazyUIMVVM.h"
+
+DEFINE_LOG_CATEGORY(LogEazyUIMVVM)
+

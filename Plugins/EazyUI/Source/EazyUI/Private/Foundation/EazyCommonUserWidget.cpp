@@ -1,6 +1,5 @@
 #include "Foundation/EazyCommonUserWidget.h"
 
-#include "Routing/EazyUIActionRouterBase.h"
 #include "EazyClassValidation.h"
 
 #if WITH_EDITOR
@@ -15,61 +14,29 @@ void UEazyCommonUserWidget::ValidateCompiledDefaults(IWidgetCompilerLog& Compile
 void UEazyCommonUserWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
+	InitializeViewModelsForWidget(this, ViewModels);
 
 	NativeResetWidgetAnimationsState();
 }
 
-void UEazyCommonUserWidget::NativeResetWidgetAnimationsState()
+void UEazyCommonUserWidget::NativeDestruct()
+{
+	ReleaseViewModelsForWidget(this, ViewModels);
+	RemoveAllInputActionBindingsForWidget(BoundInputActions);
+	Super::NativeDestruct();
+}
 
+void UEazyCommonUserWidget::NativeResetWidgetAnimationsState()
 {
 	BP_ResetWidgetAnimationsState();
 }
 
-void UEazyCommonUserWidget::NativeDestruct()
-{
-	RemoveAllInputActionBindings();
-	Super::NativeDestruct();
-}
-
 FEazyActionBindingHandle UEazyCommonUserWidget::RegisterInputActionBinding(const FEazyInputActionBindingArgs& BindActionArgs)
 {
-	if (UEazyUIActionRouterBase* Router = UEazyUIActionRouterBase::Get(*this))
-	{
-		const FEazyActionBindingHandle Handle = Router->RegisterInputAction(*this, BindActionArgs);
-		if (Handle.IsValid())
-		{
-			BoundInputActions.Add(Handle);
-		}
-		return Handle;
-	}
-
-	return FEazyActionBindingHandle();
+	return RegisterInputActionBindingForWidget(*this, BindActionArgs, BoundInputActions);
 }
 
 void UEazyCommonUserWidget::RemoveInputActionBinding(const FEazyActionBindingHandle ActionBinding)
 {
-	const int32 BindingIndex = BoundInputActions.IndexOfByKey(ActionBinding);
-	if (BindingIndex == INDEX_NONE)
-	{
-		return;
-	}
-
-	BoundInputActions[BindingIndex].Unregister();
-
-	BoundInputActions.RemoveAtSwap(BindingIndex);
-}
-
-void UEazyCommonUserWidget::RemoveAllInputActionBindings()
-{
-	for (FEazyActionBindingHandle& Handle : BoundInputActions)
-	{
-		Handle.Unregister();
-	}
-
-	BoundInputActions.Empty();
-}
-
-AHUD* UEazyCommonUserWidget::GetHUD() const
-{
-	return IsValid(GetOwningPlayer()) ? GetOwningPlayer()->GetHUD() : nullptr;
+	RemoveInputActionBindingForWidget(ActionBinding, BoundInputActions);
 }

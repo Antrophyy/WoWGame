@@ -47,23 +47,7 @@ bool UCommonUIExtensions::IsOwningPlayerUsingGamepad(const UUserWidget* WidgetCo
 	return false;
 }
 
-UCommonActivatableWidget* UCommonUIExtensions::PushContentToLayer_ForPlayer(const ULocalPlayer* LocalPlayer, const FGameplayTag LayerName, const TSubclassOf<UEazyCommonActivatableWidget> WidgetClass)
-{
-	if (const UEazyGameUIManagerSubsystem* UIManager = LocalPlayer->GetGameInstance()->GetSubsystem<UEazyGameUIManagerSubsystem>())
-	{
-		if (const UEazyGameUIPolicy* Policy = UIManager->GetCurrentUIPolicy())
-		{
-			if (UEazyPrimaryGameLayout* RootLayout = Policy->GetRootLayout(LocalPlayer))
-			{
-				return RootLayout->PushWidgetToLayer(LayerName, WidgetClass);
-			}
-		}
-	}
-
-	return nullptr;
-}
-
-void UCommonUIExtensions::PushStreamedContentToLayer_ForPlayer(const ULocalPlayer* LocalPlayer, const FGameplayTag LayerName, const TSoftClassPtr<UEazyCommonActivatableWidget> WidgetClass)
+void UCommonUIExtensions::PushWidgetToLayerAsync(const ULocalPlayer* LocalPlayer, const FGameplayTag LayerName, const TSoftClassPtr<UEazyCommonActivatableWidget> WidgetClass)
 {
 	if (const UEazyGameUIManagerSubsystem* UIManager = LocalPlayer->GetGameInstance()->GetSubsystem<UEazyGameUIManagerSubsystem>())
 	{

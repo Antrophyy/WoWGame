@@ -14,7 +14,16 @@ void UEazyUserWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	InitializeViewModelsForWidget(this, ViewModels);
+
 	NativeResetWidgetAnimationsState();
+}
+
+void UEazyUserWidget::NativeDestruct()
+{
+	ReleaseViewModelsForWidget(this, ViewModels);
+
+	Super::NativeDestruct();
 }
 
 void UEazyUserWidget::NativeResetWidgetAnimationsState()

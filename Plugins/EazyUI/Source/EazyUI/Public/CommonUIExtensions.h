@@ -23,14 +23,9 @@ public:
 	static bool IsOwningPlayerUsingGamepad(const UUserWidget* WidgetContextObject);
 
 	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Global UI Extensions")
-	static UCommonActivatableWidget* PushContentToLayer_ForPlayer(const ULocalPlayer* LocalPlayer,
-	                                                              UPARAM(meta = (Categories = "UI.Layer")) FGameplayTag LayerName,
-	                                                              UPARAM(meta = (AllowAbstract = false)) TSubclassOf<UEazyCommonActivatableWidget> WidgetClass);
-
-	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Global UI Extensions")
-	static void PushStreamedContentToLayer_ForPlayer(const ULocalPlayer* LocalPlayer,
-	                                                 UPARAM(meta = (Categories = "UI.Layer")) FGameplayTag LayerName,
-	                                                 UPARAM(meta = (AllowAbstract = false)) TSoftClassPtr<UEazyCommonActivatableWidget> WidgetClass);
+	static void PushWidgetToLayerAsync(const ULocalPlayer* LocalPlayer,
+	                                   UPARAM(meta = (Categories = "UI.Layer")) FGameplayTag LayerName,
+	                                   UPARAM(meta = (AllowAbstract = false)) TSoftClassPtr<UEazyCommonActivatableWidget> WidgetClass);
 
 	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Global UI Extensions")
 	static void PopContentFromLayer(UPARAM(meta = (AllowAbstract = false)) UEazyCommonActivatableWidget* ActivatableWidget,
@@ -39,18 +34,14 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Global UI Extensions")
 	static ULocalPlayer* GetLocalPlayerFromController(APlayerController* PlayerController);
 
-	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Global UI Extensions")
 	static FName SuspendInputForPlayer(APlayerController* PlayerController, FName SuspendReason);
-
 	static FName SuspendInputForPlayer(const ULocalPlayer* LocalPlayer, FName SuspendReason);
 
-	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Global UI Extensions")
 	static void ResumeInputForPlayer(APlayerController* PlayerController, const FName SuspendToken);
-
 	static void ResumeInputForPlayer(const ULocalPlayer* LocalPlayer, const FName SuspendToken);
 
 	static FKey GetKeyForInputType(const ULocalPlayer* LocalPlayer, ECommonInputType InputType, const UInputAction* InputAction, const int32 KeyIndex);
-	
+
 	static FSlateBrush GetIconForInputAction(const UCommonInputSubsystem* InputSubsystem, const UInputAction* InputAction, const int32 KeyIndex);
 
 private:

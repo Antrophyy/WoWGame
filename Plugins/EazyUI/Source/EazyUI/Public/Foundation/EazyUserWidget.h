@@ -1,10 +1,13 @@
 #pragma once
 
 #include "Blueprint/UserWidget.h"
+#include "Core/EazyViewModelWidgetInterface.h"
 #include "EazyUserWidget.generated.h"
 
+class UEazyViewModelBase;
+
 UCLASS(Abstract, ClassGroup=UI)
-class EAZYUI_API UEazyUserWidget : public UUserWidget
+class EAZYUI_API UEazyUserWidget : public UUserWidget, public IEazyViewModelWidgetInterface
 {
 	GENERATED_BODY()
 
@@ -16,6 +19,7 @@ public:
 
 protected:
 	virtual void NativeConstruct() override;
+	virtual void NativeDestruct() override;
 	
 protected: // EazyUI Overridable Functions
 	
@@ -37,4 +41,11 @@ protected:
 	{
 		return Cast<T>(GetHUD());
 	}
+
+private:
+	UPROPERTY()
+	TArray<TObjectPtr<UEazyViewModelBase>> ViewModels;
+
+	UPROPERTY()
+	TArray<int32> ViewModelSourceIndices;
 };

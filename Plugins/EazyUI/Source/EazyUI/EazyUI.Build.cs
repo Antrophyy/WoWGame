@@ -8,8 +8,9 @@ public class EazyUI : ModuleRules
 		
 		PrivateDependencyModuleNames.AddRange(
 		[
-			// Game
+			// Plugin
 			"EazyUIInput",
+			"EazyUIMVVM",
 
 			// Engine
 			"CommonInput",
@@ -21,6 +22,7 @@ public class EazyUI : ModuleRules
 			"EnhancedInput",
 			"GameplayTags",
 			"InputCore",
+			"ModelViewViewModel",
 			"Slate",
 			"SlateCore",
 			"UMG"
